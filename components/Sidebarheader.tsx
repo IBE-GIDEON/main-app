@@ -7,7 +7,7 @@ import path from "path";
 import Sidebarcontent from "./Sidebarcontent";
 import { LucideIcon, LayoutDashboard, LibraryBig, ClipboardClock, Sparkles } from "lucide-react"
 import Link from "next/link";
-import Newflows from "./Newflows";
+import Newflows from "./Newdecision";
 
 interface Isidebaritem {
   name: string;
@@ -46,7 +46,7 @@ const items =[
 
 ]
 
-const SidebarHeader = () => {
+const SidebarHeader = ({ isCollapsed }: { isCollapsed: boolean }) => {
 
 
   return (
@@ -59,13 +59,13 @@ const SidebarHeader = () => {
  </span> 
  <div>
   <Link href={"/"}>
-<Newflows />
+<Newflows isCollapsed={isCollapsed} />
 </Link>
   </div>
         
 <div className="space-y-3 mt-10 items-center px-0.5 text-white/80 justify-center font-bold">
   {items.map((item) => (
-    <Sidebarcontent key={item.path} item={item} />
+    <Sidebarcontent key={item.path} item={item} isCollapsed={isCollapsed} />
   ))}
   </div>      
     </div>

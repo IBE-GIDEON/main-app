@@ -1,72 +1,51 @@
-import { useState, useRef, useEffect } from "react";
-import { Search, Send } from "lucide-react";
+import { Search } from "lucide-react";
+import clsx from "clsx";
+import { useRouter } from "next/navigation";
 
 type SearchbarProps = {
-  onSubmit?: () => void;
-  inputRef?: React.RefObject<HTMLTextAreaElement>;
+  isCollapsed?: boolean;
 };
 
 export default function Searchbar({
-  onSubmit,
-  inputRef,
+  isCollapsed = false,
 }: SearchbarProps) {
-  const [input, setInput] = useState("");
-  const localRef = useRef<HTMLTextAreaElement>(null);
 
-  const textareaRef = inputRef ?? localRef;
-  const hasText = input.trim().length > 0;
+  const router = useRouter();
 
-  // Auto-resize textarea (unchanged behavior)
-  useEffect(() => {
-    const textarea = textareaRef.current;
-    if (textarea) {
-      textarea.style.height = "auto";
-      textarea.style.height = Math.min(textarea.scrollHeight, 160) + "px";
-    }
-  }, [input, textareaRef]);
-
-  const handleSubmit = () => {
-    if (!hasText) return;
-    onSubmit?.();
+  const handleSearch = () => {
+    // Navigate to search page or open search modal
+    router.push("/search");
   };
 
   return (
-    <div className="mx-auto max-w-3xl">
-      {/* Glassmorphic Search Bar */}
-      <div className=" w-[240px] group relative flex ml-48 mt-4 items-end rounded-3xl bg-white/8 backdrop-blur-2xl transition-all duration-500 hover:bg-white/12 hover:shadow-3xl">
+    <button
+      onClick={handleSearch}
+      title={isCollapsed ? "Search" : ""}
+      className={clsx(
+        "flex items-center gap-2",
+        isCollapsed ? "justify-center" : "justify-start",
+        "px-3 ml-[10px]",
+        "py-2",
+        "rounded-lg",
+        "cursor-pointer",
+        "text-white/80",
+        "border border-transparent",
+        "bg-transparent",
+        "transition-all duration-300 ease-out",
+        "hover:bg-white/10",
+        "hover:backdrop-blur-md",
+        "hover:border-white/20",
+        "hover:text-white",
+        "hover:shadow-[0_8px_32px_rgba(255,255,255,0.08)]",
+        "active:scale-[0.98]"
+        
+      )}
+    >
 
- {/* Send / Search Button */}
-        <button
-          onClick={handleSubmit}
-          className={`ml-2 mr-1 mb-1 p-3 rounded-full transition-all duration-500 flex items-center justify-center`}
-        >
-          {hasText ? (
-            <Send size={22} className="text-white" />
-          ) : (
-            <Search size={22} className="text-white/80" />
-          )}
-        </button>
+      {/* Search Icon */}
+      <Search size={20} className="text-white/90 shrink-0" />
 
-        {/* Textarea */}
-        <textarea
-          ref={textareaRef}
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" && !e.shiftKey) {
-              e.preventDefault();
-              handleSubmit();
-            }
-          }}
-          placeholder="Search flows"
-          rows={1}
-          className="flex-1 bg-black text-white placeholder:text-white/50 outline-none text-base md:text-lg py-3 px-2 resize-none overflow-y-auto max-h-20 scrollbar-none transition-all duration-300 ease-in-out"
-          style={{ scrollbarWidth: "none" }}
-        />
 
-       
-      </div>
-      </div>
+    </button>
   );
 }
-

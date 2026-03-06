@@ -1,92 +1,380 @@
 "use client";
 
-import Image from "next/image";
-import { motion } from "framer-motion";
-import Gradient from "@/components/Gradient";
+import React from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { Network, Lock, Zap, LayoutPanelLeft, ChevronRight, Play, Briefcase, Shield, Cpu, AlertCircle, Clock } from "lucide-react";
 
-const connectedApps = [
-  { name: "Gmail", icon: "/gmail.webp" },
-  { name: "Notion", icon: "/notion.webp" },
-  { name: "Zoom", icon: "/zoom.webp" },
-  { name: "Slack", icon: "/slack.webp" },
-  { name: "Google Calendar", icon: "/calender.webp" },
-];
+/* --- Apple-style Easing --- */
+const ease = [0.16, 1, 0.3, 1];
 
-export default function HeroSection() {
+/* --- Components --- */
+
+function NavBar() {
   return (
-    <section className="relative overflow-hidden bg-gradient-to-br from-[#f8fbff] via-white to-[#eef4ff] pt-32 pb-24">
-      {/* ===== Faded Gradient Glow Background ===== */}
-      <div className="absolute inset-0 -z-10">
-        <div className="absolute top-[-250px] left-[-150px] w-[600px] h-[600px] bg-blue-300/30 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-[-200px] right-[-200px] w-[550px] h-[550px] bg-indigo-400/20 rounded-full blur-3xl"></div>
+    <header className="fixed top-0 inset-x-0 mt-[-90px] z-50 flex items-center justify-between px-6 md:px-10 py-6 pointer-events-none">
+      {/* Logo */}
+      <div className="pointer-events-auto flex ml-[-25px] items-center gap-3">
+        <motion.div
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          className="flex items-center"
+        >
+          <img
+            src="/logofive.png"
+            alt="Think AI Logo"
+            className="h-[220px] w-[200px] font-bold"
+          />
+        </motion.div>
       </div>
 
-      {/* ===== Main Content ===== */}
-      <div className="max-w-7xl mx-auto px-6 text-center relative z-10">
-        <Gradient />
+      {/* Navigation - Glass Oval */}
+      <nav className="hidden lg:flex pointer-events-auto items-center gap-11 px-8 py-3.5 w-[600px] h-[70px] rounded-full bg-black/[0.02] border border-black/[0.07] backdrop-blur-3xl shadow-[0_8px_32px_0_rgba(0,0,0,0.06)] text-[13px] font-medium text-[#1C1B18]/55">
+        <a href="#home" className="hover:text-[#1C1B18] transition-colors">Home</a>
+        <a href="#engine" className="hover:text-[#1C1B18] transition-colors">The Engine</a>
+        <a href="#refinement" className="hover:text-[#1C1B18] transition-colors">Refinement</a>
+        <a href="/use-case" className="hover:text-[#1C1B18] transition-colors">Use Cases</a>
+        <a href="/pricing" className="hover:text-[#1C1B18] transition-colors">Pricing</a>
+        <a href="/blog" className="hover:text-[#1C1B18] transition-colors">Blog</a>
+      </nav>
 
-        {/* Headline */}
-        <motion.h1
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="text-4xl md:text-5xl font-bold text-gray-900 leading-tight mb-6"
-        >
-          AI That Thinks Through Unmade Decisions
-        </motion.h1>
+      {/* Auth */}
+      <div className="pointer-events-auto flex items-center gap-6">
+        <button className="text-[13px] font-medium text-[#1C1B18]/60 hover:text-[#1C1B18] transition-colors">
+          Sign In
+        </button>
+        <button className="text-[13px] font-semibold px-6 py-2.5 rounded-full bg-black/[0.05] border border-black/[0.1] text-[#1C1B18] backdrop-blur-xl hover:bg-black/[0.09] hover:scale-105 transition-all">
+          Sign Up
+        </button>
+      </div>
+    </header>
+  );
+}
 
-        {/* Subtext */}
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.2, duration: 0.6 }}
-          className="text-gray-600 text-lg md:text-xl mb-10 max-w-2xl mx-auto"
-        >
-          ZenOS automates your day, connects your favorite apps, and keeps
-          everything in one place — smarter, faster, and beautifully designed.
-        </motion.p>
+function Hero() {
+  return (
+    <section id="home" className="relative pt-52 pb-24 px-4 flex flex-col items-center text-center overflow-hidden">
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[500px] bg-[#E58A6A]/[0.07] blur-[150px] rounded-[100%] pointer-events-none" />
 
-        {/* Call to Action Buttons */}
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4, duration: 0.6 }}
-          className="flex flex-col md:flex-row justify-center gap-4 mb-16"
-        >
-          <a
-            href="/create-account"
-            className="bg-blue-600 text-white px-8 py-3 rounded-xl font-semibold shadow-lg hover:shadow-2xl hover:bg-blue-700 transition-all"
-          >
-            Request a Demo
-          </a>
-          <a
-            href="/create-account"
-            className="border border-gray-300 text-gray-900 px-8 py-3 rounded-xl font-semibold hover:bg-gray-100 transition-all"
-          >
-            Get Started
-          </a>
-        </motion.div>
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1, ease }}
+        className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#E58A6A]/10 border border-[#E58A6A]/25 text-[#D97757] text-xs font-medium mb-8"
+      >
+        <Zap className="w-3 h-3" />
+        The Enterprise Decision Engine
+      </motion.div>
 
-        {/* Connected Apps */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.6, duration: 0.8 }}
-          className="flex justify-center flex-wrap gap-8 items-center"
-        >
-          {connectedApps.map((app) => (
-            <div key={app.name} className="flex flex-col items-center">
-              <div className="w-20 h-20 flex items-center justify-center rounded-xl bg-gray-50 shadow hover:shadow-lg transition-all p-4">
-                <Image src={app.icon} alt={app.name} width={40} height={40} />
-              </div>
-              <span className="mt-2 text-gray-700 font-medium">
-                {app.name}
-              </span>
-            </div>
-          ))}
-        </motion.div>
+      <motion.h1
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1, delay: 0.1, ease }}
+        className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight text-[#1C1B18] max-w-5xl leading-[1.05]"
+      >
+        We think through <br className="hidden md:block" />
+        <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#1C1B18] via-[#E58A6A] to-[#D97757]">
+          so you can do.
+        </span>
+      </motion.h1>
+
+      <motion.p
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1, delay: 0.2, ease }}
+        className="mt-8 text-lg md:text-xl text-[#1C1B18]/45 max-w-2xl font-light leading-relaxed"
+      >
+        Move beyond generic chatbots. three AI uses recursive refinement and branching logic to calculate stakes, visualize risks, and turn complex data into clear, executable strategy.
+      </motion.p>
+
+      <motion.div
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1, delay: 0.3, ease }}
+        className="mt-12 flex flex-col sm:flex-row items-center gap-4"
+      >
+        <button className="h-12 px-8 rounded-full bg-[#E58A6A] text-white font-semibold text-sm hover:bg-[#D97757] transition-colors flex items-center gap-2 shadow-[0_0_24px_rgba(229,138,106,0.25)]">
+          Start building decisions
+          <ChevronRight className="w-4 h-4" />
+        </button>
+      </motion.div>
+    </section>
+  );
+}
+
+function VideoSpace() {
+  const { scrollYProgress } = useScroll();
+  const scale = useTransform(scrollYProgress, [0, 0.4], [0.92, 1]);
+  const opacity = useTransform(scrollYProgress, [0, 0.4], [0.3, 1]);
+
+  return (
+    <section id="engine" className="px-4 md:px-8 pb-20 flex justify-center">
+      <motion.div
+        style={{ scale, opacity }}
+        className="relative w-full max-w-6xl aspect-[16/9] rounded-[2.5rem] overflow-hidden border border-black/[0.07] shadow-[0_32px_64px_-16px_rgba(0,0,0,0.12)] group"
+      >
+        <img
+          src="/dash.png"
+          alt="three AI Dashboard"
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+      </motion.div>
+    </section>
+  );
+}
+
+function TrustedBy() {
+  return (
+    <section className="py-16 mb-24 relative">
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/[0.01] to-transparent pointer-events-none" />
+      <div className="max-w-7xl mx-auto px-4 text-center relative z-10">
+        <h3 className="text-xl md:text-2xl font-semibold text-[#1C1B18] mb-3">
+          The engine behind $10B+ in strategic decisions.
+        </h3>
+        <p className="text-[13px] font-medium text-[#1C1B18]/40 mb-10 max-w-2xl mx-auto">
+          From mitigating M&A risks to architecting zero-downtime migrations, top-tier strategy teams rely on three AI to remove ambiguity from high-stakes execution.
+        </p>
+        <div className="flex flex-wrap justify-center items-center gap-x-16 gap-y-8 opacity-25 grayscale">
+          <span className="text-xl font-bold tracking-tighter text-[#1C1B18]">Global FinTech</span>
+          <span className="text-xl font-serif italic text-[#1C1B18]">Venture Partners</span>
+          <span className="text-xl font-bold uppercase tracking-widest text-[#1C1B18]">AeroSpace Def.</span>
+          <span className="text-xl font-medium tracking-wide text-[#1C1B18]">Health Data Corp</span>
+        </div>
       </div>
     </section>
   );
 }
 
+function ProblemSolution() {
+  return (
+    <section className="py-24 max-w-7xl mx-auto px-4 md:px-8">
+      <div className="mb-16 text-center">
+        <h2 className="text-3xl md:text-5xl font-bold text-[#1C1B18] tracking-tight mb-4">
+          Why standard LLMs fail the enterprise.
+        </h2>
+        <p className="text-[#1C1B18]/45 text-lg">Text generation is not consensus. Chatbots don't calculate risk.</p>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* The Problem */}
+        <div className="p-10 rounded-[2rem] border border-black/[0.05] bg-[#F2F1ED] relative overflow-hidden">
+          <div className="absolute top-0 right-0 p-8 opacity-10"><AlertCircle className="w-32 h-32 text-rose-500" /></div>
+          <div className="relative z-10">
+            <h3 className="text-[11px] font-bold uppercase tracking-widest text-rose-500/70 mb-4">The Status Quo</h3>
+            <h4 className="text-2xl font-semibold text-[#1C1B18] mb-4">The Cost of Ambiguity</h4>
+            <p className="text-[#1C1B18]/50 leading-relaxed text-[15px] mb-8">
+              Standard AI tools give you a single, highly confident answer based on probability, hiding the underlying complexities. Teams waste hundreds of hours manually verifying data, missing critical edge-case risks, and ultimately hesitating on execution because the AI couldn't "show its work."
+            </p>
+            <ul className="space-y-3">
+              <li className="flex items-center gap-3 text-sm text-[#1C1B18]/40">
+                <div className="w-1.5 h-1.5 rounded-full bg-rose-400/60" />
+                Blindspots caused by hallucination loops.
+              </li>
+              <li className="flex items-center gap-3 text-sm text-[#1C1B18]/40">
+                <div className="w-1.5 h-1.5 rounded-full bg-rose-400/60" />
+                Wasted engineering hours debugging generic code.
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        {/* The Solution */}
+        <div className="p-10 rounded-[2rem] border border-[#E58A6A]/20 bg-gradient-to-br from-[#E58A6A]/[0.06] to-[#F5F4F0] relative overflow-hidden">
+          <div className="absolute top-0 right-0 p-8 opacity-10"><Clock className="w-32 h-32 text-[#E58A6A]" /></div>
+          <div className="relative z-10">
+            <h3 className="text-[11px] font-bold tracking-widest text-[#D97757] mb-4">THE three AI WAY</h3>
+            <h4 className="text-2xl font-semibold text-[#1C1B18] mb-4">Calculated Execution</h4>
+            <p className="text-[#1C1B18]/60 leading-relaxed text-[15px] mb-8">
+              We replace hallucination with branching logic. three AI automatically spins up sub-scenarios to stress-test ideas before you even ask. By visualizing the exact stakes of every choice, we save teams an average of 40 hours per major strategic decision while identifying 3x more edge-case risks.
+            </p>
+            <ul className="space-y-3">
+              <li className="flex items-center gap-3 text-sm text-[#1C1B18]/60">
+                <div className="w-1.5 h-1.5 rounded-full bg-[#E58A6A]" />
+                Visualized risk and upside variables.
+              </li>
+              <li className="flex items-center gap-3 text-sm text-[#1C1B18]/60">
+                <div className="w-1.5 h-1.5 rounded-full bg-[#E58A6A]" />
+                Actionable verdicts, not passive summaries.
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function BentoGrid() {
+  return (
+    <section id="refinement" className="px-4 md:px-8 py-24 max-w-7xl mx-auto border-t border-black/[0.05]">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+        <div className="md:col-span-2 relative h-[420px] rounded-[2rem] border border-black/[0.05] bg-[#F2F1EE] overflow-hidden group">
+          <div className="relative z-10 h-full p-10 md:p-12 flex flex-col justify-between">
+            <div>
+              <Network className="w-8 h-8 text-[#E58A6A] mb-5" />
+              <h3 className="text-2xl font-semibold text-[#1C1B18] mb-3">Recursive Refinement</h3>
+              <p className="text-[#1C1B18]/45 max-w-md leading-relaxed text-sm">
+                The engine challenges its own logic. It generates branching scenarios, stress-tests assumptions, and calculates decision stakes before presenting the final verdict.
+              </p>
+            </div>
+            {/* Minimalist SVG Art */}
+            <div className="absolute right-0 bottom-0 w-[60%] h-[60%] opacity-25 translate-x-8 translate-y-8 group-hover:translate-x-2 group-hover:translate-y-2 transition-transform duration-700 ease-out">
+              <svg viewBox="0 0 200 200" className="w-full h-full stroke-black/[0.2] fill-none" strokeWidth="1">
+                <path d="M10 100 Q 50 100 100 50 T 190 20" />
+                <path d="M10 100 Q 50 100 100 150 T 190 180" />
+                <circle cx="10" cy="100" r="4" className="fill-[#E58A6A] stroke-none" />
+                <circle cx="100" cy="50" r="3" className="fill-black/30 stroke-none" />
+                <circle cx="100" cy="150" r="3" className="fill-black/30 stroke-none" />
+                <circle cx="190" cy="20" r="4" className="fill-emerald-500 stroke-none" />
+                <circle cx="190" cy="180" r="4" className="fill-rose-500 stroke-none" />
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <div className="relative h-[420px] rounded-[2rem] border border-black/[0.05] bg-[#F2F1EE] overflow-hidden">
+          <div className="relative z-10 h-full p-8 flex flex-col justify-between">
+            <div>
+              <LayoutPanelLeft className="w-8 h-8 text-[#1C1B18]/50 mb-5" />
+              <h3 className="text-xl font-semibold text-[#1C1B18] mb-3">The Aside AI UI</h3>
+              <p className="text-[#1C1B18]/45 leading-relaxed text-sm">
+                Designed to live alongside your work. A spatial interface ensuring the AI acts as a collaborative partner without overtaking your screen.
+              </p>
+            </div>
+            <div className="w-full h-36 rounded-2xl border border-black/[0.06] bg-black/[0.02] flex items-stretch overflow-hidden">
+              <div className="w-2/3 bg-transparent p-3 space-y-3">
+                <div className="w-full h-2 bg-black/10 rounded-sm" />
+                <div className="w-3/4 h-2 bg-black/10 rounded-sm" />
+              </div>
+              <div className="w-1/3 bg-black/[0.03] border-l border-black/[0.05] p-3 flex flex-col justify-end">
+                <div className="w-full h-10 rounded-lg bg-[#E58A6A]/20 border border-[#E58A6A]/30" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  );
+}
+
+function PrivacySection() {
+  return (
+    <section className="py-32 relative border-t border-black/[0.05]">
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-black/[0.02] via-[#FAFAF8] to-[#FAFAF8] pointer-events-none" />
+      <div className="max-w-5xl mx-auto px-4 md:px-8 text-center relative z-10">
+        <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-[#F2F1ED] border border-black/[0.07] mb-8 shadow-[0_0_32px_rgba(0,0,0,0.04)]">
+          <Lock className="w-8 h-8 text-[#1C1B18]/70" />
+        </div>
+        <h2 className="text-3xl md:text-5xl font-bold text-[#1C1B18] tracking-tight mb-6">
+          Absolute Data Sovereignty.
+        </h2>
+        <p className="text-lg text-[#1C1B18]/45 max-w-2xl mx-auto leading-relaxed mb-16">
+          Enterprise decisions require enterprise security. three AI operates on a strict zero-leakage architecture. Your company data, strategic branches, and final stakes are isolated, encrypted, and never used to train public models.
+        </p>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
+          {["Local Execution Options", "SOC2 Type II Ready", "End-to-End Encryption"].map((feature, i) => (
+            <div key={i} className="px-6 py-5 rounded-2xl bg-black/[0.02] border border-black/[0.05] backdrop-blur-3xl flex items-center gap-4 hover:bg-black/[0.04] transition-colors">
+              <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-[0_0_12px_rgba(16,185,129,0.25)]" />
+              <span className="text-[14px] font-medium text-[#1C1B18]/75">{feature}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function EnterpriseFooter() {
+  return (
+    <footer className="border-t border-black/[0.07] bg-[#F5F4F0] pt-20 pb-12 px-6 md:px-12">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-5 gap-12 md:gap-8 mb-16">
+
+        {/* Logo & Info Column */}
+        <div className="md:col-span-2">
+          <div className="flex items-center gap-3 mb-6">
+            <motion.div
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
+              className="flex items-center"
+            >
+              <img
+                src="/logofive.PNG"
+                alt="ThinkAI Logo"
+                className="h-[80px] w-auto"
+              />
+            </motion.div>
+          </div>
+          <p className="text-[#1C1B18]/40 text-sm leading-relaxed max-w-xs mb-8">
+            The Decision Engine for the modern enterprise. We think through so you can do.
+          </p>
+          <div className="flex items-center gap-3">
+            <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+            <span className="text-xs font-medium text-[#1C1B18]/30 uppercase tracking-widest">Systems Operational</span>
+          </div>
+        </div>
+
+        {/* Links Columns */}
+        <div>
+          <h4 className="text-[#1C1B18] font-semibold text-sm mb-6">Product</h4>
+          <ul className="space-y-4 text-sm text-[#1C1B18]/50">
+            <li><a href="#" className="hover:text-[#E58A6A] transition-colors">The Engine</a></li>
+            <li><a href="#" className="hover:text-[#E58A6A] transition-colors">Aside AI UI</a></li>
+            <li><a href="#" className="hover:text-[#E58A6A] transition-colors">Security & Trust</a></li>
+            <li><a href="#" className="hover:text-[#E58A6A] transition-colors">Pricing</a></li>
+            <li><a href="#" className="hover:text-[#E58A6A] transition-colors">Changelog</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 className="text-[#1C1B18] font-semibold text-sm mb-6">Use Cases</h4>
+          <ul className="space-y-4 text-sm text-[#1C1B18]/50">
+            <li><a href="#" className="hover:text-[#E58A6A] transition-colors">Enterprise Strategy</a></li>
+            <li><a href="#" className="hover:text-[#E58A6A] transition-colors">Engineering & Tech Debt</a></li>
+            <li><a href="#" className="hover:text-[#E58A6A] transition-colors">Risk Mitigation</a></li>
+            <li><a href="#" className="hover:text-[#E58A6A] transition-colors">Startup Scaling</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 className="text-[#1C1B18] font-semibold text-sm mb-6">Company</h4>
+          <ul className="space-y-4 text-sm text-[#1C1B18]/50">
+            <li><a href="#" className="hover:text-[#E58A6A] transition-colors">About Us</a></li>
+            <li><a href="#" className="hover:text-[#E58A6A] transition-colors">Blog & Research</a></li>
+            <li><a href="#" className="hover:text-[#E58A6A] transition-colors">Careers</a></li>
+            <li><a href="#" className="hover:text-[#E58A6A] transition-colors">Contact Sales</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between pt-8 border-t border-black/[0.05] text-xs text-[#1C1B18]/30">
+        <p>© 2026 three AI Inc. All rights reserved.</p>
+        <div className="flex gap-6 mt-4 md:mt-0">
+          <a href="#" className="hover:text-[#1C1B18] transition-colors">Privacy Policy</a>
+          <a href="#" className="hover:text-[#1C1B18] transition-colors">Terms of Service</a>
+          <a href="#" className="hover:text-[#1C1B18] transition-colors">Cookie Settings</a>
+        </div>
+      </div>
+    </footer>
+  );
+}
+
+export default function LandingPage() {
+  return (
+    <div className="min-h-screen bg-[#FAFAF8] selection:bg-[#E58A6A]/20 selection:text-[#1C1B18] font-sans">
+      <NavBar />
+      <main>
+        <Hero />
+        <VideoSpace />
+        <TrustedBy />
+        <ProblemSolution />
+        <BentoGrid />
+        <PrivacySection />
+      </main>
+      <EnterpriseFooter />
+    </div>
+  );
+}

@@ -2,6 +2,7 @@
 import React from "react";
 type MicbuttonProps = {
     onClick: () => void
+    disabled?: boolean;
 }
 
 import { Mic } from "lucide-react"

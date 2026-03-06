@@ -11,7 +11,7 @@ const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
 });
-
+ 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
@@ -19,7 +19,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Think AI",
-  description: "An AI that helps humans make decision faster",
+  description: "An AI that helps businesses make decision faster",
 };
 
 export default async function RootLayout({
