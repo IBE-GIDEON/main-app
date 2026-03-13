@@ -295,7 +295,7 @@ function PricingSection() {
               <span className="text-[#1C1B18] font-semibold">No contracts. No per-seat fees.</span> One flat monthly rate for the entire decision engine.
             </p>
           </div>
-          <p className="text-[12px] text-[#1C1B18]/30 shrink-0">Questions? <a href="mailto:hello@thinkai.com" className="text-[#E58A6A] hover:underline">Talk to us →</a></p>
+          <p className="text-[12px] text-[#1C1B18]/30 shrink-0">Questions? <a href="mailto:hello@thinkai.com" className="text-[#E58A6A] hover:underline" id="contactsales">Talk to us →</a></p>
         </div>
       </FadeUp>
     </section>
@@ -382,7 +382,7 @@ function CompareTable() {
 const faqs = [
   {
     q: "What exactly is three AI — is it another AI chatbot?",
-    a: "No. three AI is a structured decision engine, not a chatbot. A chatbot generates text responses based on probability. three AI runs recursive branching logic — it generates multiple decision paths, stress-tests each one, scores the upside and downside exposure, and returns a verdict with explicit conditions. The output is a decision, not a conversation.",
+    a: "No. three AI is a structured decision engine, not a chatbot. A chatbot generates text responses based on probability. three AI runs recursive branching logic — it generates multiple decision paths based on company data, stress-tests each one, scores the upside and downside exposure, and returns a verdict with explicit conditions. The output is a decision, not a conversation.",
   },
   {
     q: "Who is the MVP plan built for?",
@@ -414,7 +414,7 @@ const faqs = [
   },
   {
     q: "What makes three AI different from asking ChatGPT or Claude a strategy question?",
-    a: "General LLMs give you a single confident answer based on pattern matching. They don't branch, they don't stress-test, and they don't calculate stakes. three AI's engine is architecturally different — it generates competing decision paths, assigns probability and impact weights to each, surfaces edge cases the LLM wouldn't catch, and produces a verdict with documented reasoning. It shows its work.",
+    a: "General LLMs give you a single confident answer based on pattern matching. They don't branch, they don't stress-test, and they don't calculate stakes. three AI's engine is architecturally different — it generates competing decision paths based on your company data, assigns probability and impact weights to each, surfaces edge cases the LLM wouldn't catch, and produces a verdict with documented reasoning. It shows its work.",
   },
   {
     q: "Can I cancel anytime?",
@@ -532,68 +532,75 @@ function CTA() {
 function EnterpriseFooter() {
   return (
     <footer className="border-t border-black/[0.07] bg-[#F5F4F0] pt-20 pb-12 px-6 md:px-12">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-5 gap-12 md:gap-8 mb-16">
-        <div className="md:col-span-2">
-          <div className="flex items-center gap-3 mb-6">
-            <motion.div
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ duration: 0.8, ease: "easeOut" }}
-              className="flex items-center"
-            >
-              <img src="/logofive.PNG" alt="ThinkAI Logo" className="h-[80px] w-auto" />
-            </motion.div>
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-5 gap-12 md:gap-8 mb-16">
+  
+          {/* Logo & Info Column */}
+          <div className="md:col-span-2">
+            <div className="flex items-center gap-3 mb-6">
+              <motion.div
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ duration: 0.8, ease: "easeOut" }}
+                className="flex items-center"
+              >
+                <img
+                  src="/logofive.PNG"
+                  alt="ThinkAI Logo"
+                  className="h-[80px] w-auto"
+                />
+              </motion.div>
+            </div>
+            <p className="text-[#1C1B18]/40 text-sm leading-relaxed max-w-xs mb-8">
+              The Decision Engine for the modern enterprise. We think through so you can do.
+            </p>
+            <div className="flex items-center gap-3">
+              <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              <span className="text-xs font-medium text-[#1C1B18]/30 uppercase tracking-widest">Systems Operational</span>
+            </div>
           </div>
-          <p className="text-[#1C1B18]/40 text-sm leading-relaxed max-w-xs mb-8">
-            The Decision Engine for the modern enterprise. We think through so you can do.
-          </p>
-          <div className="flex items-center gap-3">
-            <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-            <span className="text-xs font-medium text-[#1C1B18]/30 uppercase tracking-widest">Systems Operational</span>
+  
+          {/* Links Columns */}
+          <div>
+            <h4 className="text-[#1C1B18] font-semibold text-sm mb-6">Product</h4>
+            <ul className="space-y-4 text-sm text-[#1C1B18]/50">
+              <li><a href="#engine" className="hover:text-[#E58A6A] transition-colors">The Engine</a></li>
+              <li><a href="#aside" className="hover:text-[#E58A6A] transition-colors">Aside AI UI</a></li>
+              <li><a href="#security" className="hover:text-[#E58A6A] transition-colors">Security & Trust</a></li>
+              <li><a href="/pricing" className="hover:text-[#E58A6A] transition-colors">Pricing</a></li>
+              <li><a href="#" className="hover:text-[#E58A6A] transition-colors">Changelog</a></li>
+            </ul>
+          </div>
+  
+          <div>
+            <h4 className="text-[#1C1B18] font-semibold text-sm mb-6">Use Cases</h4>
+            <ul className="space-y-4 text-sm text-[#1C1B18]/50">
+              <li><a href="/use-case#features" className="hover:text-[#E58A6A] transition-colors">Enterprise Strategy</a></li>
+              <li><a href="/use-case#features" className="hover:text-[#E58A6A] transition-colors">Engineering & Tech Debt</a></li>
+              <li><a href="/use-case#features" className="hover:text-[#E58A6A] transition-colors">Risk Mitigation</a></li>
+              <li><a href="/use-case#features" className="hover:text-[#E58A6A] transition-colors">Startup Scaling</a></li>
+            </ul>
+          </div>
+  
+          <div>
+            <h4 className="text-[#1C1B18] font-semibold text-sm mb-6">Company</h4>
+            <ul className="space-y-4 text-sm text-[#1C1B18]/50">
+              <li><a href="/blog" className="hover:text-[#E58A6A] transition-colors">About Us</a></li>
+              <li><a href="/blog" className="hover:text-[#E58A6A] transition-colors">Blog & Research</a></li>
+              <li><a href="/blog" className="hover:text-[#E58A6A] transition-colors">Careers</a></li>
+              <li><a href="/pricing#contactsales" className="hover:text-[#E58A6A] transition-colors">Contact Sales</a></li>
+            </ul>
           </div>
         </div>
-
-        <div>
-          <h4 className="text-[#1C1B18] font-semibold text-sm mb-6">Product</h4>
-          <ul className="space-y-4 text-sm text-[#1C1B18]/50">
-            <li><a href="#" className="hover:text-[#E58A6A] transition-colors">The Engine</a></li>
-            <li><a href="#" className="hover:text-[#E58A6A] transition-colors">Aside AI UI</a></li>
-            <li><a href="#" className="hover:text-[#E58A6A] transition-colors">Security & Trust</a></li>
-            <li><a href="/pricing" className="hover:text-[#E58A6A] transition-colors">Pricing</a></li>
-            <li><a href="#" className="hover:text-[#E58A6A] transition-colors">Changelog</a></li>
-          </ul>
+  
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between pt-8 border-t border-black/[0.05] text-xs text-[#1C1B18]/30">
+          <p>© 2026 three AI Inc. All rights reserved.</p>
+          <div className="flex gap-6 mt-4 md:mt-0">
+            <a href="#" className="hover:text-[#1C1B18] transition-colors">Privacy Policy</a>
+            <a href="#" className="hover:text-[#1C1B18] transition-colors">Terms of Service</a>
+            <a href="#" className="hover:text-[#1C1B18] transition-colors">Cookie Settings</a>
+          </div>
         </div>
-
-        <div>
-          <h4 className="text-[#1C1B18] font-semibold text-sm mb-6">Use Cases</h4>
-          <ul className="space-y-4 text-sm text-[#1C1B18]/50">
-            <li><a href="#" className="hover:text-[#E58A6A] transition-colors">Enterprise Strategy</a></li>
-            <li><a href="#" className="hover:text-[#E58A6A] transition-colors">Engineering & Tech Debt</a></li>
-            <li><a href="#" className="hover:text-[#E58A6A] transition-colors">Risk Mitigation</a></li>
-            <li><a href="#" className="hover:text-[#E58A6A] transition-colors">Startup Scaling</a></li>
-          </ul>
-        </div>
-
-        <div>
-          <h4 className="text-[#1C1B18] font-semibold text-sm mb-6">Company</h4>
-          <ul className="space-y-4 text-sm text-[#1C1B18]/50">
-            <li><a href="#" className="hover:text-[#E58A6A] transition-colors">About Us</a></li>
-            <li><a href="#" className="hover:text-[#E58A6A] transition-colors">Blog & Research</a></li>
-            <li><a href="#" className="hover:text-[#E58A6A] transition-colors">Careers</a></li>
-            <li><a href="#" className="hover:text-[#E58A6A] transition-colors">Contact Sales</a></li>
-          </ul>
-        </div>
-      </div>
-
-      <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between pt-8 border-t border-black/[0.05] text-xs text-[#1C1B18]/30">
-        <p>© 2026 Think AI Inc. All rights reserved.</p>
-        <div className="flex gap-6 mt-4 md:mt-0">
-          <a href="#" className="hover:text-[#1C1B18] transition-colors">Privacy Policy</a>
-          <a href="#" className="hover:text-[#1C1B18] transition-colors">Terms of Service</a>
-          <a href="#" className="hover:text-[#1C1B18] transition-colors">Cookie Settings</a>
-        </div>
-      </div>
-    </footer>
+      </footer>
   );
 }
 

@@ -49,8 +49,8 @@ function NavBar() {
         <a href="/#engine" className="hover:text-[#1C1B18] transition-colors">The Engine</a>
         <a href="/#refinement" className="hover:text-[#1C1B18] transition-colors">Refinement</a>
         <a href="/use-case" className="text-[#E58A6A] font-semibold">Use Cases</a>
-        <a href="/#pricing" className="hover:text-[#1C1B18] transition-colors">Pricing</a>
-        <a href="/#blog" className="hover:text-[#1C1B18] transition-colors">Blog</a>
+        <a href="/pricing" className="hover:text-[#1C1B18] transition-colors">Pricing</a>
+        <a href="/blog" className="hover:text-[#1C1B18] transition-colors">Blog</a>
       </nav>
 
       <div className="pointer-events-auto flex items-center gap-6">
@@ -303,7 +303,7 @@ const useCases = [
 
 function WhatForSection() {
   return (
-    <section className="py-28 border-t border-black/[0.05] bg-[#F5F4F1]">
+    <section className="py-28 border-t border-black/[0.05] bg-[#F5F4F1]" id="features">
       <div className="max-w-7xl mx-auto px-4 md:px-8">
         <FadeUp>
           <div className="mb-16">
@@ -507,11 +507,13 @@ function CTA() {
             Stop deliberating in the dark. Give three AI the context and walk away with a verdict you can act on today.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <a href="/signin">
             <button className="h-12 px-8 rounded-full bg-[#E58A6A] text-white font-semibold text-sm hover:bg-[#D97757] transition-colors flex items-center gap-2 shadow-[0_0_24px_rgba(229,138,106,0.25)]">
               Start building decisions
               <ChevronRight className="w-4 h-4" />
             </button>
-            <button className="h-12 px-8 rounded-full border border-black/[0.1] text-[#1C1B18]/70 text-sm font-medium hover:bg-black/[0.03] transition-colors flex items-center gap-2">
+            </a>
+            <button className="h-12 px-8 rounded-full border border-black/[0.1] text-[#1C1B18]/70 text-sm font-medium hover:bg-black/[0.03] transition-colors flex items-center gap-2" id="contactsales">
               Talk to sales
               <ArrowRight className="w-4 h-4" />
             </button>
@@ -525,69 +527,76 @@ function CTA() {
 /* ─── Footer (identical to landing page) ────────────────────────── */
 function EnterpriseFooter() {
   return (
-    <footer className="border-t border-black/[0.07] bg-[#F5F4F0] pt-20 pb-12 px-6 md:px-12">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-5 gap-12 md:gap-8 mb-16">
-        <div className="md:col-span-2">
-          <div className="flex items-center gap-3 mb-6">
-            <motion.div
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ duration: 0.8, ease: "easeOut" }}
-              className="flex items-center"
-            >
-              <img src="/logofive.PNG" alt="ThinkAI Logo" className="h-[80px] w-auto" />
-            </motion.div>
+      <footer className="border-t border-black/[0.07] bg-[#F5F4F0] pt-20 pb-12 px-6 md:px-12">
+          <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-5 gap-12 md:gap-8 mb-16">
+    
+            {/* Logo & Info Column */}
+            <div className="md:col-span-2">
+              <div className="flex items-center gap-3 mb-6">
+                <motion.div
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ duration: 0.8, ease: "easeOut" }}
+                  className="flex items-center"
+                >
+                  <img
+                    src="/logofive.PNG"
+                    alt="ThinkAI Logo"
+                    className="h-[80px] w-auto"
+                  />
+                </motion.div>
+              </div>
+              <p className="text-[#1C1B18]/40 text-sm leading-relaxed max-w-xs mb-8">
+                The Decision Engine for the modern enterprise. We think through so you can do.
+              </p>
+              <div className="flex items-center gap-3">
+                <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                <span className="text-xs font-medium text-[#1C1B18]/30 uppercase tracking-widest">Systems Operational</span>
+              </div>
+            </div>
+    
+            {/* Links Columns */}
+            <div>
+              <h4 className="text-[#1C1B18] font-semibold text-sm mb-6">Product</h4>
+              <ul className="space-y-4 text-sm text-[#1C1B18]/50">
+                <li><a href="#engine" className="hover:text-[#E58A6A] transition-colors">The Engine</a></li>
+                <li><a href="#aside" className="hover:text-[#E58A6A] transition-colors">Aside AI UI</a></li>
+                <li><a href="#security" className="hover:text-[#E58A6A] transition-colors">Security & Trust</a></li>
+                <li><a href="/pricing" className="hover:text-[#E58A6A] transition-colors">Pricing</a></li>
+                <li><a href="#" className="hover:text-[#E58A6A] transition-colors">Changelog</a></li>
+              </ul>
+            </div>
+    
+            <div>
+              <h4 className="text-[#1C1B18] font-semibold text-sm mb-6">Use Cases</h4>
+              <ul className="space-y-4 text-sm text-[#1C1B18]/50">
+                <li><a href="/use-case#features" className="hover:text-[#E58A6A] transition-colors">Enterprise Strategy</a></li>
+                <li><a href="/use-case#features" className="hover:text-[#E58A6A] transition-colors">Engineering & Tech Debt</a></li>
+                <li><a href="/use-case#features" className="hover:text-[#E58A6A] transition-colors">Risk Mitigation</a></li>
+                <li><a href="/use-case#features" className="hover:text-[#E58A6A] transition-colors">Startup Scaling</a></li>
+              </ul>
+            </div>
+    
+            <div>
+              <h4 className="text-[#1C1B18] font-semibold text-sm mb-6">Company</h4>
+              <ul className="space-y-4 text-sm text-[#1C1B18]/50">
+                <li><a href="/blog" className="hover:text-[#E58A6A] transition-colors">About Us</a></li>
+                <li><a href="/blog" className="hover:text-[#E58A6A] transition-colors">Blog & Research</a></li>
+                <li><a href="/blog" className="hover:text-[#E58A6A] transition-colors">Careers</a></li>
+                <li><a href="/pricing#contactsales" className="hover:text-[#E58A6A] transition-colors">Contact Sales</a></li>
+              </ul>
+            </div>
           </div>
-          <p className="text-[#1C1B18]/40 text-sm leading-relaxed max-w-xs mb-8">
-            The Decision Engine for the modern enterprise. We think through so you can do.
-          </p>
-          <div className="flex items-center gap-3">
-            <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-            <span className="text-xs font-medium text-[#1C1B18]/30 uppercase tracking-widest">Systems Operational</span>
+    
+          <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between pt-8 border-t border-black/[0.05] text-xs text-[#1C1B18]/30">
+            <p>© 2026 three AI Inc. All rights reserved.</p>
+            <div className="flex gap-6 mt-4 md:mt-0">
+              <a href="#" className="hover:text-[#1C1B18] transition-colors">Privacy Policy</a>
+              <a href="#" className="hover:text-[#1C1B18] transition-colors">Terms of Service</a>
+              <a href="#" className="hover:text-[#1C1B18] transition-colors">Cookie Settings</a>
+            </div>
           </div>
-        </div>
-
-        <div>
-          <h4 className="text-[#1C1B18] font-semibold text-sm mb-6">Product</h4>
-          <ul className="space-y-4 text-sm text-[#1C1B18]/50">
-            <li><a href="#" className="hover:text-[#E58A6A] transition-colors">The Engine</a></li>
-            <li><a href="#" className="hover:text-[#E58A6A] transition-colors">Aside AI UI</a></li>
-            <li><a href="#" className="hover:text-[#E58A6A] transition-colors">Security & Trust</a></li>
-            <li><a href="#" className="hover:text-[#E58A6A] transition-colors">Pricing</a></li>
-            <li><a href="#" className="hover:text-[#E58A6A] transition-colors">Changelog</a></li>
-          </ul>
-        </div>
-
-        <div>
-          <h4 className="text-[#1C1B18] font-semibold text-sm mb-6">Use Cases</h4>
-          <ul className="space-y-4 text-sm text-[#1C1B18]/50">
-            <li><a href="#" className="hover:text-[#E58A6A] transition-colors">Enterprise Strategy</a></li>
-            <li><a href="#" className="hover:text-[#E58A6A] transition-colors">Engineering & Tech Debt</a></li>
-            <li><a href="#" className="hover:text-[#E58A6A] transition-colors">Risk Mitigation</a></li>
-            <li><a href="#" className="hover:text-[#E58A6A] transition-colors">Startup Scaling</a></li>
-          </ul>
-        </div>
-
-        <div>
-          <h4 className="text-[#1C1B18] font-semibold text-sm mb-6">Company</h4>
-          <ul className="space-y-4 text-sm text-[#1C1B18]/50">
-            <li><a href="#" className="hover:text-[#E58A6A] transition-colors">About Us</a></li>
-            <li><a href="#" className="hover:text-[#E58A6A] transition-colors">Blog & Research</a></li>
-            <li><a href="#" className="hover:text-[#E58A6A] transition-colors">Careers</a></li>
-            <li><a href="#" className="hover:text-[#E58A6A] transition-colors">Contact Sales</a></li>
-          </ul>
-        </div>
-      </div>
-
-      <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between pt-8 border-t border-black/[0.05] text-xs text-[#1C1B18]/30">
-        <p>© 2026 three AI Inc. All rights reserved.</p>
-        <div className="flex gap-6 mt-4 md:mt-0">
-          <a href="#" className="hover:text-[#1C1B18] transition-colors">Privacy Policy</a>
-          <a href="#" className="hover:text-[#1C1B18] transition-colors">Terms of Service</a>
-          <a href="#" className="hover:text-[#1C1B18] transition-colors">Cookie Settings</a>
-        </div>
-      </div>
-    </footer>
+        </footer>
   );
 }
 

@@ -157,7 +157,7 @@ function NavBar() {
     { label: "Home",        href: "/"          },
     { label: "The Engine",  href: "/#engine"   },
     { label: "Refinement",  href: "/#refinement"},
-    { label: "Use Cases",   href: "/use-cases" },
+    { label: "Use Cases",   href: "/use-case" },
     { label: "Pricing",     href: "/pricing"   },
     { label: "Blog",        href: "/blog",  active: true },
   ];
@@ -187,12 +187,15 @@ function NavBar() {
         </nav>
 
         <div className="pointer-events-auto flex items-center gap-4">
-          <button className="hidden lg:block text-[13px] font-medium text-[#1C1B18]/60 hover:text-[#1C1B18] transition-colors">
-            Sign In
+          <button className="text-[13px] font-medium text-[#1C1B18]/60 hover:text-[#1C1B18] transition-colors">
+          Sign In
+        </button>
+       
+          <a href="/signin">
+           <button className="text-[13px] font-semibold px-6 py-2.5 rounded-full bg-black/[0.05] border border-black/[0.1] text-[#1C1B18] backdrop-blur-xl hover:bg-black/[0.09] hover:scale-105 transition-all">
+          Sign Up
           </button>
-          <button className="hidden lg:block text-[13px] font-semibold px-6 py-2.5 rounded-full bg-black/[0.05] border border-black/[0.1] text-[#1C1B18] backdrop-blur-xl hover:bg-black/[0.09] hover:scale-105 transition-all">
-            Sign Up
-          </button>
+          </a>
 
           {/* Burger — mobile only */}
           <button
@@ -495,69 +498,76 @@ function Newsletter() {
 /* ─── Footer ─────────────────────────────────────────────────────── */
 function EnterpriseFooter() {
   return (
-    <footer className="border-t border-black/[0.07] bg-[#F5F4F0] pt-20 pb-12 px-6 md:px-12">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-5 gap-12 md:gap-8 mb-16">
-        <div className="md:col-span-2">
-          <div className="flex items-center gap-3 mb-6">
-            <motion.div
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ duration: 0.8, ease: "easeOut" }}
-              className="flex items-center"
-            >
-              <img src="/logofive.PNG" alt="ThinkAI Logo" className="h-[80px] w-auto" />
-            </motion.div>
-          </div>
-          <p className="text-[#1C1B18]/40 text-sm leading-relaxed max-w-xs mb-8">
-            The Decision Engine for the modern enterprise. We think through so you can do.
-          </p>
-          <div className="flex items-center gap-3">
-            <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-            <span className="text-xs font-medium text-[#1C1B18]/30 uppercase tracking-widest">Systems Operational</span>
-          </div>
-        </div>
-
-        <div>
-          <h4 className="text-[#1C1B18] font-semibold text-sm mb-6">Product</h4>
-          <ul className="space-y-4 text-sm text-[#1C1B18]/50">
-            <li><a href="#" className="hover:text-[#E58A6A] transition-colors">The Engine</a></li>
-            <li><a href="#" className="hover:text-[#E58A6A] transition-colors">Aside AI UI</a></li>
-            <li><a href="#" className="hover:text-[#E58A6A] transition-colors">Security & Trust</a></li>
-            <li><a href="/pricing" className="hover:text-[#E58A6A] transition-colors">Pricing</a></li>
-            <li><a href="#" className="hover:text-[#E58A6A] transition-colors">Changelog</a></li>
-          </ul>
-        </div>
-
-        <div>
-          <h4 className="text-[#1C1B18] font-semibold text-sm mb-6">Use Cases</h4>
-          <ul className="space-y-4 text-sm text-[#1C1B18]/50">
-            <li><a href="#" className="hover:text-[#E58A6A] transition-colors">Enterprise Strategy</a></li>
-            <li><a href="#" className="hover:text-[#E58A6A] transition-colors">Engineering & Tech Debt</a></li>
-            <li><a href="#" className="hover:text-[#E58A6A] transition-colors">Risk Mitigation</a></li>
-            <li><a href="#" className="hover:text-[#E58A6A] transition-colors">Startup Scaling</a></li>
-          </ul>
-        </div>
-
-        <div>
-          <h4 className="text-[#1C1B18] font-semibold text-sm mb-6">Company</h4>
-          <ul className="space-y-4 text-sm text-[#1C1B18]/50">
-            <li><a href="#" className="hover:text-[#E58A6A] transition-colors">About Us</a></li>
-            <li><a href="/blog" className="hover:text-[#E58A6A] transition-colors">Blog & Research</a></li>
-            <li><a href="#" className="hover:text-[#E58A6A] transition-colors">Careers</a></li>
-            <li><a href="#" className="hover:text-[#E58A6A] transition-colors">Contact Sales</a></li>
-          </ul>
-        </div>
-      </div>
-
-      <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between pt-8 border-t border-black/[0.05] text-xs text-[#1C1B18]/30">
-        <p>© 2026 three AI Inc. All rights reserved.</p>
-        <div className="flex gap-6 mt-4 md:mt-0">
-          <a href="#" className="hover:text-[#1C1B18] transition-colors">Privacy Policy</a>
-          <a href="#" className="hover:text-[#1C1B18] transition-colors">Terms of Service</a>
-          <a href="#" className="hover:text-[#1C1B18] transition-colors">Cookie Settings</a>
-        </div>
-      </div>
-    </footer>
+     <footer className="border-t border-black/[0.07] bg-[#F5F4F0] pt-20 pb-12 px-6 md:px-12">
+         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-5 gap-12 md:gap-8 mb-16">
+   
+           {/* Logo & Info Column */}
+           <div className="md:col-span-2">
+             <div className="flex items-center gap-3 mb-6">
+               <motion.div
+                 initial={{ scale: 0 }}
+                 animate={{ scale: 1 }}
+                 transition={{ duration: 0.8, ease: "easeOut" }}
+                 className="flex items-center"
+               >
+                 <img
+                   src="/logofive.PNG"
+                   alt="ThinkAI Logo"
+                   className="h-[80px] w-auto"
+                 />
+               </motion.div>
+             </div>
+             <p className="text-[#1C1B18]/40 text-sm leading-relaxed max-w-xs mb-8">
+               The Decision Engine for the modern enterprise. We think through so you can do.
+             </p>
+             <div className="flex items-center gap-3">
+               <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+               <span className="text-xs font-medium text-[#1C1B18]/30 uppercase tracking-widest">Systems Operational</span>
+             </div>
+           </div>
+   
+           {/* Links Columns */}
+           <div>
+             <h4 className="text-[#1C1B18] font-semibold text-sm mb-6">Product</h4>
+             <ul className="space-y-4 text-sm text-[#1C1B18]/50">
+               <li><a href="#engine" className="hover:text-[#E58A6A] transition-colors">The Engine</a></li>
+               <li><a href="#aside" className="hover:text-[#E58A6A] transition-colors">Aside AI UI</a></li>
+               <li><a href="#security" className="hover:text-[#E58A6A] transition-colors">Security & Trust</a></li>
+               <li><a href="/pricing" className="hover:text-[#E58A6A] transition-colors">Pricing</a></li>
+               <li><a href="#" className="hover:text-[#E58A6A] transition-colors">Changelog</a></li>
+             </ul>
+           </div>
+   
+           <div>
+             <h4 className="text-[#1C1B18] font-semibold text-sm mb-6">Use Cases</h4>
+             <ul className="space-y-4 text-sm text-[#1C1B18]/50">
+               <li><a href="/use-case#features" className="hover:text-[#E58A6A] transition-colors">Enterprise Strategy</a></li>
+               <li><a href="/use-case#features" className="hover:text-[#E58A6A] transition-colors">Engineering & Tech Debt</a></li>
+               <li><a href="/use-case#features" className="hover:text-[#E58A6A] transition-colors">Risk Mitigation</a></li>
+               <li><a href="/use-case#features" className="hover:text-[#E58A6A] transition-colors">Startup Scaling</a></li>
+             </ul>
+           </div>
+   
+           <div>
+             <h4 className="text-[#1C1B18] font-semibold text-sm mb-6">Company</h4>
+             <ul className="space-y-4 text-sm text-[#1C1B18]/50">
+               <li><a href="/blog" className="hover:text-[#E58A6A] transition-colors">About Us</a></li>
+               <li><a href="/blog" className="hover:text-[#E58A6A] transition-colors">Blog & Research</a></li>
+               <li><a href="/blog" className="hover:text-[#E58A6A] transition-colors">Careers</a></li>
+               <li><a href="/pricing#contactsales" className="hover:text-[#E58A6A] transition-colors">Contact Sales</a></li>
+             </ul>
+           </div>
+         </div>
+   
+         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between pt-8 border-t border-black/[0.05] text-xs text-[#1C1B18]/30">
+           <p>© 2026 three AI Inc. All rights reserved.</p>
+           <div className="flex gap-6 mt-4 md:mt-0">
+             <a href="#" className="hover:text-[#1C1B18] transition-colors">Privacy Policy</a>
+             <a href="#" className="hover:text-[#1C1B18] transition-colors">Terms of Service</a>
+             <a href="#" className="hover:text-[#1C1B18] transition-colors">Cookie Settings</a>
+           </div>
+         </div>
+       </footer>
   );
 }
 

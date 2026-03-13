@@ -20,22 +20,23 @@ function NavBar() {
           transition={{ duration: 0.8, ease: "easeOut" }}
           className="flex items-center"
         >
+          <a href="#home">
           <img
             src="/logofive.png"
             alt="Think AI Logo"
             className="h-[220px] w-[200px] font-bold"
-          />
+          /></a>
         </motion.div>
       </div>
 
       {/* Navigation - Glass Oval */}
       <nav className="hidden lg:flex pointer-events-auto items-center gap-11 px-8 py-3.5 w-[600px] h-[70px] rounded-full bg-black/[0.02] border border-black/[0.07] backdrop-blur-3xl shadow-[0_8px_32px_0_rgba(0,0,0,0.06)] text-[13px] font-medium text-[#1C1B18]/55">
-        <a href="#home" className="hover:text-[#1C1B18] transition-colors">Home</a>
-        <a href="#engine" className="hover:text-[#1C1B18] transition-colors">The Engine</a>
-        <a href="#refinement" className="hover:text-[#1C1B18] transition-colors">Refinement</a>
-        <a href="/use-case" className="hover:text-[#1C1B18] transition-colors">Use Cases</a>
-        <a href="/pricing" className="hover:text-[#1C1B18] transition-colors">Pricing</a>
-        <a href="/blog" className="hover:text-[#1C1B18] transition-colors">Blog</a>
+        <a href="#home" className="hover:text-[#D97706] transition-colors">Home</a>
+        <a href="#engine" className="hover:text-[#D97706] transition-colors">The Engine</a>
+        <a href="#refinement" className="hover:text-[#D97706] transition-colors">Refinement</a>
+        <a href="/use-case" className="hover:text-[#D97706] transition-colors">Use Cases</a>
+        <a href="/pricing" className="hover:text-[#D97706] transition-colors">Pricing</a>
+        <a href="/blog" className="hover:text-[#D97706] transition-colors">Blog</a>
       </nav>
 
       {/* Auth */}
@@ -43,9 +44,13 @@ function NavBar() {
         <button className="text-[13px] font-medium text-[#1C1B18]/60 hover:text-[#1C1B18] transition-colors">
           Sign In
         </button>
-        <button className="text-[13px] font-semibold px-6 py-2.5 rounded-full bg-black/[0.05] border border-black/[0.1] text-[#1C1B18] backdrop-blur-xl hover:bg-black/[0.09] hover:scale-105 transition-all">
+       
+          <a href="/signin">
+           <button className="text-[13px] font-semibold px-6 py-2.5 rounded-full bg-black/[0.05] border border-black/[0.1] text-[#1C1B18] backdrop-blur-xl hover:bg-black/[0.09] hover:scale-105 transition-all">
           Sign Up
-        </button>
+          </button>
+          </a>
+        
       </div>
     </header>
   );
@@ -93,10 +98,12 @@ function Hero() {
         transition={{ duration: 1, delay: 0.3, ease }}
         className="mt-12 flex flex-col sm:flex-row items-center gap-4"
       >
+
+        <a href="/signin">
         <button className="h-12 px-8 rounded-full bg-[#E58A6A] text-white font-semibold text-sm hover:bg-[#D97757] transition-colors flex items-center gap-2 shadow-[0_0_24px_rgba(229,138,106,0.25)]">
           Start building decisions
           <ChevronRight className="w-4 h-4" />
-        </button>
+        </button></a>
       </motion.div>
     </section>
   );
@@ -233,7 +240,7 @@ function BentoGrid() {
           </div>
         </div>
 
-        <div className="relative h-[420px] rounded-[2rem] border border-black/[0.05] bg-[#F2F1EE] overflow-hidden">
+        <div className="relative h-[420px] rounded-[2rem] border border-black/[0.05] bg-[#F2F1EE] overflow-hidden" id="aside">
           <div className="relative z-10 h-full p-8 flex flex-col justify-between">
             <div>
               <LayoutPanelLeft className="w-8 h-8 text-[#1C1B18]/50 mb-5" />
@@ -261,7 +268,7 @@ function BentoGrid() {
 
 function PrivacySection() {
   return (
-    <section className="py-32 relative border-t border-black/[0.05]">
+    <section className="py-32 relative border-t border-black/[0.05]" id="security">
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-black/[0.02] via-[#FAFAF8] to-[#FAFAF8] pointer-events-none" />
       <div className="max-w-5xl mx-auto px-4 md:px-8 text-center relative z-10">
         <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-[#F2F1ED] border border-black/[0.07] mb-8 shadow-[0_0_32px_rgba(0,0,0,0.04)]">
@@ -321,10 +328,10 @@ function EnterpriseFooter() {
         <div>
           <h4 className="text-[#1C1B18] font-semibold text-sm mb-6">Product</h4>
           <ul className="space-y-4 text-sm text-[#1C1B18]/50">
-            <li><a href="#" className="hover:text-[#E58A6A] transition-colors">The Engine</a></li>
-            <li><a href="#" className="hover:text-[#E58A6A] transition-colors">Aside AI UI</a></li>
-            <li><a href="#" className="hover:text-[#E58A6A] transition-colors">Security & Trust</a></li>
-            <li><a href="#" className="hover:text-[#E58A6A] transition-colors">Pricing</a></li>
+            <li><a href="#engine" className="hover:text-[#E58A6A] transition-colors">The Engine</a></li>
+            <li><a href="#aside" className="hover:text-[#E58A6A] transition-colors">Aside AI UI</a></li>
+            <li><a href="#security" className="hover:text-[#E58A6A] transition-colors">Security & Trust</a></li>
+            <li><a href="/pricing" className="hover:text-[#E58A6A] transition-colors">Pricing</a></li>
             <li><a href="#" className="hover:text-[#E58A6A] transition-colors">Changelog</a></li>
           </ul>
         </div>
@@ -332,20 +339,20 @@ function EnterpriseFooter() {
         <div>
           <h4 className="text-[#1C1B18] font-semibold text-sm mb-6">Use Cases</h4>
           <ul className="space-y-4 text-sm text-[#1C1B18]/50">
-            <li><a href="#" className="hover:text-[#E58A6A] transition-colors">Enterprise Strategy</a></li>
-            <li><a href="#" className="hover:text-[#E58A6A] transition-colors">Engineering & Tech Debt</a></li>
-            <li><a href="#" className="hover:text-[#E58A6A] transition-colors">Risk Mitigation</a></li>
-            <li><a href="#" className="hover:text-[#E58A6A] transition-colors">Startup Scaling</a></li>
+            <li><a href="/use-case#features" className="hover:text-[#E58A6A] transition-colors">Enterprise Strategy</a></li>
+            <li><a href="/use-case#features" className="hover:text-[#E58A6A] transition-colors">Engineering & Tech Debt</a></li>
+            <li><a href="/use-case#features" className="hover:text-[#E58A6A] transition-colors">Risk Mitigation</a></li>
+            <li><a href="/use-case#features" className="hover:text-[#E58A6A] transition-colors">Startup Scaling</a></li>
           </ul>
         </div>
 
         <div>
           <h4 className="text-[#1C1B18] font-semibold text-sm mb-6">Company</h4>
           <ul className="space-y-4 text-sm text-[#1C1B18]/50">
-            <li><a href="#" className="hover:text-[#E58A6A] transition-colors">About Us</a></li>
-            <li><a href="#" className="hover:text-[#E58A6A] transition-colors">Blog & Research</a></li>
-            <li><a href="#" className="hover:text-[#E58A6A] transition-colors">Careers</a></li>
-            <li><a href="#" className="hover:text-[#E58A6A] transition-colors">Contact Sales</a></li>
+            <li><a href="/blog" className="hover:text-[#E58A6A] transition-colors">About Us</a></li>
+            <li><a href="/blog" className="hover:text-[#E58A6A] transition-colors">Blog & Research</a></li>
+            <li><a href="/blog" className="hover:text-[#E58A6A] transition-colors">Careers</a></li>
+            <li><a href="/pricing#contactsales" className="hover:text-[#E58A6A] transition-colors">Contact Sales</a></li>
           </ul>
         </div>
       </div>
