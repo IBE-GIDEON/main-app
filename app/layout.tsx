@@ -1,9 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/Navbar";
-
-import AppLoader from "@/components/AppLoader";
 
 
 
@@ -18,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Think AI",
+  title: "three AI",
   description: "An AI that helps businesses make decision faster",
 };
 
@@ -33,7 +30,7 @@ export default async function RootLayout({
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         
-       <AppLoader>{children}</AppLoader> 
+       {children}
       </body>
     </html>
   );

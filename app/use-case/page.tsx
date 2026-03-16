@@ -1,12 +1,12 @@
 "use client";
 
-import React, { useRef } from "react";
-import { motion, useScroll, useTransform, useInView } from "framer-motion";
+import React, { useRef, useState } from "react";
+import { motion, useScroll, useTransform, useInView, AnimatePresence } from "framer-motion";
 import {
   ChevronRight, Zap, Network, GitBranch, Target, TrendingUp,
   Shield, Cpu, Users, BarChart3, Briefcase, Building2,
   ArrowRight, CheckCircle, Lightbulb, AlertTriangle, FlaskConical,
-  DollarSign, Globe, Layers, Lock,
+  DollarSign, Globe, Layers, Lock, Menu, X,
 } from "lucide-react";
 
 /* ─── Shared easing ─────────────────────────────────────────────── */
@@ -29,39 +29,98 @@ function FadeUp({ children, delay = 0, className = "" }: { children: React.React
   );
 }
 
-/* ─── NavBar (identical to landing page) ────────────────────────── */
+/* ─── NavBar ────────────────────────────────────────── */
 function NavBar() {
+  const [open, setOpen] = useState(false);
+
   return (
-    <header className="fixed top-0 inset-x-0 mt-[-90px] z-50 flex items-center justify-between px-6 md:px-10 py-6 pointer-events-none">
-      <div className="pointer-events-auto flex ml-[-25px] items-center gap-3">
-        <motion.div
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          className="flex items-center"
-        >
-          <img src="/logofive.png" alt="Think AI Logo" className="h-[220px] w-[200px] font-bold" />
-        </motion.div>
-      </div>
+    <>
+      <header className="fixed top-0 inset-x-0 mt-[-90px] z-50 flex items-center justify-between px-6 md:px-10 py-6 pointer-events-none">
+        <div className="pointer-events-auto flex ml-[-25px] items-center gap-3">
+          <motion.div
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            className="flex items-center"
+          >
+            <img src="/logofive.png" alt="Think AI Logo" className="h-[220px] w-[200px] font-bold" />
+          </motion.div>
+        </div>
 
-      <nav className="hidden lg:flex pointer-events-auto items-center gap-11 px-8 py-3.5 w-[600px] h-[70px] rounded-full bg-black/[0.02] border border-black/[0.07] backdrop-blur-3xl shadow-[0_8px_32px_0_rgba(0,0,0,0.06)] text-[13px] font-medium text-[#1C1B18]/55">
-        <a href="/" className="hover:text-[#1C1B18] transition-colors">Home</a>
-        <a href="/#engine" className="hover:text-[#1C1B18] transition-colors">The Engine</a>
-        <a href="/#refinement" className="hover:text-[#1C1B18] transition-colors">Refinement</a>
-        <a href="/use-case" className="text-[#E58A6A] font-semibold">Use Cases</a>
-        <a href="/pricing" className="hover:text-[#1C1B18] transition-colors">Pricing</a>
-        <a href="/blog" className="hover:text-[#1C1B18] transition-colors">Blog</a>
-      </nav>
+        <nav className="hidden lg:flex pointer-events-auto items-center gap-11 px-8 py-3.5 w-[600px] h-[70px] rounded-full bg-black/[0.02] border border-black/[0.07] backdrop-blur-3xl shadow-[0_8px_32px_0_rgba(0,0,0,0.06)] text-[13px] font-medium text-[#1C1B18]/55">
+          <a href="/" className="hover:text-[#1C1B18] transition-colors">Home</a>
+          <a href="/#engine" className="hover:text-[#1C1B18] transition-colors">The Engine</a>
+          <a href="/#refinement" className="hover:text-[#1C1B18] transition-colors">Refinement</a>
+          <a href="/use-case" className="text-[#E58A6A] font-semibold">Use Cases</a>
+          <a href="/pricing" className="hover:text-[#1C1B18] transition-colors">Pricing</a>
+          <a href="/blog" className="hover:text-[#1C1B18] transition-colors">Blog</a>
+        </nav>
 
-      <div className="pointer-events-auto flex items-center gap-6">
-        <button className="text-[13px] font-medium text-[#1C1B18]/60 hover:text-[#1C1B18] transition-colors">
-          Sign In
-        </button>
-        <button className="text-[13px] font-semibold px-6 py-2.5 rounded-full bg-black/[0.05] border border-black/[0.1] text-[#1C1B18] backdrop-blur-xl hover:bg-black/[0.09] hover:scale-105 transition-all">
-          Sign Up
-        </button>
-      </div>
-    </header>
+        <div className="pointer-events-auto flex items-center gap-6">
+          {/* Auth — desktop only */}
+          <button className="hidden lg:block text-[13px] font-medium text-[#1C1B18]/60 hover:text-[#1C1B18] transition-colors">
+            Sign In
+          </button>
+          <button className="hidden lg:block text-[13px] font-semibold px-6 py-2.5 rounded-full bg-black/[0.05] border border-black/[0.1] text-[#1C1B18] backdrop-blur-xl hover:bg-black/[0.09] hover:scale-105 transition-all">
+            Sign Up
+          </button>
+
+          {/* Burger — mobile only */}
+          <button
+            onClick={() => setOpen(!open)}
+            className="lg:hidden flex items-center justify-center w-10 h-10 rounded-full bg-black/[0.04] border border-black/[0.08] backdrop-blur-xl text-[#1C1B18] hover:bg-black/[0.08] transition-all"
+            aria-label="Toggle menu"
+          >
+            {open ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
+          </button>
+        </div>
+      </header>
+
+      {/* Mobile Drawer */}
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ opacity: 0, y: -16 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -16 }}
+            transition={{ duration: 0.35, ease }}
+            className="fixed inset-x-4 top-[100px] z-40 lg:hidden rounded-[2rem] bg-white/80 border border-black/[0.07] backdrop-blur-3xl shadow-[0_16px_48px_rgba(0,0,0,0.1)] overflow-hidden"
+          >
+            <nav className="flex flex-col px-6 py-6 gap-1 text-[15px] font-medium text-[#1C1B18]/60">
+              {[
+                { label: "Home", href: "/" },
+                { label: "The Engine", href: "/#engine" },
+                { label: "Refinement", href: "/#refinement" },
+                { label: "Use Cases", href: "/use-case" },
+                { label: "Pricing", href: "/pricing" },
+                { label: "Blog", href: "/blog" },
+              ].map(({ label, href }) => (
+                <a
+                  key={label}
+                  href={href}
+                  onClick={() => setOpen(false)}
+                  className={`px-4 py-3 rounded-2xl hover:bg-black/[0.04] transition-all ${label === "Use Cases" ? "text-[#E58A6A] font-semibold" : "hover:text-[#D97706]"}`}
+                >
+                  {label}
+                </a>
+              ))}
+
+              <div className="mt-4 pt-4 border-t border-black/[0.06] flex flex-col gap-3">
+                <button className="text-[13px] font-medium text-[#1C1B18]/60 hover:text-[#1C1B18] transition-colors text-left px-4">
+                  Sign In
+                </button>
+                <button
+                  onClick={() => setOpen(false)}
+                  className="w-full text-[13px] font-semibold px-6 py-3 rounded-full bg-black/[0.05] border border-black/[0.1] text-[#1C1B18] hover:bg-black/[0.09] transition-all"
+                >
+                  Sign Up
+                </button>
+              </div>
+            </nav>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 }
 
@@ -508,10 +567,10 @@ function CTA() {
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <a href="/signin">
-            <button className="h-12 px-8 rounded-full bg-[#E58A6A] text-white font-semibold text-sm hover:bg-[#D97757] transition-colors flex items-center gap-2 shadow-[0_0_24px_rgba(229,138,106,0.25)]">
-              Start building decisions
-              <ChevronRight className="w-4 h-4" />
-            </button>
+              <button className="h-12 px-8 rounded-full bg-[#E58A6A] text-white font-semibold text-sm hover:bg-[#D97757] transition-colors flex items-center gap-2 shadow-[0_0_24px_rgba(229,138,106,0.25)]">
+                Start building decisions
+                <ChevronRight className="w-4 h-4" />
+              </button>
             </a>
             <button className="h-12 px-8 rounded-full border border-black/[0.1] text-[#1C1B18]/70 text-sm font-medium hover:bg-black/[0.03] transition-colors flex items-center gap-2" id="contactsales">
               Talk to sales
@@ -527,76 +586,76 @@ function CTA() {
 /* ─── Footer (identical to landing page) ────────────────────────── */
 function EnterpriseFooter() {
   return (
-      <footer className="border-t border-black/[0.07] bg-[#F5F4F0] pt-20 pb-12 px-6 md:px-12">
-          <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-5 gap-12 md:gap-8 mb-16">
-    
-            {/* Logo & Info Column */}
-            <div className="md:col-span-2">
-              <div className="flex items-center gap-3 mb-6">
-                <motion.div
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  transition={{ duration: 0.8, ease: "easeOut" }}
-                  className="flex items-center"
-                >
-                  <img
-                    src="/logofive.PNG"
-                    alt="ThinkAI Logo"
-                    className="h-[80px] w-auto"
-                  />
-                </motion.div>
-              </div>
-              <p className="text-[#1C1B18]/40 text-sm leading-relaxed max-w-xs mb-8">
-                The Decision Engine for the modern enterprise. We think through so you can do.
-              </p>
-              <div className="flex items-center gap-3">
-                <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                <span className="text-xs font-medium text-[#1C1B18]/30 uppercase tracking-widest">Systems Operational</span>
-              </div>
-            </div>
-    
-            {/* Links Columns */}
-            <div>
-              <h4 className="text-[#1C1B18] font-semibold text-sm mb-6">Product</h4>
-              <ul className="space-y-4 text-sm text-[#1C1B18]/50">
-                <li><a href="#engine" className="hover:text-[#E58A6A] transition-colors">The Engine</a></li>
-                <li><a href="#aside" className="hover:text-[#E58A6A] transition-colors">Aside AI UI</a></li>
-                <li><a href="#security" className="hover:text-[#E58A6A] transition-colors">Security & Trust</a></li>
-                <li><a href="/pricing" className="hover:text-[#E58A6A] transition-colors">Pricing</a></li>
-                <li><a href="#" className="hover:text-[#E58A6A] transition-colors">Changelog</a></li>
-              </ul>
-            </div>
-    
-            <div>
-              <h4 className="text-[#1C1B18] font-semibold text-sm mb-6">Use Cases</h4>
-              <ul className="space-y-4 text-sm text-[#1C1B18]/50">
-                <li><a href="/use-case#features" className="hover:text-[#E58A6A] transition-colors">Enterprise Strategy</a></li>
-                <li><a href="/use-case#features" className="hover:text-[#E58A6A] transition-colors">Engineering & Tech Debt</a></li>
-                <li><a href="/use-case#features" className="hover:text-[#E58A6A] transition-colors">Risk Mitigation</a></li>
-                <li><a href="/use-case#features" className="hover:text-[#E58A6A] transition-colors">Startup Scaling</a></li>
-              </ul>
-            </div>
-    
-            <div>
-              <h4 className="text-[#1C1B18] font-semibold text-sm mb-6">Company</h4>
-              <ul className="space-y-4 text-sm text-[#1C1B18]/50">
-                <li><a href="/blog" className="hover:text-[#E58A6A] transition-colors">About Us</a></li>
-                <li><a href="/blog" className="hover:text-[#E58A6A] transition-colors">Blog & Research</a></li>
-                <li><a href="/blog" className="hover:text-[#E58A6A] transition-colors">Careers</a></li>
-                <li><a href="/pricing#contactsales" className="hover:text-[#E58A6A] transition-colors">Contact Sales</a></li>
-              </ul>
-            </div>
+    <footer className="border-t border-black/[0.07] bg-[#F5F4F0] pt-20 pb-12 px-6 md:px-12">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-5 gap-12 md:gap-8 mb-16">
+
+        {/* Logo & Info Column */}
+        <div className="md:col-span-2">
+          <div className="flex items-center gap-3 mb-6">
+            <motion.div
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
+              className="flex items-center"
+            >
+              <img
+                src="/logofive.PNG"
+                alt="ThinkAI Logo"
+                className="h-[80px] w-auto"
+              />
+            </motion.div>
           </div>
-    
-          <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between pt-8 border-t border-black/[0.05] text-xs text-[#1C1B18]/30">
-            <p>© 2026 three AI Inc. All rights reserved.</p>
-            <div className="flex gap-6 mt-4 md:mt-0">
-              <a href="#" className="hover:text-[#1C1B18] transition-colors">Privacy Policy</a>
-              <a href="#" className="hover:text-[#1C1B18] transition-colors">Terms of Service</a>
-              <a href="#" className="hover:text-[#1C1B18] transition-colors">Cookie Settings</a>
-            </div>
+          <p className="text-[#1C1B18]/40 text-sm leading-relaxed max-w-xs mb-8">
+            The Decision Engine for the modern enterprise. We think through so you can do.
+          </p>
+          <div className="flex items-center gap-3">
+            <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+            <span className="text-xs font-medium text-[#1C1B18]/30 uppercase tracking-widest">Systems Operational</span>
           </div>
-        </footer>
+        </div>
+
+        {/* Links Columns */}
+        <div>
+          <h4 className="text-[#1C1B18] font-semibold text-sm mb-6">Product</h4>
+          <ul className="space-y-4 text-sm text-[#1C1B18]/50">
+            <li><a href="#engine" className="hover:text-[#E58A6A] transition-colors">The Engine</a></li>
+            <li><a href="#aside" className="hover:text-[#E58A6A] transition-colors">Aside AI UI</a></li>
+            <li><a href="#security" className="hover:text-[#E58A6A] transition-colors">Security & Trust</a></li>
+            <li><a href="/pricing" className="hover:text-[#E58A6A] transition-colors">Pricing</a></li>
+            <li><a href="#" className="hover:text-[#E58A6A] transition-colors">Changelog</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 className="text-[#1C1B18] font-semibold text-sm mb-6">Use Cases</h4>
+          <ul className="space-y-4 text-sm text-[#1C1B18]/50">
+            <li><a href="/use-case#features" className="hover:text-[#E58A6A] transition-colors">Enterprise Strategy</a></li>
+            <li><a href="/use-case#features" className="hover:text-[#E58A6A] transition-colors">Engineering & Tech Debt</a></li>
+            <li><a href="/use-case#features" className="hover:text-[#E58A6A] transition-colors">Risk Mitigation</a></li>
+            <li><a href="/use-case#features" className="hover:text-[#E58A6A] transition-colors">Startup Scaling</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 className="text-[#1C1B18] font-semibold text-sm mb-6">Company</h4>
+          <ul className="space-y-4 text-sm text-[#1C1B18]/50">
+            <li><a href="/blog" className="hover:text-[#E58A6A] transition-colors">About Us</a></li>
+            <li><a href="/blog" className="hover:text-[#E58A6A] transition-colors">Blog & Research</a></li>
+            <li><a href="/blog" className="hover:text-[#E58A6A] transition-colors">Careers</a></li>
+            <li><a href="/pricing#contactsales" className="hover:text-[#E58A6A] transition-colors">Contact Sales</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between pt-8 border-t border-black/[0.05] text-xs text-[#1C1B18]/30">
+        <p>© 2026 three AI Inc. All rights reserved.</p>
+        <div className="flex gap-6 mt-4 md:mt-0">
+          <a href="#" className="hover:text-[#1C1B18] transition-colors">Privacy Policy</a>
+          <a href="#" className="hover:text-[#1C1B18] transition-colors">Terms of Service</a>
+          <a href="#" className="hover:text-[#1C1B18] transition-colors">Cookie Settings</a>
+        </div>
+      </div>
+    </footer>
   );
 }
 

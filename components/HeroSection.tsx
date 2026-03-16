@@ -1,8 +1,8 @@
 "use client";
 
-import React from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
-import { Network, Lock, Zap, LayoutPanelLeft, ChevronRight, Play, Briefcase, Shield, Cpu, AlertCircle, Clock } from "lucide-react";
+import React, { useState } from "react";
+import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
+import { Network, Lock, Zap, LayoutPanelLeft, ChevronRight, Play, Briefcase, Shield, Cpu, AlertCircle, Clock, Menu, X } from "lucide-react";
 
 /* --- Apple-style Easing --- */
 const ease = [0.16, 1, 0.3, 1];
@@ -10,49 +10,106 @@ const ease = [0.16, 1, 0.3, 1];
 /* --- Components --- */
 
 function NavBar() {
+  const [open, setOpen] = useState(false);
+
   return (
-    <header className="fixed top-0 inset-x-0 mt-[-90px] z-50 flex items-center justify-between px-6 md:px-10 py-6 pointer-events-none">
-      {/* Logo */}
-      <div className="pointer-events-auto flex ml-[-25px] items-center gap-3">
-        <motion.div
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          className="flex items-center"
-        >
-          <a href="#home">
-          <img
-            src="/logofive.png"
-            alt="Think AI Logo"
-            className="h-[220px] w-[200px] font-bold"
-          /></a>
-        </motion.div>
-      </div>
+    <>
+      <header className="fixed top-0 inset-x-0 mt-[-90px] z-50 flex items-center justify-between px-6 md:px-10 py-6 pointer-events-none">
+        {/* Logo */}
+        <div className="pointer-events-auto flex ml-[-25px] items-center gap-3">
+          <motion.div
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            className="flex items-center"
+          >
+            <a href="#home">
+              <img
+                src="/logofive.png"
+                alt="Think AI Logo"
+                className="h-[220px] w-[200px] font-bold"
+              />
+            </a>
+          </motion.div>
+        </div>
 
-      {/* Navigation - Glass Oval */}
-      <nav className="hidden lg:flex pointer-events-auto items-center gap-11 px-8 py-3.5 w-[600px] h-[70px] rounded-full bg-black/[0.02] border border-black/[0.07] backdrop-blur-3xl shadow-[0_8px_32px_0_rgba(0,0,0,0.06)] text-[13px] font-medium text-[#1C1B18]/55">
-        <a href="#home" className="hover:text-[#D97706] transition-colors">Home</a>
-        <a href="#engine" className="hover:text-[#D97706] transition-colors">The Engine</a>
-        <a href="#refinement" className="hover:text-[#D97706] transition-colors">Refinement</a>
-        <a href="/use-case" className="hover:text-[#D97706] transition-colors">Use Cases</a>
-        <a href="/pricing" className="hover:text-[#D97706] transition-colors">Pricing</a>
-        <a href="/blog" className="hover:text-[#D97706] transition-colors">Blog</a>
-      </nav>
+        {/* Navigation - Glass Oval (desktop only) */}
+        <nav className="hidden lg:flex pointer-events-auto items-center gap-11 px-8 py-3.5 w-[600px] h-[70px] rounded-full bg-black/[0.02] border border-black/[0.07] backdrop-blur-3xl shadow-[0_8px_32px_0_rgba(0,0,0,0.06)] text-[13px] font-medium text-[#1C1B18]/55">
+          <a href="#home" className="hover:text-[#D97706] transition-colors">Home</a>
+          <a href="#engine" className="hover:text-[#D97706] transition-colors">The Engine</a>
+          <a href="#refinement" className="hover:text-[#D97706] transition-colors">Refinement</a>
+          <a href="/use-case" className="hover:text-[#D97706] transition-colors">Use Cases</a>
+          <a href="/pricing" className="hover:text-[#D97706] transition-colors">Pricing</a>
+          <a href="/blog" className="hover:text-[#D97706] transition-colors">Blog</a>
+        </nav>
 
-      {/* Auth */}
-      <div className="pointer-events-auto flex items-center gap-6">
-        <button className="text-[13px] font-medium text-[#1C1B18]/60 hover:text-[#1C1B18] transition-colors">
-          Sign In
-        </button>
-       
-          <a href="/signin">
-           <button className="text-[13px] font-semibold px-6 py-2.5 rounded-full bg-black/[0.05] border border-black/[0.1] text-[#1C1B18] backdrop-blur-xl hover:bg-black/[0.09] hover:scale-105 transition-all">
-          Sign Up
+        {/* Auth (desktop) + Burger (mobile) */}
+        <div className="pointer-events-auto flex items-center gap-6">
+          {/* Auth — desktop only */}
+          <button className="hidden lg:block text-[13px] font-medium text-[#1C1B18]/60 hover:text-[#1C1B18] transition-colors">
+            Sign In
           </button>
+          <a href="/signin" className="hidden lg:block">
+            <button className="text-[13px] font-semibold px-6 py-2.5 rounded-full bg-black/[0.05] border border-black/[0.1] text-[#1C1B18] backdrop-blur-xl hover:bg-black/[0.09] hover:scale-105 transition-all">
+              Sign Up
+            </button>
           </a>
-        
-      </div>
-    </header>
+
+          {/* Burger — mobile only */}
+          <button
+            onClick={() => setOpen(!open)}
+            className="lg:hidden flex items-center justify-center w-10 h-10 rounded-full bg-black/[0.04] border border-black/[0.08] backdrop-blur-xl text-[#1C1B18] hover:bg-black/[0.08] transition-all"
+            aria-label="Toggle menu"
+          >
+            {open ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
+          </button>
+        </div>
+      </header>
+
+      {/* Mobile Drawer */}
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ opacity: 0, y: -16 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -16 }}
+            transition={{ duration: 0.35, ease }}
+            className="fixed inset-x-4 top-[100px] z-40 lg:hidden rounded-[2rem] bg-white/80 border border-black/[0.07] backdrop-blur-3xl shadow-[0_16px_48px_rgba(0,0,0,0.1)] overflow-hidden"
+          >
+            <nav className="flex flex-col px-6 py-6 gap-1 text-[15px] font-medium text-[#1C1B18]/60">
+              {[
+                { label: "Home", href: "#home" },
+                { label: "The Engine", href: "#engine" },
+                { label: "Refinement", href: "#refinement" },
+                { label: "Use Cases", href: "/use-case" },
+                { label: "Pricing", href: "/pricing" },
+                { label: "Blog", href: "/blog" },
+              ].map(({ label, href }) => (
+                <a
+                  key={label}
+                  href={href}
+                  onClick={() => setOpen(false)}
+                  className="px-4 py-3 rounded-2xl hover:bg-black/[0.04] hover:text-[#D97706] transition-all"
+                >
+                  {label}
+                </a>
+              ))}
+
+              <div className="mt-4 pt-4 border-t border-black/[0.06] flex flex-col gap-3">
+                <button className="text-[13px] font-medium text-[#1C1B18]/60 hover:text-[#1C1B18] transition-colors text-left px-4">
+                  Sign In
+                </button>
+                <a href="/signin" onClick={() => setOpen(false)}>
+                  <button className="w-full text-[13px] font-semibold px-6 py-3 rounded-full bg-black/[0.05] border border-black/[0.1] text-[#1C1B18] hover:bg-black/[0.09] transition-all">
+                    Sign Up
+                  </button>
+                </a>
+              </div>
+            </nav>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 }
 
@@ -98,12 +155,12 @@ function Hero() {
         transition={{ duration: 1, delay: 0.3, ease }}
         className="mt-12 flex flex-col sm:flex-row items-center gap-4"
       >
-
         <a href="/signin">
-        <button className="h-12 px-8 rounded-full bg-[#E58A6A] text-white font-semibold text-sm hover:bg-[#D97757] transition-colors flex items-center gap-2 shadow-[0_0_24px_rgba(229,138,106,0.25)]">
-          Start building decisions
-          <ChevronRight className="w-4 h-4" />
-        </button></a>
+          <button className="h-12 px-8 rounded-full bg-[#E58A6A] text-white font-semibold text-sm hover:bg-[#D97757] transition-colors flex items-center gap-2 shadow-[0_0_24px_rgba(229,138,106,0.25)]">
+            Start building decisions
+            <ChevronRight className="w-4 h-4" />
+          </button>
+        </a>
       </motion.div>
     </section>
   );
