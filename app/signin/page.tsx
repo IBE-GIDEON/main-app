@@ -1,5 +1,6 @@
 "use client";
 
+import { Suspense } from 'react';
 import React, { useState, useEffect } from "react";
 import { signIn } from "next-auth/react";
 import {
@@ -23,7 +24,8 @@ const INK = "#0F0E0B";
 const LILAC = "#B9A7FF";
 const MUTED = "#8A8780";
 
-export default function AuthPage() {
+// 1. Rename your main function and remove 'export default'
+function AuthPageContent() {
   const searchParams = useSearchParams();
   const [mode, setMode] = useState<"login" | "signup">("login");
   const [isLoading, setIsLoading] = useState<string | null>(null);
@@ -521,7 +523,6 @@ export default function AuthPage() {
           cursor: not-allowed;
         }
 
-        /* --- NEW: BLUR EFFECT FOR DISABLED PROVIDERS --- */
         .provider-btn-blurred {
           filter: blur(1.5px);
           opacity: 0.45;
@@ -781,7 +782,6 @@ export default function AuthPage() {
                 )}
               </button>
 
-              {/* THE FIX: Added disabled={true} and provider-btn-blurred class */}
               <button
                 disabled={true}
                 onClick={() => handleSocialAuth("apple")}
@@ -800,7 +800,6 @@ export default function AuthPage() {
                 )}
               </button>
 
-              {/* THE FIX: Added disabled={true} and provider-btn-blurred class */}
               <button
                 disabled={true}
                 onClick={() => handleSocialAuth("azure-ad")}
@@ -848,6 +847,23 @@ export default function AuthPage() {
   );
 }
 
+// 2. The protective Suspense boundary wrap
+export default function AuthPage() {
+  return (
+    <Suspense 
+      fallback={
+        <div className="min-h-screen flex items-center justify-center bg-[#F2F0EA]">
+          <div className="text-[10px] font-mono tracking-[0.16em] uppercase text-[#0F0E0B] opacity-50">
+            Loading...
+          </div>
+        </div>
+      }
+    >
+      <AuthPageContent />
+    </Suspense>
+  );
+}
+
 function AuthNav() {
   const [open, setOpen] = useState(false);
 
@@ -860,7 +876,6 @@ function AuthNav() {
 
   return (
     <>
-      
       {open && (
         <div className="mobile-drawer">
           <div className="mobile-drawer-inner">
