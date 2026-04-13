@@ -2,45 +2,46 @@
 
 import React from 'react'
 import { Workflow } from 'lucide-react'
-import { useRouter } from 'next/navigation'
 import clsx from 'clsx'
 
 const Newdecision = ({ isCollapsed }: { isCollapsed: boolean }) => {
-  const router = useRouter();
 
-  const createNewflows = async () => {
-    // created a new chatid in store
-    router.push (`/chat/676767`);
+  const createNewflows = () => {
+    // 1. Instantly fires the signal to wipe the workspace without a page reload or URL change
+    if (typeof window !== "undefined") {
+      window.dispatchEvent(new CustomEvent("think-ai-new"));
+    }
   };
 
   return (
-    <div 
+    <div
       onClick={createNewflows}
-      title= {isCollapsed ? "New think" : ""}
-      className="mt-4 text-[15px] items-center px-0.5 text-white/80 justify-center mb-[-28px]"
+      title={isCollapsed ? "New Decision" : ""}
+      className="px-0 mt-2"
     >
       <div
         className={clsx(
-          "flex items-center gap-2 px-2 py-2 rounded-lg cursor-pointer text-white/80 border border-transparent bg-transparent transition-all duration-300 ease-out hover:bg-white/10 hover:backdrop-blur-md hover:border-white/20 hover:text-white hover:shadow-[0_8px_32px_rgba(255,255,255,0.08)] active:scale-[0.98]",
-          isCollapsed && "justify-center"
+          // Always use the exact same flex layout and padding (p-2). No swapping justify properties.
+          "flex items-center w-full p-2 rounded-xl cursor-pointer",
+          "font-semibold text-[13px] text-white",
+          "bg-gradient-to-r from-[#b372ce] to-[#5b8def] shadow-[0_0_15px_rgba(179,114,206,0.25)] hover:shadow-[0_0_20px_rgba(179,114,206,0.4)]",
+          "transition-all duration-300 ease-out active:scale-[0.98]"
         )}
       >
-        <span className="shrink-0">
-          <Workflow />
-        </span>
-
-        {/* Smooth text animation (no glitch) */}
-        <span
+        {/* Fixed-width icon container: guarantees perfectly centered alignment when sidebar is 72px */}
+        <div className="flex items-center justify-center w-8 h-8 shrink-0">
+          <Workflow size={18} className="text-white" />
+        </div>
+        
+        {/* Smooth expanding text container using max-width for zero-jitter clipping */}
+        <div
           className={clsx(
-            "whitespace-nowrap",
-            "transition-all duration-300 ease-in-out",
-            isCollapsed
-              ? "opacity-0 -translate-x-2 w-0 overflow-hidden"
-              : "opacity-100 translate-x-0 w-auto"
+            "flex flex-col justify-center overflow-hidden transition-all duration-300 ease-in-out",
+            isCollapsed ? "max-w-0 opacity-0 ml-0" : "max-w-[150px] opacity-100 ml-2"
           )}
         >
-          New Decision
-        </span>
+          <span className="whitespace-nowrap">New Decision</span>
+        </div>
       </div>
     </div>
   )

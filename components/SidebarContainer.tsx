@@ -1,162 +1,180 @@
-// app/(chat)/_components/Sidebar.tsx
 "use client";
 
-
 import React, { useState } from "react";
-import { X, Menu, PanelRight } from "lucide-react";
+import { Menu, PanelRight } from "lucide-react";
 import clsx from "clsx";
 import Sidebarheader from "./Sidebarheader";
-import Sidebarfooter from "./Sidebarfooter";
-import Image from 'next/image';
-
-
+import Sidebarfooter from "./Sidebarfooter"; 
+import SidebarRecents from "./SidebarRecents";
+import Image from "next/image";
 
 interface SidebarContainerProps {
   onCollapsedChange?: (isCollapsed: boolean) => void;
 }
 
 const SidebarContainer = ({ onCollapsedChange }: SidebarContainerProps) => {
-  const [isCollapsed, setIsCollapsed] = useState(false); // width collapse (desktop + mobile)
-  const [isMobileOpen, setIsMobileOpen] = useState(false); // mobile visibility
+  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isMobileOpen, setIsMobileOpen] = useState(false);
 
-  const sidebarWidth = isCollapsed ? "w-16" : "w-64";
+  const sidebarWidth = isCollapsed ? "w-[72px]" : "w-64";
 
-  // Notify parent when sidebar collapses/expands
   const handleToggleCollapse = () => {
     const newState = !isCollapsed;
     setIsCollapsed(newState);
     onCollapsedChange?.(newState);
   };
 
-
   const sidebarClasses = clsx(
-    "flex h-full flex-col bg-black text-gray-900 transition-all duration-300 ease-in-out",
+    "flex h-full flex-col transition-all duration-300 ease-in-out",
     sidebarWidth
   );
 
+  const glassBtn =
+    "flex items-center justify-center transition-all duration-200 rounded-lg hover:bg-zinc-200 dark:hover:bg-white/10 text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-200";
+
+  const sidebarBg = "bg-[#F9F9F9] dark:bg-[#0D0D0D] border-r border-zinc-200 dark:border-white/5 transition-colors duration-300";
+
   const desktopHeaderContent = (
-    <div className="flex items-center justify-between px-2 py-2">
-      {/* Logo */}
-      <div className={clsx("flex items-center justify-center transition-all duration-300", isCollapsed && "w-full")}>
-        <button
-          type="button"
-          onClick={handleToggleCollapse}
-          className="h-auto w-auto flex items-center justify-center rounded-full dark:hover:bg-zinc-900 group relative"
-          aria-label="Toggle sidebar width"
-          title={isCollapsed ? "Open sidebar" : ""}
-        >
-          <Image 
-            className={clsx(
-              "mt-[6px] transition-all duration-300", 
-              isCollapsed ? "ml-0 group-hover:opacity-0" : "ml-[14px]"
-            )}
-            src="/tw.png" 
-            alt="My logo" 
-            width={isCollapsed ? 40 : 75} 
-            height={10} 
-          />
-          
-          {/* PanelRight icon on hover when collapsed */}
-          {isCollapsed && (
-            <PanelRight className="h-5 w-5 text-white absolute opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-          )}
-
-          {/* Tooltip */}
-          {isCollapsed && (
-            <div className="absolute left-full ml-2 px-2 py-1 bg-white text-black text-xs font-semibold rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
-              Open sidebar
+    <div className="px-3 py-4">
+      <div
+        className={clsx(
+          "flex items-center transition-all duration-300",
+          isCollapsed 
+            ? "justify-center p-2 bg-transparent" 
+            : "justify-between p-3 bg-zinc-100 dark:bg-[#262626] rounded-xl border border-zinc-200 dark:border-white/5"
+        )}
+      >
+        {isCollapsed ? (
+          <button
+            type="button"
+            onClick={handleToggleCollapse}
+            className="relative flex h-8 w-8 items-center justify-center rounded-lg group hover:bg-zinc-200 dark:hover:bg-white/10 transition-all duration-200"
+            aria-label="Expand sidebar"
+          >
+            {/* THE FIX: Dark Mode Logo (hidden in light mode) */}
+            <Image
+              className="absolute hidden dark:block transition-opacity duration-300 group-hover:opacity-0"
+              src="/dashlogo.png"
+              alt="Think AI logo"
+              width={24}
+              height={24}
+            />
+            {/* THE FIX: Light Mode Logo (hidden in dark mode) */}
+            <Image
+              className="absolute block dark:hidden transition-opacity duration-300 group-hover:opacity-0"
+              src="/dashlogo-light.png"
+              alt="Think AI logo"
+              width={24}
+              height={24}
+            />
+            
+            <PanelRight className="absolute h-4 w-4 text-zinc-500 dark:text-zinc-300 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+            
+            <div className="absolute left-full ml-4 px-2 py-1 bg-white dark:bg-[#1A1A1A] border border-zinc-200 dark:border-white/10 text-zinc-700 dark:text-zinc-300 text-xs font-medium rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-50 shadow-sm dark:shadow-none">
+              Expand menu
             </div>
-          )}
-        </button>
+          </button>
+        ) : (
+          <>
+            {/* THE FIX: Dark Mode Logo */}
+            <Image
+              className="hidden dark:block bg-none"
+              src="/dashlogo.png"
+              alt="Think AI logo"
+              width={24}
+              height={24}
+            />
+            {/* THE FIX: Light Mode Logo */}
+            <Image
+              className="block dark:hidden bg-none"
+              src="/dashlogo-light.png"
+              alt="Think AI logo"
+              width={24}
+              height={24}
+            />
+            <button
+              type="button"
+              onClick={handleToggleCollapse}
+              className={clsx("h-7 w-7", glassBtn)}
+              aria-label="Close sidebar"
+            >
+              <PanelRight className="h-4 w-4" />
+            </button>
+          </>
+        )}
       </div>
-
-      {/* Close button on desktop (shows when expanded) */}
-      {!isCollapsed && (
-        <button
-          type="button"
-          onClick={handleToggleCollapse}
-          className="h-8 w-8 flex items-center justify-center rounded-full mr-2 hover:bg-zinc-800 transition-colors"
-          aria-label="Close sidebar"
-        >
-          <PanelRight className="h-4 w-4 text-white" />
-        </button>
-      )}
     </div>
   );
 
   const mobileHeaderContent = (
-    <div className="flex items-center justify-end px-4 py-4">
-      {/* Mobile close button */}
+    <div className="flex items-center justify-between px-4 py-4 border-b border-zinc-200 dark:border-white/5">
+      {/* THE FIX: Mobile Dark Mode Logo */}
+      <Image src="/dashlogo.png" alt="Think AI logo" width={24} height={24} className="hidden dark:block" />
+      {/* THE FIX: Mobile Light Mode Logo */}
+      <Image src="/dashlogo-light.png" alt="Think AI logo" width={24} height={24} className="block dark:hidden" />
       <button
         type="button"
         onClick={() => setIsMobileOpen(false)}
-        className="h-8 w-8 flex items-center justify-center rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-900"
+        className={clsx("h-8 w-8", glassBtn)}
         aria-label="Close sidebar"
       >
-        <PanelRight className="h-4 w-4 mt-[-8px] text-white" />
+        <PanelRight className="h-4 w-4" />
       </button>
     </div>
   );
 
   return (
     <>
-      {/* Mobile open button */}
+      {/* MOBILE HAMBURGER BUTTON */}
       <button
         type="button"
         onClick={() => setIsMobileOpen(true)}
         className={clsx(
-          "fixed left-3 top-3 z-40 inline-flex h-9 w-9 items-center justify-center rounded-full border border-zinc-200 bg-white shadow-md hover:bg-zinc-100 dark:border-zinc-800 dark:bg-zinc-900 dark:hover:bg-zinc-800 md:hidden transition-opacity duration-300",
-          isMobileOpen ? "opacity-0 pointer-events-none" : "opacity-100 pointer-events-auto"
+          "fixed left-4 top-4 z-40 inline-flex h-9 w-9 md:hidden transition-all duration-300 bg-white dark:bg-[#1A1A1A] border border-zinc-200 dark:border-white/10 shadow-sm dark:shadow-none",
+          glassBtn,
+          isMobileOpen
+            ? "opacity-0 pointer-events-none"
+            : "opacity-100 pointer-events-auto"
         )}
         aria-label="Open sidebar"
       >
         <Menu className="h-4 w-4" />
       </button>
 
-      {/* Mobile logo (shows when drawer is open) */}
-      <div
-        className={clsx(
-          "fixed left-3 top-3 z-40 md:hidden transition-opacity duration-300",
-          isMobileOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
-        )}
-      >
-        <Image src="/tw.png" alt="My logo" width={75} height={10} />
-      </div>
-
-      {/* Desktop sidebar */}
-      <aside className={clsx(sidebarClasses, "left-0 top-0 z-20 hidden md:flex")}>
+      {/* DESKTOP SIDEBAR */}
+      <aside className={clsx(sidebarClasses, sidebarBg, "left-0 top-0 z-20 hidden md:flex")}>
         {desktopHeaderContent}
         <Sidebarheader isCollapsed={isCollapsed} />
-           <Sidebarfooter />
+        <SidebarRecents isCollapsed={isCollapsed} />
+        <Sidebarfooter isCollapsed={isCollapsed} />
       </aside>
 
-      {/* Mobile drawer */}
+      {/* MOBILE OVERLAY */}
       <div
         className={clsx(
           "fixed inset-0 z-30 md:hidden transition-opacity duration-300",
           isMobileOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
         )}
       >
-        {/* Overlay */}
         <div
-          className="absolute inset-0 bg-black/40 backdrop-blur-sm"
+          className="absolute inset-0 bg-zinc-900/60 dark:bg-black/60 backdrop-blur-sm transition-colors"
           onClick={() => setIsMobileOpen(false)}
         />
-
-        {/* Sliding sidebar */}
+        
+        {/* MOBILE SIDEBAR */}
         <aside
           className={clsx(
-            "flex h-full flex-col bg-black text-gray-900 transition-transform duration-300 ease-in-out w-64",
+            "absolute flex h-full flex-col transition-transform duration-300 ease-in-out w-64 shadow-2xl",
+            sidebarBg,
             isMobileOpen ? "translate-x-0" : "-translate-x-full"
           )}
         >
           {mobileHeaderContent}
           <Sidebarheader isCollapsed={false} />
-           <Sidebarfooter />
+          <SidebarRecents isCollapsed={false} />
+          <Sidebarfooter isCollapsed={false} />
         </aside>
-     
       </div>
-      
     </>
   );
 };

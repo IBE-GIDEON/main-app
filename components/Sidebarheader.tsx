@@ -5,8 +5,9 @@ import React, { useState } from "react";
 import Sidebarsearch from "./Sidebarsearch"
 import path from "path";
 import Sidebarcontent from "./Sidebarcontent";
-import { LucideIcon, LayoutDashboard, LibraryBig, ClipboardClock, Sparkles } from "lucide-react"
+import { LucideIcon, LayoutDashboard, Database, Binoculars, Search, Brain } from "lucide-react"
 import Link from "next/link";
+
 import Newflows from "./Newdecision";
 
 interface Isidebaritem {
@@ -22,53 +23,58 @@ interface Isubitem {
 } 
 
 const items =[
-
   {
-    name: "Connected apps",
+    name: "conditions",
     path: "/integratedapps",
     icon: LayoutDashboard,
   },
   {
-    name: "Library",
+    name: "Insights",
     path: "/libraryfiles",
-    icon: LibraryBig,
+    icon: Brain,
   },
   {
-    name: "FLow history",
+    name: "Discover",
     path: "/history",
-    icon: ClipboardClock,
+    icon: Binoculars,
   },
   {
-    name: "Zen AI",
+    name: "Data deck",
     path: "/zen-Ai",
-    icon: Sparkles,
+    icon: Database,
   },
-
 ]
 
 const SidebarHeader = ({ isCollapsed }: { isCollapsed: boolean }) => {
-
-
   return (
     <>
-     
-<div className=" items-center px-3 pt-3 pb-2">
-        <span className="inline-flex h-7 w-7 items-center justify-center">
+      <div className="flex flex-col px-3 pt-2 pb-2">
         
-<Sidebarsearch />
- </span> 
- <div>
-  <Link href={"/"}>
-<Newflows isCollapsed={isCollapsed} />
-</Link>
-  </div>
+        {/* Search Container */}
+        <div className="mb-2 w-full">
+          <Sidebarsearch />
+        </div> 
+
+        {/* Decide / Main Action Container */}
+        {/* Kept your exact Link and Component syntax */}
+        <div className="mb-4 block w-full rounded-lg transition-all duration-200 hover:opacity-90">
         
-<div className="space-y-3 mt-10 items-center px-0.5 text-white/80 justify-center font-bold">
-  {items.map((item) => (
-    <Sidebarcontent key={item.path} item={item} isCollapsed={isCollapsed} />
-  ))}
-  </div>      
-    </div>
+            <Newflows isCollapsed={isCollapsed} />
+          
+        </div>
+        
+        {/* Navigation List Container */}
+        {/* Tightened the space-y-3 and mt-10 to match the clean Aside aesthetic */}
+        <div className="flex flex-col space-y-1 w-full text-zinc-400 font-medium">
+          {items.map((item) => (
+            <Sidebarcontent key={item.path} item={item} isCollapsed={isCollapsed} />
+          ))}
+        </div>      
+
+
+
+        
+      </div>
     </> 
   );
 };

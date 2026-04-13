@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import React, { useMemo } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
@@ -35,38 +35,29 @@ const SidebarContent = ({ item, isCollapsed }: { item: Isidebaritem; isCollapsed
       onClick={onClick}
       title={isCollapsed ? name : ""}
       className={clsx(
-        "flex items-center gap-2",
-        isCollapsed ? "justify-center px-3" : "px-3",
-        "py-2",
-        "rounded-lg",
-        "cursor-pointer",
-        "text-white/80",
-        "border border-transparent",
-        "bg-transparent",
-        "transition-all duration-300 ease-out",
-        "hover:bg-white/10",
-        "hover:backdrop-blur-md",
-        "hover:border-white/20",
-        "hover:text-white",
-        "hover:shadow-[0_8px_32px_rgba(255,255,255,0.08)]",
-        "active:scale-[0.98]",
-        isActive && "bg-white/10 backdrop-blur-md border-white/20 text-white shadow-[0_8px_32px_rgba(255,255,255,0.08)]"
+        "flex items-center w-full p-2 rounded-lg cursor-pointer",
+        "transition-all duration-300 ease-out active:scale-[0.98]",
+        isActive 
+          // THE FIX: Added light mode background (bg-zinc-100) and dark text (text-zinc-900)
+          ? "bg-zinc-100 text-zinc-900 dark:bg-white/10 dark:text-white font-medium shadow-sm"
+          // THE FIX: Added light mode hover states and inactive text colors
+          : "text-zinc-500 bg-transparent hover:bg-zinc-50 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-white/5 dark:hover:text-zinc-200"
       )}
     >
-      <Icon size={20} className="shrink-0" />
+      {/* Fixed-width icon container */}
+      <div className="flex items-center justify-center w-8 h-8 shrink-0 transition-colors">
+        <Icon size={18} />
+      </div>
 
-      {/* Smooth text animation (no glitch) */}
-      <span
+      {/* Zero-jitter text reveal via max-width */}
+      <div
         className={clsx(
-          "whitespace-nowrap text-sm font-semibold",
-          "transition-all duration-300 ease-in-out",
-          isCollapsed
-            ? "opacity-0 -translate-x-2 w-0 overflow-hidden"
-            : "opacity-100 translate-x-0 w-auto"
+          "flex flex-col justify-center overflow-hidden transition-all duration-300 ease-in-out",
+          isCollapsed ? "max-w-0 opacity-0 ml-0" : "max-w-[200px] opacity-100 ml-2"
         )}
       >
-        {name}
-      </span>
+        <span className="whitespace-nowrap text-[13px]">{name}</span>
+      </div>
     </div>
   )
 }
