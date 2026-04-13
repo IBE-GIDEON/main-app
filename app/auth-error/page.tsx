@@ -1,6 +1,8 @@
 "use client";
 
+import { Suspense } from 'react';
 import { useRouter, useSearchParams } from "next/navigation";
+import { Lock, Mail, AlertCircle, MapPin } from 'lucide-react';
 
 const ERROR_MESSAGES: Record<string, string> = {
   Configuration: "There is a problem with the server configuration.",
@@ -14,7 +16,8 @@ const ERROR_MESSAGES: Record<string, string> = {
   Default: "An unexpected error occurred.",
 };
 
-export default function AuthErrorPage() {
+// 1. The main content component that uses useSearchParams
+function AuthErrorContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const errorCode = searchParams.get("error") ?? "Default";
@@ -482,7 +485,7 @@ export default function AuthErrorPage() {
         <div className="left-panel">
           <div>
             <a href="/" className="brand">
-              <span className="brand-think">Think</span>
+              <span className="brand-think">Three</span>
               <span className="brand-ai">AI</span>
             </a>
           </div>
@@ -584,7 +587,24 @@ export default function AuthErrorPage() {
         </div>
       </div>
 
-      <p className="footer-note">Think AI · Decision Engine</p>
+      <p className="footer-note">Three AI · Decision Engine</p>
     </div>
+  );
+}
+
+// 2. The protective Suspense boundary
+export default function AuthErrorPage() {
+  return (
+    <Suspense 
+      fallback={
+        <div className="min-h-screen flex items-center justify-center bg-[#111315]">
+          <div className="text-[10px] uppercase tracking-[0.2em] font-mono text-[rgba(255,255,255,0.5)]">
+            Loading error status...
+          </div>
+        </div>
+      }
+    >
+      <AuthErrorContent />
+    </Suspense>
   );
 }
