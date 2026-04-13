@@ -11,14 +11,14 @@ const nextConfig: NextConfig = {
     ignoreDuringBuilds: true,
   },
 
-  // 3. Your existing Python connection
+  // 3. Your live Python connection
   async rewrites() {
     return [
       {
         // When you call /api/py/anything in your frontend...
         source: "/api/py/:path*",
-        // ...it actually talks to your Python server!
-        destination: "http://127.0.0.1:8000/:path*",
+        // ...it actually talks to your LIVE Python server!
+        destination: "https://main-app-backend-fvgl.onrender.com/:path*", 
       },
     ];
   },
