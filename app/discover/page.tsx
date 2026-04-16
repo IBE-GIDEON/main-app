@@ -272,7 +272,6 @@ export default function DiscoverPage() {
   const [isTopicPending, startTopicTransition] = useTransition();
   const sentinelRef = useRef<HTMLDivElement | null>(null);
 
-  // YOUR EXACT HOOK RESTORED
   const {
     stories,
     loading,
@@ -349,8 +348,10 @@ export default function DiscoverPage() {
   }, []);
 
   return (
-    <main className="flex-1 overflow-y-auto bg-[#F9F9F9] font-sans dark:bg-[#121212]">
-      <div className="mx-auto flex min-h-full w-full max-w-[1560px] flex-col gap-6 px-4 pb-16 pt-8 sm:px-6 lg:px-8">
+    // FIX: Restored flex-1 to keep your layout intact, changed to overflow-y-scroll to kill the jitter
+    <main className="flex-1 overflow-y-scroll bg-[#F9F9F9] font-sans dark:bg-[#121212]">
+      {/* FIX: Restored your original pt-16 padding */}
+      <div className="mx-auto flex min-h-full w-full max-w-[1560px] flex-col gap-6 px-4 pb-16 pt-16 sm:px-6 lg:px-8 lg:pt-8">
         <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_320px]">
           <section className="min-w-0 space-y-6">
             <header className="sticky top-0 z-10 -mx-4 border-b border-zinc-200 bg-[#F9F9F9]/90 px-4 py-4 backdrop-blur xl:static xl:mx-0 xl:border-b-0 xl:bg-transparent xl:p-0 dark:border-zinc-800 dark:bg-[#121212]/90">
@@ -400,7 +401,7 @@ export default function DiscoverPage() {
                   </div>
                 </div>
 
-                <div className="flex flex-wrap items-center gap-2 border-b border-zinc-200 pb-2 dark:border-zinc-800">
+                <div className="flex min-h-[36px] flex-wrap items-center gap-2 border-b border-zinc-200 pb-2 dark:border-zinc-800">
                   {FEED_TOPICS.map((topic) => (
                     <button
                       key={topic.value}
@@ -421,11 +422,13 @@ export default function DiscoverPage() {
                       {topic.label}
                     </button>
                   ))}
-                  {isTopicPending && (
-                    <span className="ml-2 text-xs font-medium uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
-                      switching...
-                    </span>
-                  )}
+                  <div className="ml-2 w-20">
+                    {isTopicPending && (
+                      <span className="text-xs font-medium uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
+                        switching...
+                      </span>
+                    )}
+                  </div>
                 </div>
               </div>
             </header>

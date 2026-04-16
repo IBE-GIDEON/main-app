@@ -23,7 +23,6 @@ const STORY_TOPIC_LABELS: Record<DiscoverStoryTopic, string> = {
   macro: "Macro",
 };
 
-// Flattened badge colors to match the enterprise look
 const STORY_TOPIC_STYLES: Record<DiscoverStoryTopic, string> = {
   markets:
     "border-emerald-500/20 bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-300",
@@ -67,13 +66,14 @@ export default function DiscoverStoryPage() {
     ? params.storyId[0]
     : params.storyId;
 
-  // YOUR EXACT LOGIC - UNTOUCHED
   const { story, related, loading, error, mode, fetchedAt } =
     useDiscoverStory(storyId);
 
   return (
-    <main className="flex-1 overflow-y-auto bg-[#F9F9F9] font-sans dark:bg-[#121212]">
-      <div className="mx-auto flex min-h-full w-full max-w-[1280px] flex-col gap-6 px-4 pb-16 pt-8 sm:px-6 lg:px-8">
+    // FIX: Restored flex-1 for layout support, using overflow-y-scroll to block the shake
+    <main className="flex-1 overflow-y-scroll bg-[#F9F9F9] font-sans dark:bg-[#121212]">
+      {/* FIX: Restored your original pt-16 padding */}
+      <div className="mx-auto flex min-h-full w-full max-w-[1280px] flex-col gap-6 px-4 pb-16 pt-16 sm:px-6 lg:px-8 lg:pt-8">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <Link
             href="/discover"
@@ -91,7 +91,7 @@ export default function DiscoverStoryPage() {
 
         {loading ? (
           <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_320px]">
-            <div className="h-[520px] animate-pulse rounded-md border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-[#1C1C1E]" />
+            <div className="h-[600px] animate-pulse rounded-md border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-[#1C1C1E]" />
             <div className="h-[420px] animate-pulse rounded-md border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-[#1C1C1E]" />
           </div>
         ) : story ? (
