@@ -6,10 +6,11 @@ module.exports = {
     "./pages/**/*.{js,ts,jsx,tsx}",
     "./components/**/*.{js,ts,jsx,tsx}",
   ],
-  theme: {
-    extend: {
-      backdropBlur: {
-      xs: '2px',
+theme: {
+  extend: {
+    fontFamily: {
+      serif: ['"Playfair Display"', 'Georgia', 'serif'],
+      sans: ['Inter', 'system-ui', 'sans-serif'],
     },
       keyframes: {
         blobSlow: {
