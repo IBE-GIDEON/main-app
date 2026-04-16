@@ -211,7 +211,8 @@ export default function ZenSearchBar({
               className="flex min-w-0 items-center gap-2 rounded-full px-2.5 py-2 text-[12px] font-medium text-zinc-400 transition-colors hover:bg-zinc-100 hover:text-zinc-800 disabled:opacity-50 sm:px-3 sm:text-[13px] dark:hover:bg-white/10 dark:hover:text-zinc-100"
             >
               <Plug size={16} className="text-zinc-400 dark:text-zinc-400" />
-              <span className="truncate">Connect Apps</span>
+              <span className="sm:hidden">Apps</span>
+              <span className="hidden sm:inline">Connect Apps</span>
             </button>
           </div>
 
