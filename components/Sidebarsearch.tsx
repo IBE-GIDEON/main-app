@@ -18,11 +18,15 @@ export default function Sidebarsearch({ isCollapsed = false }: SearchbarProps) {
   return (
     <>
       <button
+        type="button"
         onClick={() => setIsModalOpen(true)}
         title={isCollapsed ? "Search" : ""}
+        aria-haspopup="dialog"
+        aria-expanded={isModalOpen}
         className={clsx(
-          "flex items-center w-full p-2 rounded-xl cursor-pointer",
+          "flex w-full items-center rounded-xl p-2 cursor-pointer",
           "transition-all duration-300 ease-out active:scale-[0.98]",
+          isCollapsed ? "justify-center" : "justify-start",
           
           // Light Mode (Crisp white box, subtle border, dark text on hover)
           "bg-white border border-zinc-200 text-zinc-500 shadow-sm",

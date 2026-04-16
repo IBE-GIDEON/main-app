@@ -38,7 +38,7 @@ const SidebarHeader = ({ isCollapsed }: { isCollapsed: boolean }) => {
         
         {/* Search Container */}
         <div className="mb-2 w-full">
-          <Sidebarsearch />
+          <Sidebarsearch isCollapsed={isCollapsed} />
         </div> 
 
         {/* Decide / Main Action Container */}
