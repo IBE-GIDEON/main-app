@@ -104,7 +104,7 @@ export default function ZenSearchBar({
   };
 
   return (
-    <div className="mx-auto w-full max-w-4xl px-4 py-2">
+    <div className="mx-auto w-full max-w-4xl px-3 py-2 sm:px-4">
       
       {/* HIDDEN FILE INPUTS */}
       <input 
@@ -134,7 +134,7 @@ export default function ZenSearchBar({
         `}
       >
         {/* Top Section: Input */}
-        <div className="px-5 pt-4 pb-2">
+        <div className="px-4 pt-4 pb-2 sm:px-5">
           <textarea
             ref={textareaRef}
             value={input}
@@ -148,17 +148,17 @@ export default function ZenSearchBar({
               w-full bg-transparent text-zinc-900 dark:text-white
               placeholder:text-zinc-400 dark:placeholder:text-zinc-500 font-medium
               outline-none resize-none overflow-y-auto scrollbar-none
-              text-[16px] md:text-[17px] leading-[28px] tracking-wide
+              text-[15px] sm:text-[16px] md:text-[17px] leading-[26px] sm:leading-[28px] tracking-wide
               max-h-[200px] min-h-[28px] disabled:opacity-50 transition-colors
             "
           />
         </div>
 
         {/* Bottom Section: Tools & Actions */}
-        <div className="flex items-center justify-between px-2 pb-1">
+        <div className="flex flex-wrap items-center justify-between gap-x-2 gap-y-2 px-2 pb-1">
           
           {/* Left Side: Attachments & Connect Apps */}
-          <div className="flex items-center gap-1">
+          <div className="flex min-w-0 items-center gap-1">
             
             {/* THE PLUS DROPDOWN */}
             <DropdownMenu.Root>
@@ -166,7 +166,7 @@ export default function ZenSearchBar({
                 <button
                   type="button"
                   disabled={isLoading || uploading}
-                  className="p-2.5 text-zinc-400 hover:text-zinc-800 hover:bg-zinc-100 dark:hover:text-zinc-100 dark:hover:bg-white/10 rounded-full transition-colors disabled:opacity-50 outline-none"
+                  className="shrink-0 rounded-full p-2.5 text-zinc-400 transition-colors hover:bg-zinc-100 hover:text-zinc-800 disabled:opacity-50 outline-none dark:hover:bg-white/10 dark:hover:text-zinc-100"
                 >
                   <Plus size={22} />
                 </button>
@@ -208,15 +208,15 @@ export default function ZenSearchBar({
               type="button"
               onClick={() => router.push("/dashin/connectors")}
               disabled={isLoading || uploading}
-              className="flex items-center gap-2 px-3 py-2 text-zinc-400 hover:text-zinc-800 hover:bg-zinc-100 dark:hover:text-zinc-100 dark:hover:bg-white/10 rounded-full text-[13px] font-medium transition-colors disabled:opacity-50"
+              className="flex min-w-0 items-center gap-2 rounded-full px-2.5 py-2 text-[12px] font-medium text-zinc-400 transition-colors hover:bg-zinc-100 hover:text-zinc-800 disabled:opacity-50 sm:px-3 sm:text-[13px] dark:hover:bg-white/10 dark:hover:text-zinc-100"
             >
               <Plug size={16} className="text-zinc-400 dark:text-zinc-400" />
-              Connect Apps
+              <span className="truncate">Connect Apps</span>
             </button>
           </div>
 
           {/* Right Side: Mode, Mic, and Send */}
-          <div className="flex items-center gap-1">
+          <div className="ml-auto flex w-full items-center justify-end gap-1 sm:w-auto">
             
             {/* UPGRADE PLANS DROPDOWN */}
             <DropdownMenu.Root>
@@ -225,7 +225,7 @@ export default function ZenSearchBar({
                   type="button"
                   disabled={isLoading || uploading}
                   className={clsx(
-                    "flex items-center w-full p-2 rounded-xl cursor-pointer outline-none",
+                    "flex shrink-0 items-center gap-1 whitespace-nowrap rounded-xl p-2 cursor-pointer outline-none",
                     "font-semibold text-[13px] text-white",
                     "bg-gradient-to-r from-[#b372ce] to-[#5b8def] shadow-[0_0_15px_rgba(179,114,206,0.25)] hover:shadow-[0_0_10px_rgba(179,114,206,0.4)]",
                     "transition-all duration-300 ease-out active:scale-[0.98]"

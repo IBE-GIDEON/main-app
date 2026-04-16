@@ -949,9 +949,9 @@ function MessageBubble({
 
   if (isUser) {
     return (
-      <div className="flex flex-col items-end gap-1 mb-6 mt-2">
+      <div className="mt-2 mb-5 flex flex-col items-end gap-1 sm:mb-6">
         <span className="text-[11px] font-medium text-zinc-400 dark:text-zinc-500 mr-2 select-none">You</span>
-        <div className="max-w-[80%] px-5 py-3.5 rounded-2xl rounded-tr-sm text-[14.5px] text-zinc-900 dark:text-zinc-100 bg-zinc-100 dark:bg-[#1E1E1E] border border-zinc-200 dark:border-white/5 shadow-sm leading-relaxed">
+        <div className="max-w-[88%] rounded-2xl rounded-tr-sm border border-zinc-200 bg-zinc-100 px-4 py-3 text-[14px] leading-relaxed text-zinc-900 shadow-sm sm:max-w-[80%] sm:px-5 sm:py-3.5 sm:text-[14.5px] dark:border-white/5 dark:bg-[#1E1E1E] dark:text-zinc-100">
           {message.content}
         </div>
       </div>
@@ -960,7 +960,7 @@ function MessageBubble({
 
   if (isError) {
     return (
-      <div className="max-w-[85%] px-5 py-4 rounded-xl border border-rose-200 dark:border-rose-500/40 bg-rose-50 dark:bg-rose-950/20 text-rose-700 dark:text-rose-200 text-[14px] leading-relaxed mb-6 shadow-sm">
+      <div className="mb-5 max-w-[92%] rounded-xl border border-rose-200 bg-rose-50 px-4 py-3.5 text-[13.5px] leading-relaxed text-rose-700 shadow-sm sm:mb-6 sm:max-w-[85%] sm:px-5 sm:py-4 sm:text-[14px] dark:border-rose-500/40 dark:bg-rose-950/20 dark:text-rose-200">
         {message.content}
       </div>
     );
@@ -978,7 +978,7 @@ function MessageBubble({
     : [];
 
   return (
-    <div className="w-full flex items-start gap-4 mb-8">
+    <div className="mb-6 flex w-full items-start gap-3 sm:mb-8 sm:gap-4">
       <div
         className={clsx(
           "shrink-0 w-8 h-8 flex items-center justify-center bg-white dark:bg-[black] shadow-sm overflow-hidden transition-all duration-300 mt-0.5",
@@ -1086,7 +1086,7 @@ export default function Aicontentspace({ messages, isTyping, onSpawnQuestion }: 
       <div
         ref={scrollContainerRef}
         onScroll={handleScroll}
-        className="h-full overflow-y-auto px-6 md:px-10 py-10 scroll-smooth"
+        className="h-full overflow-y-auto px-4 py-6 scroll-smooth sm:px-6 sm:py-8 md:px-10 md:py-10"
         style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
       >
         {messages.length === 0 && <div className="h-full flex items-center justify-center" />}
@@ -1107,7 +1107,7 @@ export default function Aicontentspace({ messages, isTyping, onSpawnQuestion }: 
       {showScrollButton && (
         <button
           onClick={() => bottomRef.current?.scrollIntoView({ behavior: "smooth" })}
-          className="absolute bottom-6 left-1/2 -translate-x-1/2 px-5 py-2.5 rounded-full bg-white dark:bg-[#1A1A1A] border border-zinc-200 dark:border-white/10 hover:bg-zinc-50 dark:hover:bg-[#252525] hover:border-zinc-300 dark:hover:border-white/20 transition-all active:scale-95 shadow-xl flex items-center gap-2 text-zinc-600 dark:text-zinc-400"
+          className="absolute bottom-4 left-1/2 flex -translate-x-1/2 items-center gap-2 rounded-full border border-zinc-200 bg-white px-4 py-2 text-zinc-600 shadow-xl transition-all active:scale-95 hover:border-zinc-300 hover:bg-zinc-50 sm:bottom-6 sm:px-5 sm:py-2.5 dark:border-white/10 dark:bg-[#1A1A1A] dark:text-zinc-400 dark:hover:border-white/20 dark:hover:bg-[#252525]"
         >
           <ArrowDown className="w-4 h-4" />
           <span className="text-[11px] font-bold uppercase tracking-widest text-zinc-700 dark:text-zinc-300">

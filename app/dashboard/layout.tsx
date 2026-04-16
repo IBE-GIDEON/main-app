@@ -21,7 +21,7 @@ export default function ChatLayout() {
       <div className="flex flex-col flex-1 min-w-0 h-full relative z-10">
 
         {/* Top bar */}
-        <div className="flex-none flex items-center justify-between px-6 py-4">
+        <div className="flex-none flex items-center justify-between px-4 py-4 sm:px-6">
           
           {/* Breadcrumb */}
           <div className="flex items-center gap-2 text-[11px] text-zinc-400 dark:text-white/30 font-medium transition-colors">
@@ -46,23 +46,23 @@ export default function ChatLayout() {
         <div 
           className={clsx(
             "w-full transition-all duration-500 ease-in-out flex flex-col items-center",
-            hasMessages ? "flex-none pb-4 pt-0" : "flex-1 justify-center pb-20"
+            hasMessages ? "flex-none pb-3 pt-0 sm:pb-4" : "flex-1 justify-center pb-16 sm:pb-20"
           )}
         >
           {/* Hero Text */}
           {!hasMessages && (
-            <div className="flex flex-col items-center mb-8 transform transition-all duration-700 ease-out animate-in fade-in slide-in-from-bottom-4 text-center">
-              <h1 className="text-4xl md:text-5xl font-semibold text-zinc-900 dark:text-white mb-3 tracking-tight transition-colors">
+            <div className="mb-6 flex flex-col items-center px-4 text-center transform transition-all duration-700 ease-out animate-in fade-in slide-in-from-bottom-4 sm:mb-8">
+              <h1 className="mb-3 text-3xl font-semibold tracking-tight text-zinc-900 transition-colors sm:text-4xl md:text-5xl dark:text-white">
                 Hi,
               </h1>
-              <p className="text-lg text-zinc-500 dark:text-white/40 tracking-wide font-medium transition-colors">
+              <p className="text-base font-medium tracking-wide text-zinc-500 transition-colors sm:text-lg dark:text-white/40">
                 Let&apos;s start making those decisions.
               </p>
             </div>
           )}
 
           {/* Searchbar Container */}
-          <div className="w-full max-w-4xl mx-auto px-4 md:px-8">
+          <div className="mx-auto w-full max-w-4xl px-3 sm:px-4 md:px-8">
             <Searchbar
               isLoading={loading}
               onMicClick={() => void 0}
