@@ -1,6 +1,5 @@
 "use client";
 
-import React, { useState } from "react";
 import Aicontentspace from "@/components/Aicontentspace";
 import Searchbar from "@/components/Searchbar";
 import SidebarContainer from "@/components/SidebarContainer";
@@ -9,10 +8,9 @@ import { useOnboarding } from "@/hooks/useOnboarding";
 import clsx from "clsx";
 
 export default function ChatLayout() {
-  const [started, setStarted] = useState(false);
   useOnboarding();
 
-  const { messages, loading, send, clear } = useChat();
+  const { messages, loading, send, uploadDocuments } = useChat();
   const hasMessages = messages.length > 0;
 
   return (
@@ -58,7 +56,7 @@ export default function ChatLayout() {
                 Hi,
               </h1>
               <p className="text-lg text-zinc-500 dark:text-white/40 tracking-wide font-medium transition-colors">
-                Let's start making those decisions.
+                Let&apos;s start making those decisions.
               </p>
             </div>
           )}
@@ -67,9 +65,9 @@ export default function ChatLayout() {
           <div className="w-full max-w-4xl mx-auto px-4 md:px-8">
             <Searchbar
               isLoading={loading}
-              onMicClick={() => setStarted(true)}
+              onMicClick={() => void 0}
+              onDocumentUpload={uploadDocuments}
               onResult={(text) => {
-                setStarted(true);
                 send(text);
               }}
             />

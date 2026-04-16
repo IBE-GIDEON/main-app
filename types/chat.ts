@@ -60,6 +60,17 @@ export interface UIAudit {
   cache_bypassed?: boolean | null;
 }
 
+export type BlockTone = "neutral" | "positive" | "warning" | "critical" | "info";
+
+export interface FinanceHealthItem {
+  metric_name: string;
+  label: string;
+  value: number | string | null;
+  unit: string;
+  status?: "green" | "yellow" | "red" | null;
+  description?: string | null;
+}
+
 export interface FinanceSnapshot {
   as_of_utc?: string | null;
   currency?: string | null;
@@ -111,6 +122,28 @@ export interface FinanceSnapshot {
 
   headcount?: number | null;
   notes?: string[];
+  health_summary?: FinanceHealthItem[];
+}
+
+export interface AgentBlockMetric {
+  label: string;
+  value: string;
+  tone?: BlockTone;
+}
+
+export interface AgentTable {
+  columns: string[];
+  rows: string[][];
+}
+
+export interface AgentBlock {
+  id: string;
+  type: "status" | "markdown" | "table" | "metric_grid" | "callout";
+  title?: string | null;
+  text?: string | null;
+  tone?: BlockTone | null;
+  table?: AgentTable | null;
+  metrics?: AgentBlockMetric[];
 }
 
 export interface BoxReasoningTrail {
@@ -171,6 +204,82 @@ export interface DecisionPayload {
   parent_query?: string | null;
 }
 
+export interface AssistantEnvelope {
+  kind: "decision" | "chat" | "action";
+  blocks: AgentBlock[];
+  decision?: DecisionPayload | null;
+}
+
+export interface UploadDocumentsResponse {
+  ok: boolean;
+  message: string;
+  document_count: number;
+  total_chars: number;
+  uploaded_utc: string;
+  documents: Array<{
+    filename: string;
+    pages: number;
+    chars_extracted: number;
+    uploaded_utc: string;
+    sha256: string;
+  }>;
+}
+
+export interface DeliveryStatusResponse {
+  ok: boolean;
+  email_delivery_available: boolean;
+}
+
+export interface VerdictEmailResponse {
+  ok: boolean;
+  provider: string;
+  to: string;
+  subject: string;
+  sent_utc: string;
+}
+
+export interface RecentAuditRecord {
+  record_id: string;
+  decision_id: string;
+  version: number;
+  query_preview: string;
+  decision_type: string;
+  stake_level: string;
+  verdict_color: VerdictColor;
+  net_score: number;
+  confidence: number;
+  total_boxes: number;
+  is_branch: boolean;
+  created_utc: string;
+}
+
+export interface AuditBoxRecord {
+  box_type?: string;
+  claim?: string;
+  reasoning?: string;
+  explanation?: string;
+  evidence_or_reasoning?: string;
+  action_items?: string[];
+  next_steps?: string[];
+  actions?: string[];
+  spawn_questions?: string[];
+  [key: string]: unknown;
+}
+
+export interface AuditRecordResponse {
+  query_preview?: string;
+  verdict_snapshot?: Record<string, unknown>;
+  boxes?: AuditBoxRecord[];
+  routing_snapshot?: {
+    confidence?: number;
+    framework?: string;
+    stake_level?: string;
+  };
+  performance?: Record<string, unknown>;
+  audit?: Record<string, unknown>;
+  metrics?: Record<string, unknown>;
+}
+
 export interface Message {
   id: string;
   role: Role;
@@ -178,4 +287,6 @@ export interface Message {
   pending?: boolean;
   createdAt: number;
   decision?: DecisionPayload;
+  blocks?: AgentBlock[];
+  kind?: AssistantEnvelope["kind"];
 }

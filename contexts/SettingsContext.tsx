@@ -1,12 +1,14 @@
 "use client";
 
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useState, useSyncExternalStore } from "react";
 
 interface SettingsState {
   autosuggest: boolean;
   aiDataRetention: boolean;
   emailUpdates: boolean;
   appDecisions: boolean;
+  verdictEmailEnabled: boolean;
+  verdictEmailAddress: string;
 }
 
 interface SettingsContextType extends SettingsState {
@@ -19,28 +21,33 @@ const defaultSettings: SettingsState = {
   aiDataRetention: true,
   emailUpdates: true,
   appDecisions: true,
+  verdictEmailEnabled: false,
+  verdictEmailAddress: "",
 };
 
 const SettingsContext = createContext<SettingsContextType | undefined>(undefined);
 
 export function SettingsProvider({ children }: { children: React.ReactNode }) {
-  const [settings, setSettings] = useState<SettingsState>(defaultSettings);
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [settings, setSettings] = useState<SettingsState>(() => {
+    if (typeof window === "undefined") return defaultSettings;
 
-  // THE FIX 1: Read from local storage EXACTLY ONCE on mount
-  useEffect(() => {
     const saved = localStorage.getItem("three_ai_settings");
-    if (saved) {
-      try {
-        const parsed = JSON.parse(saved);
-        delete parsed.theme; // Safety fallback
-        setSettings((prev) => ({ ...prev, ...parsed }));
-      } catch (e) {
-        console.error("Failed to parse settings");
-      }
+    if (!saved) return defaultSettings;
+
+    try {
+      const parsed = JSON.parse(saved);
+      delete parsed.theme;
+      return { ...defaultSettings, ...parsed };
+    } catch {
+      console.error("Failed to parse settings");
+      return defaultSettings;
     }
-    setIsLoaded(true);
-  }, []);
+  });
+  const isLoaded = useSyncExternalStore(
+    () => () => undefined,
+    () => true,
+    () => false
+  );
 
   // THE FIX 2: Only save to local storage when the user ACTUALLY clicks a button
   const updateSetting = <K extends keyof SettingsState>(key: K, value: SettingsState[K]) => {

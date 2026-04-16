@@ -14,6 +14,7 @@ import clsx from 'clsx';
 type SearchbarProps = {
   onMicClick: () => void;
   onResult: (text: string) => void;
+  onDocumentUpload?: (files: File[]) => Promise<{ message?: string } | null>;
   inputRef?: React.RefObject<HTMLTextAreaElement>;
   isLoading?: boolean;
   autoFocus?: boolean;
@@ -23,6 +24,7 @@ type SearchbarProps = {
 export default function ZenSearchBar({
   onMicClick,
   onResult,
+  onDocumentUpload,
   inputRef,
   isLoading = false,
   autoFocus = true,
@@ -30,6 +32,8 @@ export default function ZenSearchBar({
 }: SearchbarProps) {
   const router = useRouter();
   const [input, setInput] = useState("");
+  const [uploadMessage, setUploadMessage] = useState<string | null>(null);
+  const [uploading, setUploading] = useState(false);
   const localRef = useRef<HTMLTextAreaElement>(null);
   const textareaRef = inputRef ?? localRef;
   const hasText = useMemo(() => input.trim().length > 0, [input]);
@@ -64,7 +68,7 @@ export default function ZenSearchBar({
   }, [hasText, isLoading, input, onResult, textareaRef]);
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if ((e.nativeEvent as any).isComposing) return;
+    if (e.nativeEvent.isComposing) return;
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       handleSubmit();
@@ -72,15 +76,31 @@ export default function ZenSearchBar({
   };
 
   // --- NEW: FILE UPLOAD HANDLERS ---
-  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>, type: "document" | "image") => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    
-    console.log(`Selected ${type}:`, file.name);
-    // TODO: Add your actual file upload logic/API call here!
-    
-    // Reset the input so the user can select the same file again if needed
-    e.target.value = "";
+  const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>, type: "document" | "image") => {
+    const files = Array.from(e.target.files || []);
+    if (files.length === 0) return;
+
+    try {
+      if (type === "image") {
+        setUploadMessage("Image uploads are coming next. Financial documents are live now.");
+        return;
+      }
+
+      if (!onDocumentUpload) {
+        setUploadMessage("Document uploads are not configured in this view yet.");
+        return;
+      }
+
+      setUploading(true);
+      const result = await onDocumentUpload(files);
+      setUploadMessage(result?.message || `Uploaded ${files.length} document(s) into finance context.`);
+    } catch {
+      setUploadMessage("Document upload failed. Check your backend connection and try again.");
+    } finally {
+      setUploading(false);
+      e.target.value = "";
+      window.setTimeout(() => setUploadMessage(null), 5000);
+    }
   };
 
   return (
@@ -91,7 +111,8 @@ export default function ZenSearchBar({
         type="file" 
         ref={documentInputRef} 
         className="hidden" 
-        accept=".pdf,.doc,.docx,.txt,.csv" 
+        accept=".pdf,.txt,.csv,.md,.json" 
+        multiple
         onChange={(e) => handleFileSelect(e, "document")} 
       />
       <input 
@@ -106,7 +127,7 @@ export default function ZenSearchBar({
         className={`
           flex flex-col relative rounded-[2.5rem] p-2
           border transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] transform-gpu
-          ${isLoading
+          ${isLoading || uploading
             ? "border-zinc-200 bg-zinc-50 dark:border-white/5 dark:bg-[#1A1A1A] cursor-wait"
             : "bg-white border-zinc-200/60 shadow-[0_4px_20px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] hover:-translate-y-0.5 focus-within:shadow-[0_15px_40px_rgb(0,0,0,0.12)] focus-within:-translate-y-1 focus-within:border-zinc-300 dark:border-transparent dark:bg-[#1E1E1E] dark:hover:-translate-y-0 dark:focus-within:-translate-y-0 dark:focus-within:border-white/10 dark:focus-within:bg-[#252525] dark:shadow-2xl"
           }
@@ -117,10 +138,10 @@ export default function ZenSearchBar({
           <textarea
             ref={textareaRef}
             value={input}
-            disabled={isLoading}
+            disabled={isLoading || uploading}
             maxLength={maxLength}
             rows={1}
-            placeholder={isLoading ? "Analyzing..." : "Ask Three ..."}
+            placeholder={isLoading ? "Analyzing..." : uploading ? "Loading documents into context..." : "Ask Three ..."}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
             className="
@@ -144,7 +165,7 @@ export default function ZenSearchBar({
               <DropdownMenu.Trigger asChild>
                 <button
                   type="button"
-                  disabled={isLoading}
+                  disabled={isLoading || uploading}
                   className="p-2.5 text-zinc-400 hover:text-zinc-800 hover:bg-zinc-100 dark:hover:text-zinc-100 dark:hover:bg-white/10 rounded-full transition-colors disabled:opacity-50 outline-none"
                 >
                   <Plus size={22} />
@@ -186,7 +207,7 @@ export default function ZenSearchBar({
             <button
               type="button"
               onClick={() => router.push("/dashin/connectors")}
-              disabled={isLoading}
+              disabled={isLoading || uploading}
               className="flex items-center gap-2 px-3 py-2 text-zinc-400 hover:text-zinc-800 hover:bg-zinc-100 dark:hover:text-zinc-100 dark:hover:bg-white/10 rounded-full text-[13px] font-medium transition-colors disabled:opacity-50"
             >
               <Plug size={16} className="text-zinc-400 dark:text-zinc-400" />
@@ -202,7 +223,7 @@ export default function ZenSearchBar({
               <DropdownMenu.Trigger asChild>
                 <button
                   type="button"
-                  disabled={isLoading}
+                  disabled={isLoading || uploading}
                   className={clsx(
                     "flex items-center w-full p-2 rounded-xl cursor-pointer outline-none",
                     "font-semibold text-[13px] text-white",
@@ -262,13 +283,13 @@ export default function ZenSearchBar({
               </DropdownMenu.Portal>
             </DropdownMenu.Root>
             
-            <Micbutton onClick={onMicClick} disabled={isLoading} />
+            <Micbutton onClick={onMicClick} disabled={isLoading || uploading} />
             
             {/* The Send Button */}
             <button
               type="button"
               onClick={handleSubmit}
-              disabled={!hasText || isLoading}
+              disabled={!hasText || isLoading || uploading}
               className={`
                 flex items-center justify-center w-20 h-10 rounded-full ml-1
                 transition-all duration-500
@@ -278,7 +299,7 @@ export default function ZenSearchBar({
                 }
               `}
             >
-              {isLoading ? (
+              {isLoading || uploading ? (
                 <Loader2 className="w-5 h-5 animate-spin" />
               ) : hasText ? (
                 <Send size={18} strokeWidth={2.5} className="ml-0.5" /> 
@@ -294,6 +315,15 @@ export default function ZenSearchBar({
       {input.length > 50 && (
         <div className="mt-2 text-[10px] uppercase tracking-tighter text-zinc-400 dark:text-white/20 text-right px-6 transition-colors">
           Refinement Scope: {input.length} / {maxLength}
+        </div>
+      )}
+
+      {uploadMessage && (
+        <div className="mt-3 px-5 py-3 rounded-2xl border border-sky-200 dark:border-sky-500/20 bg-sky-50/80 dark:bg-sky-950/10 text-sky-800 dark:text-sky-200 shadow-sm">
+          <p className="text-[11px] font-bold uppercase tracking-[0.24em] text-sky-500 dark:text-sky-300/80 mb-1">
+            Document Context
+          </p>
+          <p className="text-[13px] leading-relaxed">{uploadMessage}</p>
         </div>
       )}
     </div>

@@ -1,110 +1,239 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Message } from "@/types/chat";
-import { loadChat, saveChat, clearChat } from "@/utils/chatStorage";
+import type { AssistantEnvelope, AuditBoxRecord, Message } from "@/types/chat";
+import {
+  getAuditRecord,
+  deliverVerdictEmail,
+  getDeliveryStatus,
+  getOrCreateCompanyId,
+  getVerdictEmailPreferences,
+  streamToAI,
+  uploadFinancialDocuments,
+} from "@/services/chatApi";
+import { clearChat, loadChat, saveChat } from "@/utils/chatStorage";
+
+function contentFromEnvelope(envelope: AssistantEnvelope, fallback = "") {
+  const markdownText = envelope.blocks.find((block) => block.text?.trim())?.text?.trim();
+  return fallback || markdownText || envelope.decision?.verdict_card?.headline || "Structured response ready.";
+}
+
+function mergeEnvelopeIntoMessage(message: Message, envelope: AssistantEnvelope, fallback = ""): Message {
+  return {
+    ...message,
+    content: contentFromEnvelope(envelope, fallback),
+    kind: envelope.kind,
+    blocks: envelope.blocks,
+    decision: envelope.decision ?? undefined,
+  };
+}
+
+function normalizeAuditBox(box: AuditBoxRecord) {
+  return {
+    ...box,
+    evidence_or_reasoning: box.evidence_or_reasoning || box.reasoning || box.explanation || box.claim,
+    actions: box.actions || box.action_items || box.next_steps || [],
+    spawn_questions: box.spawn_questions || [],
+  };
+}
 
 export function useChat() {
   const [messages, setMessages] = useState<Message[]>(() => {
     if (typeof window !== "undefined") {
-      const saved = loadChat();
-      return saved ? saved : [];
+      return loadChat() || [];
     }
     return [];
   });
-  
   const [loading, setLoading] = useState(false);
   const controller = useRef<AbortController | null>(null);
+  const sendRef = useRef<(text: string) => Promise<void>>(async () => undefined);
 
-  // SAFE SAVE: Only saves actual state changes
   useEffect(() => {
     if (messages.length > 0) {
       saveChat(messages);
     }
   }, [messages]);
 
-  // --- THE MASTER EVENT LISTENER ---
+  async function maybeDeliverVerdictEmail(envelope: AssistantEnvelope) {
+    if (!envelope.decision) return;
+
+    const prefs = getVerdictEmailPreferences();
+    if (!prefs.enabled || !prefs.address) return;
+
+    try {
+      const status = await getDeliveryStatus();
+      if (!status.email_delivery_available) return;
+
+      await deliverVerdictEmail({
+        to: prefs.address,
+        query: envelope.decision.query,
+        decision: envelope.decision,
+      });
+    } catch (error) {
+      console.warn("Verdict email delivery skipped:", error);
+    }
+  }
+
+  async function send(text: string) {
+    if (!text.trim()) return;
+
+    if (messages.some((message) => message.decision)) {
+      clearChat();
+    }
+
+    controller.current?.abort();
+    controller.current = new AbortController();
+
+    const userMsg: Message = {
+      id: crypto.randomUUID(),
+      role: "user",
+      content: text,
+      createdAt: Date.now(),
+    };
+    const aiMsgId = crypto.randomUUID();
+    const initialAiMsg: Message = {
+      id: aiMsgId,
+      role: "assistant",
+      content: "",
+      createdAt: Date.now() + 1,
+    };
+
+    setMessages((prev) => (prev.some((message) => message.decision) ? [userMsg, initialAiMsg] : [...prev, userMsg, initialAiMsg]));
+    setLoading(true);
+
+    let streamedText = "";
+    let statusFeed: string[] = [];
+    let finalEnvelope: AssistantEnvelope | null = null;
+    let pendingKind: Message["kind"] | undefined;
+
+    try {
+      await streamToAI(text, {
+        signal: controller.current.signal,
+        onEvent: (event) => {
+          if (event.type === "status") {
+            pendingKind = event.text.startsWith("Finance triage routed via") ? "decision" : "chat";
+            statusFeed = [...statusFeed, event.text];
+            const content = [...statusFeed, streamedText].filter(Boolean).join("\n\n");
+            setMessages((prev) =>
+              prev.map((message) =>
+                message.id === aiMsgId ? { ...message, content, kind: pendingKind } : message,
+              ),
+            );
+            return;
+          }
+
+          if (event.type === "chunk") {
+            pendingKind = pendingKind || "chat";
+            streamedText += event.text;
+            const content = [...statusFeed, streamedText].filter(Boolean).join("\n\n");
+            setMessages((prev) =>
+              prev.map((message) =>
+                message.id === aiMsgId ? { ...message, content, kind: pendingKind } : message,
+              ),
+            );
+            return;
+          }
+
+          if (event.type === "assistant") {
+            finalEnvelope = event.payload;
+            setMessages((prev) =>
+              prev.map((message) =>
+                message.id === aiMsgId
+                  ? mergeEnvelopeIntoMessage(message, event.payload, streamedText || message.content)
+                  : message,
+              ),
+            );
+
+            if (event.payload.decision) {
+              window.dispatchEvent(new CustomEvent("refresh-recents"));
+            }
+            return;
+          }
+
+          if (event.type === "error") {
+            pushError(event.error);
+          }
+        },
+      });
+
+      if (finalEnvelope) {
+        void maybeDeliverVerdictEmail(finalEnvelope);
+      }
+    } catch (error: unknown) {
+      if (error instanceof DOMException && error.name === "AbortError") return;
+      pushError("Could not reach Three AI. Make sure your backend is running.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    sendRef.current = send;
+  });
+
   useEffect(() => {
     if (typeof window === "undefined") return;
 
-    // 1. Follow-up spawn questions
     const pendingQuestion = localStorage.getItem("pending_spawn_question");
     if (pendingQuestion) {
       localStorage.removeItem("pending_spawn_question");
-      setTimeout(() => send(pendingQuestion), 150);
+      window.setTimeout(() => {
+        void sendRef.current(pendingQuestion);
+      }, 150);
     }
 
-    // 2. Listen for the "New Decision" wipe command (from Dashboard or Onboarding)
     const handleNew = () => {
       clearChat();
       setMessages([]);
     };
 
-    // 3. Listen for clicks on the Sidebar Audit Ledger to restore a decision
-    const handleLoadRecord = async (e: any) => {
-      const recordId = e.detail;
+    const handleLoadRecord = async (e: Event) => {
+      const recordId = (e as CustomEvent<string>).detail;
       clearChat();
       setMessages([]);
       setLoading(true);
-      
-      // Grab the actual company ID
-      const companyId = localStorage.getItem("company_id") || "default-co";
-      
-      try {
-        const res = await fetch(`http://localhost:8000/audit/${companyId}/${recordId}`, {
-          headers: { "X-API-Key": "testkey123" } // Update this when you move to production!
-        });
-        if (!res.ok) throw new Error("Failed to load record");
-        const auditData = await res.json();
 
-        // THE FINAL SAFETY NET: Reconstruct the payload exactly as the UI expects it
+      const companyId = getOrCreateCompanyId();
+
+      try {
+        const auditData = await getAuditRecord(recordId, companyId);
+        const boxes = auditData.boxes || [];
         const reconstructedPayload = {
           verdict_card: auditData.verdict_snapshot,
-          upside_boxes: auditData.boxes.filter((b: any) => b.box_type === 'upside').map((b: any) => ({
-            ...b, 
-            evidence_or_reasoning: b.evidence_or_reasoning || b.reasoning || b.explanation || b.claim,
-            actions: b.actions || b.action_items || b.next_steps || [],
-            spawn_questions: b.spawn_questions || [] 
-          })),
-          risk_boxes: auditData.boxes.filter((b: any) => b.box_type === 'risk').map((b: any) => ({
-            ...b, 
-            evidence_or_reasoning: b.evidence_or_reasoning || b.reasoning || b.explanation || b.claim,
-            actions: b.actions || b.action_items || b.next_steps || [],
-            spawn_questions: b.spawn_questions || []
-          })),
+          upside_boxes: boxes.filter((box) => box.box_type === "upside").map(normalizeAuditBox),
+          risk_boxes: boxes.filter((box) => box.box_type === "risk").map(normalizeAuditBox),
           confidence: auditData.routing_snapshot?.confidence || 0,
-          audit: auditData.performance || auditData.audit || auditData.metrics || {}
+          audit: auditData.performance || auditData.audit || auditData.metrics || {},
         };
 
-        const userMsg: Message = {
-          id: crypto.randomUUID(),
-          role: "user",
-          content: auditData.query_preview,
-          createdAt: Date.now() - 1000,
-        };
-        const aiMsg: Message = {
-          id: crypto.randomUUID(),
-          role: "assistant",
-          content: `**Restored Decision:** Analyzed using the ${auditData.routing_snapshot?.framework || "Standard"} framework at ${auditData.routing_snapshot?.stake_level || "Normal"} stakes.`,
-          decision: reconstructedPayload,
-          createdAt: Date.now(),
-        };
-
-        setMessages([userMsg, aiMsg]);
-      } catch (err) {
-        console.error(err);
+        setMessages([
+          {
+            id: crypto.randomUUID(),
+            role: "user",
+            content: auditData.query_preview || "Restored query",
+            createdAt: Date.now() - 1000,
+          },
+          {
+            id: crypto.randomUUID(),
+            role: "assistant",
+            content: `Restored decision using ${auditData.routing_snapshot?.framework || "Standard"} at ${auditData.routing_snapshot?.stake_level || "Normal"} stakes.`,
+            decision: reconstructedPayload,
+            kind: "decision",
+            createdAt: Date.now(),
+          },
+        ]);
+      } catch (error) {
+        console.error(error);
         pushError("Failed to load archived decision.");
       } finally {
         setLoading(false);
       }
     };
 
-    // Attach the listeners (listening for both old and new event names just to be safe)
     window.addEventListener("think-ai-new", handleNew);
     window.addEventListener("three-ai-new", handleNew);
     window.addEventListener("think-ai-load-record", handleLoadRecord);
 
-    // Cleanup
     return () => {
       window.removeEventListener("think-ai-new", handleNew);
       window.removeEventListener("three-ai-new", handleNew);
@@ -112,96 +241,46 @@ export function useChat() {
     };
   }, []);
 
-  async function send(text: string) {
-    if (!text.trim()) return;
-
-    // AUTO-WIPE: If a decision is already on the board, wipe it to start fresh
-    if (messages.some(m => m.decision)) {
-       clearChat();
-    }
-
-    controller.current?.abort();
-    controller.current = new AbortController();
-
-    const userMsg: Message = { id: crypto.randomUUID(), role: "user", content: text, createdAt: Date.now() };
-    const aiMsgId = crypto.randomUUID();
-    const initialAiMsg: Message = { id: aiMsgId, role: "assistant", content: "", createdAt: Date.now() + 1 };
-
-    setMessages((prev) => prev.some(m => m.decision) ? [userMsg, initialAiMsg] : [...prev, userMsg, initialAiMsg]);
-    setLoading(true);
+  async function uploadDocuments(files: File[]) {
+    if (files.length === 0) return null;
 
     try {
-      // 🚀 THE FIX: Dynamically pull the user's actual company ID from storage
-      const companyId = localStorage.getItem("company_id") || "default-co";
+      const result = await uploadFinancialDocuments(files);
+      const filenames = result.documents.map((doc) => `- ${doc.filename} (${doc.chars_extracted.toLocaleString()} chars)`);
 
-      const res = await fetch("http://localhost:8000/decide/stream", {
-        method: "POST",
-        headers: { "Content-Type": "application/json", "X-API-Key": "testkey123" },
-        // 👇 This is the nametag! Now the backend knows exactly who is asking.
-        body: JSON.stringify({ query: text, company_id: companyId }), 
-        signal: controller.current.signal,
-      });
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: crypto.randomUUID(),
+          role: "assistant",
+          content: result.message,
+          kind: "chat",
+          blocks: [
+            {
+              id: crypto.randomUUID(),
+              type: "callout",
+              title: "Financial document context loaded",
+              tone: "info",
+              text: [result.message, ...filenames].join("\n"),
+            },
+          ],
+          createdAt: Date.now(),
+        },
+      ]);
 
-      if (!res.body) throw new Error("No readable stream available.");
-      
-      const reader = res.body.getReader();
-      const decoder = new TextDecoder("utf-8");
-      let streamedText = "";
-      let fullDecisionPayload = null;
-
-      while (true) {
-        const { value, done } = await reader.read();
-        if (done) break;
-
-        const chunk = decoder.decode(value, { stream: true });
-        const lines = chunk.split("\n");
-
-        for (const line of lines) {
-          if (line.startsWith("data: ")) {
-            const dataStr = line.replace("data: ", "").trim();
-            if (dataStr === "[DONE]") continue;
-
-            try {
-              const parsed = JSON.parse(dataStr);
-              if (parsed.upside_boxes || parsed.verdict_card || parsed.executable_tool) {
-                fullDecisionPayload = parsed;
-              } else if (parsed.text) {
-                streamedText += parsed.text;
-              } else if (parsed.error) {
-                pushError(parsed.error);
-              }
-            } catch {
-              // Only append if it's not a broken JSON snippet
-              if (!dataStr.startsWith("{") && !dataStr.startsWith('"')) {
-                 streamedText += dataStr;
-              }
-            }
-
-            setMessages((prev) =>
-              prev.map((m) =>
-                m.id === aiMsgId ? { ...m, content: streamedText, ...(fullDecisionPayload && { decision: fullDecisionPayload }) } : m
-              )
-            );
-          }
-        }
-      }
-
-      // Tell the sidebar to fetch the new record using the new company ID
-      if (fullDecisionPayload) {
-        window.dispatchEvent(new CustomEvent("refresh-recents"));
-      }
-
-    } catch (err: any) {
-      if (err?.name === "AbortError") return; 
-      pushError("Could not reach Three AI. Make sure your Python backend is running.");
-    } finally {
-      // This is the ONLY place setLoading(false) should live so the logo spins properly!
-      setLoading(false);
+      return result;
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : "Document upload failed.";
+      pushError(message);
+      throw error;
     }
   }
 
   function pushError(text: string) {
-    setMessages((m) => [...m, { id: crypto.randomUUID(), role: "error", content: text, createdAt: Date.now() }]);
+    setMessages((prev) => [
+      ...prev,
+      { id: crypto.randomUUID(), role: "error", content: text, createdAt: Date.now() },
+    ]);
   }
 
   function clear() {
@@ -209,5 +288,5 @@ export function useChat() {
     setMessages([]);
   }
 
-  return { messages, loading, send, clear };
+  return { messages, loading, send, clear, uploadDocuments };
 }

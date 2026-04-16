@@ -4,9 +4,14 @@ const KEY = "chat_history";
 
 export function loadChat(): Message[] {
   try {
-    const parsed = JSON.parse(localStorage.getItem(KEY) || "[]");
-    // Filter out any messages with invalid content — prevents crashes from old cached data
-    return parsed.filter((m: any) => m && typeof m.content === "string");
+    const parsed = JSON.parse(localStorage.getItem(KEY) || "[]") as unknown[];
+    return parsed.filter(
+      (message): message is Message =>
+        Boolean(message) &&
+        typeof message === "object" &&
+        "content" in message &&
+        typeof (message as { content?: unknown }).content === "string",
+    );
   } catch {
     return [];
   }

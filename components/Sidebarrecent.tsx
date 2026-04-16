@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import clsx from "clsx";
-import { Clock, Trash2 } from "lucide-react";
+import { Trash2 } from "lucide-react";
 
 const VERDICT_STYLES: Record<string, string> = {
   Green:  "bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.4)]",
@@ -43,7 +43,7 @@ export default function SidebarRecents({ isCollapsed }: SidebarRecentsProps) {
       
       const data = await res.json();
       setRecents(data);
-    } catch (err) {
+    } catch {
       console.warn("Backend not connected yet. Loading demo recents.");
       // THE DEMO FALLBACK: Shows up if Python isn't running yet!
       setRecents([

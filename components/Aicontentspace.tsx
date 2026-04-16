@@ -1,9 +1,11 @@
 "use client";
 
-import { Message, DecisionBox, VerdictCard, NextStep, VerdictColor } from "@/types/chat";
-import { useEffect, useRef, useState } from "react";
+import { AgentBlock, BlockTone, Message, DecisionBox, VerdictCard, NextStep, VerdictColor } from "@/types/chat";
+import { ReactNode, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import {
   ArrowDown,
   TrendingUp,
@@ -34,7 +36,7 @@ interface Props {
 type HealthSummaryItem = {
   metric_name: string;
   label: string;
-  value: number | string;
+  value: number | string | null;
   unit: string;
   status?: "green" | "yellow" | "red" | null;
   description?: string;
@@ -412,6 +414,188 @@ function FinanceSnapshotView({ snapshot }: { snapshot?: FinanceSnapshot | null }
   );
 }
 
+const BLOCK_TONE_STYLES: Record<BlockTone, string> = {
+  neutral: "border-zinc-200 dark:border-white/10 bg-white dark:bg-[#141414] text-zinc-800 dark:text-zinc-200",
+  positive: "border-emerald-200 dark:border-emerald-500/20 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-800 dark:text-emerald-200",
+  warning: "border-amber-200 dark:border-amber-500/20 bg-amber-50 dark:bg-amber-500/10 text-amber-800 dark:text-amber-200",
+  critical: "border-rose-200 dark:border-rose-500/20 bg-rose-50 dark:bg-rose-500/10 text-rose-800 dark:text-rose-200",
+  info: "border-sky-200 dark:border-sky-500/20 bg-sky-50 dark:bg-sky-500/10 text-sky-800 dark:text-sky-200",
+};
+
+function BlockCard({
+  tone = "neutral",
+  children,
+}: {
+  tone?: BlockTone | null;
+  children: ReactNode;
+}) {
+  return (
+    <div
+      className={clsx(
+        "rounded-2xl border shadow-sm overflow-hidden",
+        BLOCK_TONE_STYLES[tone || "neutral"]
+      )}
+    >
+      {children}
+    </div>
+  );
+}
+
+function StatusBlockView({ block }: { block: AgentBlock }) {
+  return (
+    <BlockCard tone={block.tone || "info"}>
+      <div className="px-5 py-4 flex items-center gap-3">
+        <div className="w-8 h-8 rounded-full bg-white/70 dark:bg-black/20 flex items-center justify-center">
+          <BrainCircuit className="w-4 h-4" />
+        </div>
+        <div>
+          {block.title && (
+            <p className="text-[10px] font-bold uppercase tracking-widest opacity-70">{block.title}</p>
+          )}
+          <p className="text-[14px] font-medium leading-relaxed">{block.text}</p>
+        </div>
+      </div>
+    </BlockCard>
+  );
+}
+
+function MarkdownBlockView({ block }: { block: AgentBlock }) {
+  return (
+    <BlockCard tone={block.tone}>
+      <div className="px-5 py-5">
+        {block.title && (
+          <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-400 dark:text-zinc-500 mb-3">
+            {block.title}
+          </p>
+        )}
+        <div className="prose prose-sm max-w-none prose-headings:mb-3 prose-headings:mt-0 prose-p:leading-7 prose-p:text-zinc-700 dark:prose-p:text-zinc-300 prose-strong:text-zinc-900 dark:prose-strong:text-zinc-100 prose-li:text-zinc-700 dark:prose-li:text-zinc-300 prose-code:text-zinc-900 dark:prose-code:text-zinc-100 prose-pre:bg-zinc-950 prose-pre:text-zinc-50 dark:prose-invert">
+          <ReactMarkdown remarkPlugins={[remarkGfm]}>{block.text || ""}</ReactMarkdown>
+        </div>
+      </div>
+    </BlockCard>
+  );
+}
+
+function TableBlockView({ block }: { block: AgentBlock }) {
+  if (!block.table) return null;
+
+  return (
+    <BlockCard tone={block.tone}>
+      <div className="px-5 py-5">
+        <div className="flex items-center gap-2 mb-4">
+          <Database className="w-4 h-4 text-zinc-500 dark:text-zinc-400" />
+          <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-400 dark:text-zinc-500">
+            {block.title || "Structured table"}
+          </p>
+        </div>
+
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-[520px] border-separate border-spacing-0">
+            <thead>
+              <tr>
+                {block.table.columns.map((column) => (
+                  <th
+                    key={column}
+                    className="text-left text-[11px] font-bold uppercase tracking-widest text-zinc-500 dark:text-zinc-400 pb-3 border-b border-zinc-200 dark:border-white/10"
+                  >
+                    {column}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {block.table.rows.map((row, rowIndex) => (
+                <tr key={`${block.id}-${rowIndex}`}>
+                  {row.map((cell, cellIndex) => (
+                    <td
+                      key={`${block.id}-${rowIndex}-${cellIndex}`}
+                      className="py-3 pr-4 text-[13px] text-zinc-700 dark:text-zinc-300 border-b border-zinc-100 dark:border-white/5 align-top"
+                    >
+                      {cell}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </BlockCard>
+  );
+}
+
+function MetricGridBlockView({ block }: { block: AgentBlock }) {
+  const metrics = block.metrics || [];
+  if (metrics.length === 0) return null;
+
+  return (
+    <BlockCard tone={block.tone}>
+      <div className="px-5 py-5">
+        <div className="flex items-center gap-2 mb-4">
+          <BarChart2 className="w-4 h-4 text-zinc-500 dark:text-zinc-400" />
+          <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-400 dark:text-zinc-500">
+            {block.title || "Metric grid"}
+          </p>
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+          {metrics.map((metric) => (
+            <div
+              key={`${block.id}-${metric.label}`}
+              className={clsx(
+                "rounded-xl border px-3.5 py-3",
+                BLOCK_TONE_STYLES[metric.tone || "neutral"]
+              )}
+            >
+              <p className="text-[10px] font-bold uppercase tracking-widest opacity-70 mb-1">{metric.label}</p>
+              <p className="text-[15px] font-semibold">{metric.value}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </BlockCard>
+  );
+}
+
+function CalloutBlockView({ block }: { block: AgentBlock }) {
+  return (
+    <BlockCard tone={block.tone}>
+      <div className="px-5 py-5">
+        <div className="flex items-center gap-2 mb-2.5">
+          <Zap className="w-4 h-4" />
+          <p className="text-[10px] font-bold uppercase tracking-widest opacity-70">
+            {block.title || "Callout"}
+          </p>
+        </div>
+        <p className="text-[14px] leading-relaxed whitespace-pre-wrap">{block.text}</p>
+      </div>
+    </BlockCard>
+  );
+}
+
+function AssistantBlocksView({ blocks }: { blocks?: AgentBlock[] }) {
+  if (!blocks || blocks.length === 0) return null;
+
+  return (
+    <div className="w-full space-y-4">
+      {blocks.map((block) => {
+        if (block.type === "status") {
+          return <StatusBlockView key={block.id} block={block} />;
+        }
+        if (block.type === "table") {
+          return <TableBlockView key={block.id} block={block} />;
+        }
+        if (block.type === "metric_grid") {
+          return <MetricGridBlockView key={block.id} block={block} />;
+        }
+        if (block.type === "callout") {
+          return <CalloutBlockView key={block.id} block={block} />;
+        }
+        return <MarkdownBlockView key={block.id} block={block} />;
+      })}
+    </div>
+  );
+}
+
 function AuditMiniView({ audit }: { audit?: any }) {
   if (!audit) return null;
 
@@ -784,14 +968,7 @@ function MessageBubble({
 
   const isThinking = isLatest && isTyping;
   const contentStr = (message.content as string) || "";
-
-  const isEngineStream =
-    contentStr.includes("**Strategic Triage:**") ||
-    contentStr.includes("**Refinement:**") ||
-    contentStr.includes("**Finance Triage:**") ||
-    contentStr.includes("**Live Finance Snapshot:**") ||
-    contentStr.includes("**Finance synthesis complete.**") ||
-    contentStr.includes("**Synthesis Complete.**");
+  const isEngineStream = message.kind === "decision" && !message.decision && contentStr.trim().length > 0;
 
   const thinkingSteps = isEngineStream
     ? contentStr
@@ -821,6 +998,10 @@ function MessageBubble({
         {(message as any).decision ? (
           <div className="w-full animate-in fade-in slide-in-from-bottom-2 duration-500">
             <DecisionBoard message={message} onSpawn={onSpawn} />
+          </div>
+        ) : message.blocks?.length ? (
+          <div className="w-full animate-in fade-in slide-in-from-bottom-2 duration-500">
+            <AssistantBlocksView blocks={message.blocks} />
           </div>
         ) : isEngineStream ? (
           <div className="w-full pl-1">

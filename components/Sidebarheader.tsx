@@ -1,26 +1,12 @@
 // app/(chat)/_components/Sidebar.tsx
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import Sidebarsearch from "./Sidebarsearch"
-import path from "path";
 import Sidebarcontent from "./Sidebarcontent";
-import { LucideIcon, LayoutDashboard, Database, Binoculars, Search, Brain } from "lucide-react"
-import Link from "next/link";
+import { LayoutDashboard, Database, Binoculars, Brain } from "lucide-react"
 
 import Newflows from "./Newdecision";
-
-interface Isidebaritem {
-  name: string;
-  icon: LucideIcon;
-  path: string;
-  items?: Isubitem;
-}
-
-interface Isubitem {
- name: string;
- path: string;
-} 
 
 const items =[
   {

@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import clsx from "clsx";
-import { useSettings } from "@/contexts/SettingsContext"; // Make sure path matches your project!
+import { useSettings } from "@/contexts/SettingsContext";
+import { getDeliveryStatus } from "@/services/chatApi";
 
 // Reusable Toggle Component for the clean UI
 function Toggle({ enabled, onChange, disabled = false }: { enabled: boolean; onChange: () => void; disabled?: boolean }) {
@@ -28,10 +29,34 @@ function Toggle({ enabled, onChange, disabled = false }: { enabled: boolean; onC
 
 export default function NotificationsPage() {
   // Grab real global settings for the core features
-  const { emailUpdates, appDecisions, updateSetting, isLoaded } = useSettings();
+  const {
+    emailUpdates,
+    appDecisions,
+    verdictEmailEnabled,
+    verdictEmailAddress,
+    updateSetting,
+    isLoaded,
+  } = useSettings();
   
   // Local state for marketing (usually handled via external mailing list API anyway)
   const [emailMarketing, setEmailMarketing] = useState(false);
+  const [deliveryAvailable, setDeliveryAvailable] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    let active = true;
+
+    void getDeliveryStatus()
+      .then((status) => {
+        if (active) setDeliveryAvailable(status.email_delivery_available);
+      })
+      .catch(() => {
+        if (active) setDeliveryAvailable(false);
+      });
+
+    return () => {
+      active = false;
+    };
+  }, []);
 
   // Prevent hydration flash
   if (!isLoaded) return null;
@@ -72,6 +97,53 @@ export default function NotificationsPage() {
             enabled={emailMarketing} 
             onChange={() => setEmailMarketing(!emailMarketing)} 
           />
+        </div>
+
+        <div className="rounded-2xl border border-zinc-200 dark:border-white/10 bg-zinc-50/80 dark:bg-white/[0.03] px-4 py-4">
+          <div className="flex items-start justify-between gap-4">
+            <div className="flex flex-col max-w-[80%]">
+              <span className="flex items-center gap-2 text-[14px] font-medium text-zinc-900 dark:text-zinc-100 transition-colors">
+                Verdict delivery
+                <span
+                  className={clsx(
+                    "text-[9px] font-bold uppercase tracking-widest px-1.5 py-0.5 rounded-md border",
+                    deliveryAvailable
+                      ? "text-emerald-700 border-emerald-200 bg-emerald-50 dark:text-emerald-300 dark:border-emerald-500/20 dark:bg-emerald-500/10"
+                      : "text-zinc-500 border-zinc-200 bg-white dark:text-zinc-400 dark:border-white/10 dark:bg-white/5"
+                  )}
+                >
+                  {deliveryAvailable ? "Connected" : "Server setup needed"}
+                </span>
+              </span>
+              <span className="mt-0.5 text-[13px] text-zinc-500 dark:text-zinc-400 leading-relaxed transition-colors">
+                Auto-send finished finance verdicts to an inbox when mail delivery is configured on the backend.
+              </span>
+            </div>
+            <Toggle
+              enabled={verdictEmailEnabled}
+              onChange={() => updateSetting("verdictEmailEnabled", !verdictEmailEnabled)}
+              disabled={!deliveryAvailable}
+            />
+          </div>
+
+          <div className="mt-4">
+            <label className="text-[11px] font-bold uppercase tracking-widest text-zinc-400 dark:text-zinc-500">
+              Destination email
+            </label>
+            <input
+              type="email"
+              value={verdictEmailAddress}
+              onChange={(e) => updateSetting("verdictEmailAddress", e.target.value)}
+              placeholder="finance@company.com"
+              disabled={!verdictEmailEnabled || !deliveryAvailable}
+              className="mt-2 w-full rounded-xl border border-zinc-200 dark:border-white/10 bg-white dark:bg-[#121212] px-3.5 py-3 text-[14px] text-zinc-900 dark:text-zinc-100 outline-none transition-colors placeholder:text-zinc-400 disabled:cursor-not-allowed disabled:opacity-50"
+            />
+            <p className="mt-2 text-[12px] text-zinc-500 dark:text-zinc-400 leading-relaxed">
+              {deliveryAvailable
+                ? "Three AI will only deliver verdicts after a completed decision board is generated."
+                : "Connect SMTP or Resend on the backend before enabling auto-delivery."}
+            </p>
+          </div>
         </div>
       </div>
 
