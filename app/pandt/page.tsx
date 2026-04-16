@@ -7,7 +7,7 @@ export default function LegalPage() {
       {/* Logo - Top Left */}
       <div className="absolute top-6 left-6 md:top-8 md:left-8">
         <a href="/">
-          <img src="/logosix.PNG" alt="Three AI Logo" className="h-[30px] w-auto" />
+          <img src="/logosix.png" alt="three AI logo" className="h-[30px] w-auto" />
         </a>
       </div>
 

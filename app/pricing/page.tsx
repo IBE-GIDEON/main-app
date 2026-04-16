@@ -181,7 +181,7 @@ const faqs = [
   },
   {
     q: "What is the 'Do button' in Beta V2?",
-    a: "The Do button is the execution layer. Once three AI delivers a verdict, Beta V2 lets you approve and act in one click — drafting and sending a strategic summary to your Slack exec channel, or translating the winning decision branch into assigned Jira tickets. Think AI stops being a passive analyser and becomes an active agent.",
+    a: "The Do button is the execution layer. Once three AI delivers a verdict, Beta V2 lets you approve and act in one click — drafting and sending a strategic summary to your Slack exec channel, or translating the winning decision branch into assigned Jira tickets. three AI stops being a passive analyser and becomes an active agent.",
   },
   {
     q: "Can I use three AI for my whole team right now?",
@@ -243,7 +243,7 @@ function NavBar() {
                     className="flex items-center"
                   >
                     {/* Added 'nav-logo' class here for CSS targeting */}
-                    <img src="/logofive.PNG" alt="threeAI Logo" className="h-[30px] w-auto mt-5 nav-logo" />
+                    <img src="/logofive.png" alt="three AI logo" className="h-[30px] w-auto mt-5 nav-logo" />
                   </motion.div>
                 </div></a>
 
@@ -1116,7 +1116,7 @@ function EnterpriseFooter() {
                        className="flex items-center"
                      >
                        {/* Added 'nav-logo' class here for CSS targeting */}
-                       <img src="/logosix.PNG" alt="threeAI Logo" className="h-[30px] w-auto mt-5 nav-logo" />
+                       <img src="/logosix.png" alt="three AI logo" className="h-[30px] w-auto mt-5 nav-logo" />
                      </motion.div>
                    </div></a>
             <p className="font-editorial" style={{ fontSize: 15, lineHeight: 1.7, color: "rgba(242,240,234,0.42)", maxWidth: 320, marginBottom: 24 }}>

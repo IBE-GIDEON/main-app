@@ -471,7 +471,7 @@ function NavBar({ scrolled, isLight }) {
             className="flex items-center"
           >
             {/* Added 'nav-logo' class here for CSS targeting */}
-            <img src="/logofive.PNG" alt="threeAI Logo" className="h-[30px] w-auto mt-5 nav-logo" />
+            <img src="/logofive.png" alt="three AI logo" className="h-[30px] w-auto mt-5 nav-logo" />
           </motion.div>
         </div></a>
 
@@ -1580,7 +1580,7 @@ function Footer() {
             className="flex items-center"
           >
             {/* Added 'nav-logo' class here for CSS targeting */}
-            <img src="/logosix.PNG" alt="threeAI Logo" className="h-[20px] w-15 mt-5 nav-logo" />
+            <img src="/logosix.png" alt="three AI logo" className="h-[20px] w-15 mt-5 nav-logo" />
           </motion.div>
         </div></a>
 

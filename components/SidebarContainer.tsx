@@ -55,7 +55,7 @@ const SidebarContainer = ({ onCollapsedChange }: SidebarContainerProps) => {
             <Image
               className="absolute hidden dark:block transition-opacity duration-300 group-hover:opacity-0"
               src="/dashlogo.png"
-              alt="Think AI logo"
+              alt="three AI logo"
               width={24}
               height={24}
             />
@@ -63,7 +63,7 @@ const SidebarContainer = ({ onCollapsedChange }: SidebarContainerProps) => {
             <Image
               className="absolute block dark:hidden transition-opacity duration-300 group-hover:opacity-0"
               src="/dashlogo-light.png"
-              alt="Think AI logo"
+              alt="three AI logo"
               width={24}
               height={24}
             />
@@ -80,7 +80,7 @@ const SidebarContainer = ({ onCollapsedChange }: SidebarContainerProps) => {
             <Image
               className="hidden dark:block bg-none"
               src="/dashlogo.png"
-              alt="Think AI logo"
+              alt="three AI logo"
               width={24}
               height={24}
             />
@@ -88,7 +88,7 @@ const SidebarContainer = ({ onCollapsedChange }: SidebarContainerProps) => {
             <Image
               className="block dark:hidden bg-none"
               src="/dashlogo-light.png"
-              alt="Think AI logo"
+              alt="three AI logo"
               width={24}
               height={24}
             />
@@ -109,9 +109,9 @@ const SidebarContainer = ({ onCollapsedChange }: SidebarContainerProps) => {
   const mobileHeaderContent = (
     <div className="flex items-center justify-between px-4 py-4 border-b border-zinc-200 dark:border-white/5">
       {/* THE FIX: Mobile Dark Mode Logo */}
-      <Image src="/dashlogo.png" alt="Think AI logo" width={24} height={24} className="hidden dark:block" />
+      <Image src="/dashlogo.png" alt="three AI logo" width={24} height={24} className="hidden dark:block" />
       {/* THE FIX: Mobile Light Mode Logo */}
-      <Image src="/dashlogo-light.png" alt="Think AI logo" width={24} height={24} className="block dark:hidden" />
+      <Image src="/dashlogo-light.png" alt="three AI logo" width={24} height={24} className="block dark:hidden" />
       <button
         type="button"
         onClick={() => setIsMobileOpen(false)}

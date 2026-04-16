@@ -52,7 +52,7 @@ const PLAN = {
   price: "$560",
   period: "/ month",
   description:
-    "The full Think AI decision engine — branching logic, risk scoring, verdict cards, and the Aside panel.",
+    "The full three AI decision engine — branching logic, risk scoring, verdict cards, and the Aside panel.",
   badge: "Available Now",
   features: [
     { icon: GitBranch, text: "Unlimited recursive branching engine" },
@@ -956,7 +956,7 @@ export default function CheckoutPage() {
                 <a href="/">
                     <div className="flex items-center gap-3 mb-6 mt-[-30]">
 
-                        <img src="/logofive.PNG" alt="threeAI Logo" className="h-[30px] w-auto mt-5 nav-logo" />
+                        <img src="/logofive.png" alt="three AI logo" className="h-[30px] w-auto mt-5 nav-logo" />
                     
                     </div></a>
 

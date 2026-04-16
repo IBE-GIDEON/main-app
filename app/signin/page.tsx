@@ -675,7 +675,7 @@ function AuthPageContent() {
              <a href="/">
                     <div className="flex items-center gap-3 mb-6 mt-[-30]">
 
-                        <img src="/logofive.PNG" alt="threeAI Logo" className="h-[30px] w-auto mt-5 nav-logo" />
+                        <img src="/logofive.png" alt="three AI logo" className="h-[30px] w-auto mt-5 nav-logo" />
                     
                     </div></a>
 
@@ -724,7 +724,7 @@ function AuthPageContent() {
         <div className="right-panel">
           <div className="auth-card">
             <div className="mobile-brand">
-            <img src="/logofive.PNG" alt="threeAI Logo" className="h-[30px] w-auto mt-5 nav-logo" />
+            <img src="/logofive.png" alt="three AI logo" className="h-[30px] w-auto mt-5 nav-logo" />
                                
             </div>
 

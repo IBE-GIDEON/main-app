@@ -68,7 +68,7 @@ export default function ConnectorsPage() {
 
       {/* SUB-HEADER */}
       <p className="mb-6 text-[14px] text-zinc-300">
-        Connect your tools to Think AI to search across them and take action. Your permissions are always respected.
+        Connect your tools to three AI to search across them and take action. Your permissions are always respected.
       </p>
 
       {/* FILTERS & TABS SECTION */}

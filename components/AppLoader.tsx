@@ -30,7 +30,7 @@ function NavBar() {
             <a href="#home">
               <img
                 src="/logofive.png"
-                alt="three AI Logo"
+                alt="three AI logo"
                 className="h-[220px] w-[200px] font-bold"
               />
             </a>
@@ -376,8 +376,8 @@ function EnterpriseFooter() {
               className="flex items-center"
             >
               <img
-                src="/logofive.PNG"
-                alt="ThinkAI Logo"
+                src="/logofive.png"
+                alt="three AI logo"
                 className="h-[80px] w-auto"
               />
             </motion.div>
