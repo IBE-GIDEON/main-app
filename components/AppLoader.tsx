@@ -135,7 +135,7 @@ function Hero() {
         className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#E58A6A]/10 border border-[#E58A6A]/25 text-[#D97757] text-xs font-medium mb-8"
       >
         <Zap className="w-3 h-3" />
-        The Enterprise Decision Engine
+        The Finance Decision Engine
       </motion.div>
 
       <motion.h1
@@ -156,7 +156,7 @@ function Hero() {
         transition={{ duration: 1, delay: 0.2, ease }}
         className="mt-8 text-lg md:text-xl text-[#1C1B18]/45 max-w-2xl font-light leading-relaxed"
       >
-        Move beyond generic chatbots. three AI uses recursive refinement and branching logic to calculate stakes, visualize risks, and turn complex data into clear, executable strategy.
+        Move beyond generic chatbots. three AI reads financial documents, synced context, and prior decisions to produce clear verdicts with risks, conditions, and next steps.
       </motion.p>
 
       <motion.div
@@ -167,7 +167,7 @@ function Hero() {
       >
         <a href="/signin?mode=signup">
           <button className="h-12 px-8 rounded-full bg-[#E58A6A] text-white font-semibold text-sm hover:bg-[#D97757] transition-colors flex items-center gap-2 shadow-[0_0_24px_rgba(229,138,106,0.25)]">
-            Start building decisions
+            Start your first decision
             <ChevronRight className="w-4 h-4" />
           </button>
         </a>
@@ -203,16 +203,16 @@ function TrustedBy() {
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/[0.01] to-transparent pointer-events-none" />
       <div className="max-w-7xl mx-auto px-4 text-center relative z-10">
         <h3 className="text-xl md:text-2xl font-semibold text-[#1C1B18] mb-3">
-          The engine behind $10B+ in strategic decisions.
+          Built for finance, strategy, and operations teams.
         </h3>
         <p className="text-[13px] font-medium text-[#1C1B18]/40 mb-10 max-w-2xl mx-auto">
-          From mitigating M&A risks to architecting zero-downtime migrations, top-tier strategy teams rely on three AI to remove ambiguity from high-stakes execution.
+          From fundraising and pricing to diligence and cost control, three AI helps turn scattered context into a structured recommendation.
         </p>
         <div className="flex flex-wrap justify-center items-center gap-x-16 gap-y-8 opacity-25 grayscale">
-          <span className="text-xl font-bold tracking-tighter text-[#1C1B18]">Global FinTech</span>
-          <span className="text-xl font-serif italic text-[#1C1B18]">Venture Partners</span>
-          <span className="text-xl font-bold uppercase tracking-widest text-[#1C1B18]">AeroSpace Def.</span>
-          <span className="text-xl font-medium tracking-wide text-[#1C1B18]">Health Data Corp</span>
+          <span className="text-xl font-bold tracking-tighter text-[#1C1B18]">Fundraising</span>
+          <span className="text-xl font-serif italic text-[#1C1B18]">Diligence</span>
+          <span className="text-xl font-bold uppercase tracking-widest text-[#1C1B18]">Pricing</span>
+          <span className="text-xl font-medium tracking-wide text-[#1C1B18]">Runway</span>
         </div>
       </div>
     </section>
@@ -224,9 +224,9 @@ function ProblemSolution() {
     <section className="py-24 max-w-7xl mx-auto px-4 md:px-8">
       <div className="mb-16 text-center">
         <h2 className="text-3xl md:text-5xl font-bold text-[#1C1B18] tracking-tight mb-4">
-          Why standard LLMs fail the enterprise.
+          Why generic AI falls short on financial decisions.
         </h2>
-        <p className="text-[#1C1B18]/45 text-lg">Text generation is not consensus. Chatbots don't calculate risk.</p>
+        <p className="text-[#1C1B18]/45 text-lg">Text generation is not a decision record. Generic chat does not preserve conditions.</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -237,16 +237,16 @@ function ProblemSolution() {
             <h3 className="text-[11px] font-bold uppercase tracking-widest text-rose-500/70 mb-4">The Status Quo</h3>
             <h4 className="text-2xl font-semibold text-[#1C1B18] mb-4">The Cost of Ambiguity</h4>
             <p className="text-[#1C1B18]/50 leading-relaxed text-[15px] mb-8">
-              Standard AI tools give you a single, highly confident answer based on probability, hiding the underlying complexities. Teams waste hundreds of hours manually verifying data, missing critical edge-case risks, and ultimately hesitating on execution because the AI couldn't "show its work."
+              Generic AI tools return polished answers but do not preserve the path behind the call. Finance teams still end up reconciling spreadsheets, memos, and assumptions by hand before they can trust the output.
             </p>
             <ul className="space-y-3">
               <li className="flex items-center gap-3 text-sm text-[#1C1B18]/40">
                 <div className="w-1.5 h-1.5 rounded-full bg-rose-400/60" />
-                Blindspots caused by hallucination loops.
+                Disconnected context across documents, spreadsheets, and notes.
               </li>
               <li className="flex items-center gap-3 text-sm text-[#1C1B18]/40">
                 <div className="w-1.5 h-1.5 rounded-full bg-rose-400/60" />
-                Wasted engineering hours debugging generic code.
+                Hard to trace why a recommendation changed.
               </li>
             </ul>
           </div>
@@ -257,14 +257,14 @@ function ProblemSolution() {
           <div className="absolute top-0 right-0 p-8 opacity-10"><Clock className="w-32 h-32 text-[#E58A6A]" /></div>
           <div className="relative z-10">
             <h3 className="text-[11px] font-bold tracking-widest text-[#D97757] mb-4">THE three AI WAY</h3>
-            <h4 className="text-2xl font-semibold text-[#1C1B18] mb-4">Calculated Execution</h4>
+            <h4 className="text-2xl font-semibold text-[#1C1B18] mb-4">Structured Financial Reasoning</h4>
             <p className="text-[#1C1B18]/60 leading-relaxed text-[15px] mb-8">
-              We replace hallucination with branching logic. three AI automatically spins up sub-scenarios to stress-test ideas before you even ask. By visualizing the exact stakes of every choice, we save teams an average of 40 hours per major strategic decision while identifying 3x more edge-case risks.
+              three AI organizes the decision into branches, challenges the initial answer, and returns risks, upsides, confidence, and next steps in a workspace built for action.
             </p>
             <ul className="space-y-3">
               <li className="flex items-center gap-3 text-sm text-[#1C1B18]/60">
                 <div className="w-1.5 h-1.5 rounded-full bg-[#E58A6A]" />
-                Visualized risk and upside variables.
+                Document-aware finance context.
               </li>
               <li className="flex items-center gap-3 text-sm text-[#1C1B18]/60">
                 <div className="w-1.5 h-1.5 rounded-full bg-[#E58A6A]" />
@@ -311,9 +311,9 @@ function BentoGrid() {
           <div className="relative z-10 h-full p-8 flex flex-col justify-between">
             <div>
               <LayoutPanelLeft className="w-8 h-8 text-[#1C1B18]/50 mb-5" />
-              <h3 className="text-xl font-semibold text-[#1C1B18] mb-3">The Aside AI UI</h3>
+              <h3 className="text-xl font-semibold text-[#1C1B18] mb-3">The Decision Workspace</h3>
               <p className="text-[#1C1B18]/45 leading-relaxed text-sm">
-                Designed to live alongside your work. A spatial interface ensuring the AI acts as a collaborative partner without overtaking your screen.
+                A focused workspace for long-form financial prompts, uploads, and verdict cards without crowding the rest of your screen.
               </p>
             </div>
             <div className="w-full h-36 rounded-2xl border border-black/[0.06] bg-black/[0.02] flex items-stretch overflow-hidden">
@@ -342,14 +342,14 @@ function PrivacySection() {
           <Lock className="w-8 h-8 text-[#1C1B18]/70" />
         </div>
         <h2 className="text-3xl md:text-5xl font-bold text-[#1C1B18] tracking-tight mb-6">
-          Absolute Data Sovereignty.
+          Built for sensitive financial context.
         </h2>
         <p className="text-lg text-[#1C1B18]/45 max-w-2xl mx-auto leading-relaxed mb-16">
-          Enterprise decisions require enterprise security. three AI operates on a strict zero-leakage architecture. Your company data, strategic branches, and final stakes are isolated, encrypted, and never used to train public models.
+          three AI keeps uploaded documents, synced finance data, and verdict history scoped to your workspace so you can review decisions without scattering context across tools.
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
-          {["Local Execution Options", "SOC2 Type II Ready", "End-to-End Encryption"].map((feature, i) => (
+          {["Isolated workspaces", "Audit-ready history", "Optional email delivery"].map((feature, i) => (
             <div key={i} className="px-6 py-5 rounded-2xl bg-black/[0.02] border border-black/[0.05] backdrop-blur-3xl flex items-center gap-4 hover:bg-black/[0.04] transition-colors">
               <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-[0_0_12px_rgba(16,185,129,0.25)]" />
               <span className="text-[14px] font-medium text-[#1C1B18]/75">{feature}</span>
@@ -383,7 +383,7 @@ function EnterpriseFooter() {
             </motion.div>
           </div>
           <p className="text-[#1C1B18]/40 text-sm leading-relaxed max-w-xs mb-8">
-            The Decision Engine for the modern enterprise. We think through so you can do.
+            Document-backed financial reasoning and structured verdicts in one workspace.
           </p>
           <div className="flex items-center gap-3">
             <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
@@ -396,7 +396,7 @@ function EnterpriseFooter() {
           <h4 className="text-[#1C1B18] font-semibold text-sm mb-6">Product</h4>
           <ul className="space-y-4 text-sm text-[#1C1B18]/50">
             <li><a href="#engine" className="hover:text-[#E58A6A] transition-colors">The Engine</a></li>
-            <li><a href="#aside" className="hover:text-[#E58A6A] transition-colors">Aside AI UI</a></li>
+            <li><a href="#aside" className="hover:text-[#E58A6A] transition-colors">Decision Workspace</a></li>
             <li><a href="#security" className="hover:text-[#E58A6A] transition-colors">Security & Trust</a></li>
             <li><a href="/pricing" className="hover:text-[#E58A6A] transition-colors">Pricing</a></li>
             <li><a href="#" className="hover:text-[#E58A6A] transition-colors">Changelog</a></li>
@@ -407,9 +407,9 @@ function EnterpriseFooter() {
           <h4 className="text-[#1C1B18] font-semibold text-sm mb-6">Use Cases</h4>
           <ul className="space-y-4 text-sm text-[#1C1B18]/50">
             <li><a href="/use-case#features" className="hover:text-[#E58A6A] transition-colors">Enterprise Strategy</a></li>
-            <li><a href="/use-case#features" className="hover:text-[#E58A6A] transition-colors">Engineering & Tech Debt</a></li>
-            <li><a href="/use-case#features" className="hover:text-[#E58A6A] transition-colors">Risk Mitigation</a></li>
-            <li><a href="/use-case#features" className="hover:text-[#E58A6A] transition-colors">Startup Scaling</a></li>
+            <li><a href="/use-case#features" className="hover:text-[#E58A6A] transition-colors">Fundraising Strategy</a></li>
+            <li><a href="/use-case#features" className="hover:text-[#E58A6A] transition-colors">M&amp;A Diligence</a></li>
+            <li><a href="/use-case#features" className="hover:text-[#E58A6A] transition-colors">Runway Planning</a></li>
           </ul>
         </div>
 

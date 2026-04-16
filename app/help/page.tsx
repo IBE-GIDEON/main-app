@@ -46,10 +46,10 @@ const HELP_CATEGORIES = [
   {
     icon: FileText,
     title: "Context & Integrations",
-    description: "Connect data sources to give the engine perfect context.",
+    description: "Upload documents and connect supported finance data sources.",
     articles: [
-      { title: "Uploading internal documents", href: "#" },
-      { title: "Configuring company risk appetite", href: "#" },
+      { title: "Uploading financial documents", href: "#" },
+      { title: "Connecting Stripe, QuickBooks, or CSV data", href: "#" },
       { title: "Supported file types and limits", href: "#" },
     ],
   },
@@ -65,12 +65,12 @@ const HELP_CATEGORIES = [
   },
   {
     icon: Users,
-    title: "Team & Workspaces",
-    description: "Invite your executives and manage decision history.",
+    title: "History & Workspace",
+    description: "Manage saved decisions and keep your workspace organized.",
     articles: [
-      { title: "Inviting team members", href: "#" },
+      { title: "Renaming a recent decision", href: "#" },
       { title: "Restoring decisions from the Audit Ledger", href: "#" },
-      { title: "Role-based access controls", href: "#" },
+      { title: "Deleting a saved decision", href: "#" },
     ],
   },
   {
@@ -92,11 +92,11 @@ const FAQS = [
   },
   {
     q: "What is the difference between Chat and a Decision?",
-    a: "The engine automatically routes your queries. 'Chat' is used for standard Q&A, definitions, and coding. 'Decision' is triggered when you face a strategic choice—launching our recursive refinement layers to generate Upside/Risk boxes and Verdict cards.",
+    a: "The engine automatically routes your queries. Chat is best for finance Q&A, document follow-ups, and clarifying context. Decision mode is triggered when you are weighing a real choice, launching recursive refinement so the engine can return Upside and Risk boxes, verdict cards, conditions, and next steps.",
   },
   {
     q: "What do I get with the MVP Plan?",
-    a: "The MVP Plan ($560/year) unlocks unlimited recursive refinement layers, premium video/image generation, advanced frameworks, priority API access, and zero queue times.",
+    a: "The MVP Plan ($560/month) unlocks unlimited recursive refinement, full upside and downside scoring, a full audit trail, faster response performance, supported finance document uploads, and optional verdict email delivery when the backend mail integration is configured.",
   },
   {
     q: "How do I restore a previous decision?",
@@ -164,7 +164,7 @@ export default function HelpPage() {
           </h1>
           
           <p className="text-[16px] text-zinc-600 dark:text-zinc-400 max-w-2xl mx-auto mb-10">
-            Find answers, explore engine mechanics, and get support for onboarding, privacy, and workspace setup.
+            Find answers, understand how the engine works, and get help with onboarding, documents, delivery, and workspace setup.
           </p>
 
           {/* SEARCH BAR */}

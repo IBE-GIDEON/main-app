@@ -28,6 +28,7 @@ import {
   X,
   Database,
   ArrowUpRight,
+  Mail,
 } from "lucide-react";
 
 /* ─────────────────────────────────────────
@@ -82,7 +83,7 @@ const basicFeatures = [
   { icon: CheckCircle, text: "Simplified verdict cards (go / stop only)" },
   { icon: Zap, text: "Standard response latency" },
   { icon: Shield, text: "Zero-leakage data isolation" },
-  { icon: Database, text: "Company knowledge base RAG integration" },
+  { icon: Database, text: "Financial document uploads (PDF, CSV, TXT, MD, JSON)" },
   { icon: Clock, text: "5-day decision history" },
   { icon: Users, text: "Single-user workspace" },
   { icon: Network, text: "Web interface access" },
@@ -92,9 +93,10 @@ const mvpFeatures = [
   { icon: GitBranch, text: "Unlimited recursive branching decision engine" },
   { icon: Target, text: "Full upside & risk scoring per branch" },
   { icon: CheckCircle, text: "Verdict cards with go / stop / review conditions" },
-  { icon: Network, text: "Aside AI panel — live alongside your workflow (Beta)" },
-  { icon: Database, text: "Company knowledge base RAG integration" },
+  { icon: Network, text: "Focused decision workspace for long-form finance work" },
+  { icon: Database, text: "Document uploads plus Stripe, QuickBooks, and CSV context" },
   { icon: Zap, text: "Next-step execution recommendations" },
+  { icon: Mail, text: "Optional verdict email delivery when configured" },
   { icon: Shield, text: "Zero-leakage data isolation" },
   { icon: BarChart3, text: "Up to 50 decisions per month" },
   { icon: Clock, text: "Full decision history & audit trail" },
@@ -104,54 +106,54 @@ const mvpFeatures = [
 
 const betaFeatures = [
   { icon: GitBranch, text: "Everything in MVP, plus:" },
-  { icon: Globe, text: "Slack & Jira 'Do' button — one-click execution" },
-  { icon: Building2, text: "Multi-user team workspaces" },
-  { icon: Network, text: "Company knowledge base RAG integration" },
-  { icon: Star, text: "Multi-agent debate mode (experimental)" },
-  { icon: BarChart3, text: "Unlimited decisions per month" },
-  { icon: Sparkles, text: "Proactive background decision monitoring" },
-  { icon: Users, text: "C-suite multiplayer sessions" },
-  { icon: Shield, text: "SOC2 Type II compliance (in progress)" },
+  { icon: Globe, text: "Early access to newly shipped finance workflows" },
+  { icon: Building2, text: "Guided connector onboarding for supported data sources" },
+  { icon: Network, text: "Deeper document, CSV, and delivery workflow setup" },
+  { icon: Star, text: "Founding member feedback channel for roadmap input" },
+  { icon: BarChart3, text: "Higher monthly decision volume" },
+  { icon: Sparkles, text: "Priority access to new templates and workflow releases" },
+  { icon: Users, text: "Rollout support for finance and ops teams" },
+  { icon: Shield, text: "Extended retention and export controls" },
   { icon: Rocket, text: "Priority onboarding & dedicated support" },
 ];
 
 const basicMarkets = [
-  "Solo founders exploring AI-assisted thinking",
-  "Students & researchers stress-testing ideas",
-  "Early-stage operators not yet at scale",
-  "Anyone curious before they commit",
+  "Solo founders exploring structured finance decisions",
+  "Operators testing document-backed verdicts",
+  "Finance leads validating the workflow before rollout",
+  "Anyone who wants a low-risk way to try the engine",
 ];
 
 const mvpMarkets = [
-  "Founders & solo operators",
-  "CTOs making architectural bets",
-  "Strategy leads at Series A–C",
-  "Consultants who bill by the decision",
+  "Founders and solo operators",
+  "Finance and FP&A leads",
+  "Strategy teams at growth-stage companies",
+  "Advisors who need defensible recommendations fast",
 ];
 
 const betaMarkets = [
-  "Enterprise strategy teams",
-  "VC firms & deal rooms",
-  "Multi-department orgs",
-  "Regulated industries (finance, health, legal)",
+  "Finance teams rolling out shared workflows",
+  "Advisory firms and deal teams",
+  "Operators with repeat decision volume",
+  "Customers who want hands-on onboarding and roadmap access",
 ];
 
 const compareRows = [
   { feature: "Branching decision engine", basic: true, mvp: true, beta: true },
   { feature: "Verdict cards", basic: "Basic", mvp: true, beta: true },
   { feature: "Risk & upside scoring", basic: false, mvp: true, beta: true },
-  { feature: "Aside AI panel", basic: false, mvp: true, beta: true },
+  { feature: "Focused decision workspace", basic: false, mvp: true, beta: true },
   { feature: "Decision history", basic: "5 days", mvp: true, beta: true },
   { feature: "Zero-leakage data isolation", basic: true, mvp: true, beta: true },
   { feature: "Decisions per month", basic: "2/day", mvp: "50", beta: "∞" },
   { feature: "Decision paths per query", basic: "3", mvp: "∞", beta: "∞" },
-  { feature: "Users", basic: "1", mvp: "1", beta: "Team" },
+  { feature: "Users", basic: "1", mvp: "1", beta: "Guided rollout" },
   { feature: "Groq ultra-low latency", basic: false, mvp: true, beta: true },
-  { feature: "Slack / Jira 'Do' button", basic: false, mvp: false, beta: true },
-  { feature: "Company knowledge base RAG", basic: true, mvp: true, beta: true },
-  { feature: "Multi-agent debate mode", basic: false, mvp: false, beta: true },
-  { feature: "Background monitoring", basic: false, mvp: false, beta: true },
-  { feature: "SOC2 Type II", basic: false, mvp: false, beta: true },
+  { feature: "Financial document uploads", basic: true, mvp: true, beta: true },
+  { feature: "Connector-backed context", basic: false, mvp: true, beta: true },
+  { feature: "Optional verdict email delivery", basic: false, mvp: true, beta: true },
+  { feature: "Extended retention & exports", basic: false, mvp: false, beta: true },
+  { feature: "Priority onboarding", basic: false, mvp: false, beta: true },
 ];
 
 const faqs = [
@@ -165,7 +167,7 @@ const faqs = [
   },
   {
     q: "What's the difference between Basic and MVP?",
-    a: "Basic caps you at 2 decisions per day, 3 decision paths per query, and simplified verdict cards with no risk scoring or audit trail. The MVP removes all those limits — you get unlimited branching depth, full upside and downside scoring, the Aside AI panel for working live alongside your workflow, and Groq-powered speed. The MVP is built for operators who rely on the engine daily.",
+    a: "Basic caps you at 2 decisions per day, 3 decision paths per query, and simplified verdict cards. MVP opens up the full finance workflow: unlimited branching depth, full upside and downside scoring, document uploads, connector-backed context, optional verdict delivery by email when configured, and a full audit trail. It is built for people who rely on the engine every week, not just occasionally.",
   },
   {
     q: "What does '50 decisions per month' mean in practice?",
@@ -177,15 +179,15 @@ const faqs = [
   },
   {
     q: "Why is Beta V2 cheaper than the MVP?",
-    a: "Beta V2 is a founding-member price — a thank-you for early adopters willing to help shape the product. The $480 rate is locked in permanently for anyone who joins the waitlist and converts. When V2 launches publicly, it will be priced higher to reflect the added integrations, team features, and compute cost of the multi-agent engine.",
+    a: "Beta V2 is a founding-member price — a thank-you for early adopters who want hands-on onboarding, early access to newly shipped finance workflows, and a closer feedback loop with the team. The $480 rate is designed for customers comfortable joining before every rollout and support layer is finalized.",
   },
   {
-    q: "What is the 'Do button' in Beta V2?",
-    a: "The Do button is the execution layer. Once three AI delivers a verdict, Beta V2 lets you approve and act in one click — drafting and sending a strategic summary to your Slack exec channel, or translating the winning decision branch into assigned Jira tickets. three AI stops being a passive analyser and becomes an active agent.",
+    q: "What does Beta V2 actually add?",
+    a: "Beta V2 is the early-access track for customers who want more guided setup around supported connectors, deeper document and CSV workflows, longer retention, and earlier access to new finance templates as they ship. It is not a separate engine — it is a higher-touch rollout of the same core decision system.",
   },
   {
     q: "Can I use three AI for my whole team right now?",
-    a: "The Basic and MVP plans are single-user workspaces. Team multiplayer functionality — shared decision rooms, role-based access, and C-suite collaborative sessions — is coming in Beta V2. You can join the waitlist today and get early access when it ships.",
+    a: "Today, the public plans are optimized for a single-user workspace. If you need a broader rollout for a finance or operations team, Beta V2 is the right path to join because it is where guided onboarding and higher-volume support are being introduced first.",
   },
   {
     q: "What makes three AI different from asking ChatGPT or Claude a strategy question?",
@@ -408,7 +410,7 @@ function Hero() {
               >
                 Start free and experience the engine firsthand. When the stakes get real,
                 upgrade to the plan built for deeper reasoning, cleaner execution, and
-                enterprise-grade control.
+                clearer control.
               </p>
 
               <div className="hero-actions" style={{ display: "flex", gap: 14, flexWrap: "wrap" }}>
@@ -591,8 +593,8 @@ function PricingSection() {
                 margin: "0 auto",
               }}
             >
-              Clean entry at the free tier. Full operating leverage at MVP. Team-scale
-              coordination in Beta V2.
+              Start with the core workflow for free. Move up to MVP for deeper finance
+              context, audit history, and delivery tools. Join Beta V2 for guided rollout.
             </p>
           </div>
         </FadeUp>
@@ -605,7 +607,7 @@ function PricingSection() {
               <div className="price-inner">
                 <div className="pill-neutral">
                   <Zap size={12} />
-                  <span>Basic — Free for 7 days</span>
+                  <span>Basic — Free</span>
                 </div>
 
                 <div style={{ marginBottom: 22 }}>
@@ -623,9 +625,8 @@ function PricingSection() {
                 </div>
 
                 <p className="body-copy">
-                  Dip your toes into structured decision-making. The Basic plan gives you a real
-                  taste of the engine — branching logic, verdicts, and risk framing — before you
-                  commit to a full seat.
+                  Start with the real engine. Basic gives you structured verdicts, light
+                  branching, and document-aware decision support before you commit to a full seat.
                 </p>
 
                 <div className="price-block">
@@ -681,9 +682,9 @@ function PricingSection() {
                 </div>
 
                 <p className="body-copy">
-                  The full decision engine — unlimited branching logic, full risk scoring, verdict
-                  cards with review triggers, and the Aside panel. Built for operators making
-                  consequential decisions every week.
+                  The full finance decision workflow — unlimited branching logic, document-backed
+                  reasoning, verdict cards with review triggers, connector context, and audit
+                  history. Built for operators making consequential calls every week.
                 </p>
 
                 <div className="price-block">
@@ -726,7 +727,8 @@ function PricingSection() {
                     Coming in Beta V2
                   </p>
                   <p className="font-editorial" style={{ fontSize: 14, lineHeight: 1.6, color: "rgba(15,14,11,0.42)", maxWidth: 240, textAlign: "center", marginBottom: 18 }}>
-                    Join the waitlist to lock in the founding price and get early access.
+                    Join the waitlist for guided rollout, earlier workflow releases, and
+                    founding-member pricing.
                   </p>
                   <button className="btn-soft">
                     Join Waitlist <ArrowRight size={14} />
@@ -755,8 +757,8 @@ function PricingSection() {
                 </div>
 
                 <p className="body-copy" style={{ color: "rgba(15,14,11,0.3)" }}>
-                  The full V2 platform with team collaboration, live integrations, and autonomous
-                  background monitoring. Built for organisations where decisions happen at scale.
+                  A higher-touch rollout for teams that want help setting up supported finance
+                  connectors, document workflows, and delivery tooling as new releases ship.
                 </p>
 
                 <div className="price-block">
@@ -1143,7 +1145,7 @@ function EnterpriseFooter() {
               heading: "Product",
               links: [
                 { label: "The Engine", href: "#engine" },
-                { label: "Aside AI UI", href: "#aside" },
+                { label: "Decision Workspace", href: "#aside" },
                 { label: "Security & Trust", href: "#security" },
                 { label: "Pricing", href: "/pricing" },
                 { label: "Changelog", href: "#" },

@@ -86,11 +86,11 @@ const audiences = [
   },
   {
     icon: Cpu,
-    role: "CTOs & Engineering Leads",
-    tag: "Technical Strategy",
+    role: "Finance & FP&A",
+    tag: "Scenario Planning",
     description:
-      "For complex technical bets where architecture, reliability, cost, and timing all matter at once.",
-    examples: ["Build vs. buy", "Migration planning", "Platform architecture decisions"],
+      "For decisions where cash, timing, downside exposure, and operational trade-offs all have to be weighed together.",
+    examples: ["Runway planning", "Budget trade-offs", "Capital sequencing"],
   },
   {
     icon: BarChart3,
@@ -110,11 +110,11 @@ const audiences = [
   },
   {
     icon: Layers,
-    role: "Product Leaders",
-    tag: "Roadmap Decisions",
+    role: "Advisors & Consultants",
+    tag: "Client-Ready Verdicts",
     description:
-      "Designed for prioritisation calls where timing, dependencies, and business impact all compete.",
-    examples: ["Feature prioritisation", "Release planning", "Platform trade-offs"],
+      "Designed for people who need structured recommendations they can defend to clients, partners, or executive teams.",
+    examples: ["Client recommendations", "Board prep", "Scenario comparisons"],
   },
   {
     icon: DollarSign,
@@ -140,14 +140,14 @@ const useCases = [
   },
   {
     icon: Cpu,
-    title: "Tech Stack Migration",
-    industry: "Engineering",
+    title: "Cash Runway Planning",
+    industry: "Finance",
     problem:
-      "A technical migration carries hidden dependencies, downtime risk, and long-term architecture consequences.",
+      "Extend runway, cut burn, or raise capital — each option changes hiring, execution, and downside risk.",
     howThinkAI:
-      "The engine evaluates competing migration paths and highlights operational risk, reversibility, and complexity.",
+      "The engine compares scenarios across burn, timing, risk exposure, and the conditions that change the recommendation.",
     outcome:
-      "A migration decision leadership can defend with more confidence.",
+      "A financing or cost-control decision leadership can defend with more confidence.",
   },
   {
     icon: TrendingUp,
@@ -162,14 +162,14 @@ const useCases = [
   },
   {
     icon: Users,
-    title: "Hiring & Org Design",
+    title: "Headcount Planning",
     industry: "Operations",
     problem:
-      "Leadership hires and team structure changes create cost, culture, and execution trade-offs.",
+      "Hiring plans create trade-offs across runway, delivery speed, and team capacity.",
     howThinkAI:
-      "The engine maps organisational impact across burn, ramp time, capability gaps, and strategic timing.",
+      "The engine maps headcount scenarios against burn, ramp time, capability gaps, and strategic timing.",
     outcome:
-      "A more structured people decision instead of a purely intuition-led one.",
+      "A more grounded hiring plan instead of a purely intuition-led one.",
   },
   {
     icon: FlaskConical,
@@ -226,7 +226,7 @@ const steps = [
   {
     number: "04",
     icon: CheckCircle,
-    title: "Verdict delivered. You execute.",
+    title: "Verdict delivered. You decide.",
     description:
       "You receive a clearer recommendation with explicit conditions for action, pause, or review.",
     detail:
@@ -235,10 +235,10 @@ const steps = [
 ];
 
 const stats = [
-  { value: "40hrs", label: "Saved per major strategic decision" },
-  { value: "3×", label: "More edge-case risks surfaced" },
-  { value: "<10m", label: "From input to defensible verdict" },
-  { value: "100%", label: "Data isolation — zero model training" },
+  { value: "3-pass", label: "Draft, attack, finalize reasoning loop" },
+  { value: "5 types", label: "Supported document upload formats" },
+  { value: "1 board", label: "Risks, upsides, conditions, and next steps" },
+  { value: "Audit trail", label: "Search, restore, and review past decisions" },
 ];
 
 /* ─────────────────────────────────────────
@@ -720,7 +720,7 @@ function EnterpriseFooter() {
               heading: "Product",
               links: [
                 { label: "The Engine", href: "/#engine" },
-                { label: "Aside AI UI", href: "/#aside" },
+                { label: "Decision Workspace", href: "/#aside" },
                 { label: "Security & Trust", href: "/#security" },
                 { label: "Pricing", href: "/pricing" },
                 { label: "Changelog", href: "#" },

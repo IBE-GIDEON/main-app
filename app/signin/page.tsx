@@ -831,7 +831,7 @@ function AuthPageContent() {
             <div className="trust-block">
               <div className="trust-row">
                 <Sparkles size={11} color={LILAC} />
-                Zero-leakage · Data stays yours · SOC2 ready
+                Zero-leakage · Data stays yours · Secure by design
               </div>
 
               <p className="font-editorial trust-copy">

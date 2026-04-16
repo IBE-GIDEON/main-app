@@ -456,7 +456,7 @@ export default function OnboardingPage() {
           })}
         </div>
         <div className="flex items-center gap-2 justify-center text-[12px] text-zinc-500">
-          <ShieldCheck size={14} className="text-emerald-500" /> Enterprise-grade SOC2 encryption. Read-only access.
+          <ShieldCheck size={14} className="text-emerald-500" /> Secure, read-only access for supported finance connections.
         </div>
       </Card>
 

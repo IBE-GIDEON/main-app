@@ -103,7 +103,7 @@ const POSTS = [
     featured: false,
     title: "A Rigorous Framework for Build vs. Buy vs. Partner Decisions",
     excerpt:
-      "Stop arguing about it in Slack. Here is the exact branching model three AI uses to score every make-or-buy decision — and how to run it yourself.",
+      "Stop looping on it in meetings. Here is the branching model three AI uses to score every make-or-buy decision — and how to run it yourself.",
     href: "#post-3",
   },
   {
@@ -344,8 +344,8 @@ function Hero() {
 
         <FadeUp delay={0.14}>
           <p className="font-editorial hero-copy">
-            Decision science, product thinking, and the architecture behind the engine —
-            written for operators who take financial strategy seriously.
+            Research, workflow design, and architecture notes from a product built to
+            read financial context, stress-test decisions, and return structured verdicts.
           </p>
         </FadeUp>
       </div>
@@ -523,7 +523,7 @@ function EnterpriseFooter() {
                      </motion.div>
                    </div></a>
             <p className="footer-copy">
-              The decision engine built for the modern enterprise. We think through so you can do.
+              Document-backed financial reasoning and structured verdicts in one workspace.
             </p>
 
             <div className="footer-status">
@@ -537,7 +537,7 @@ function EnterpriseFooter() {
               heading: "Product",
               links: [
                 { label: "The Engine", href: "/#engine" },
-                { label: "Aside AI UI", href: "/#aside" },
+                { label: "Decision Workspace", href: "/#aside" },
                 { label: "Security & Trust", href: "/#security" },
                 { label: "Pricing", href: "/pricing" },
                 { label: "Changelog", href: "#" },
@@ -547,9 +547,9 @@ function EnterpriseFooter() {
               heading: "Use Cases",
               links: [
                 { label: "Enterprise Strategy", href: "/use-case#features" },
-                { label: "Engineering & Tech Debt", href: "/use-case#features" },
-                { label: "Risk Mitigation", href: "/use-case#features" },
-                { label: "Startup Scaling", href: "/use-case#features" },
+                { label: "Fundraising Strategy", href: "/use-case#features" },
+                { label: "M&A Diligence", href: "/use-case#features" },
+                { label: "Runway Planning", href: "/use-case#features" },
               ],
             },
             {

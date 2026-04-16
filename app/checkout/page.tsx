@@ -52,14 +52,15 @@ const PLAN = {
   price: "$560",
   period: "/ month",
   description:
-    "The full three AI decision engine — branching logic, risk scoring, verdict cards, and the Aside panel.",
+    "The full three AI finance decision engine — branching logic, risk scoring, document-backed verdicts, and audit history.",
   badge: "Available Now",
   features: [
     { icon: GitBranch, text: "Unlimited recursive branching engine" },
     { icon: Target, text: "Full upside & risk scoring per branch" },
     { icon: CheckCircle, text: "Verdict cards with go / stop / review" },
-    { icon: Network, text: "Aside AI panel — live alongside your workflow" },
+    { icon: Network, text: "Focused decision workspace for long-form finance work" },
     { icon: Zap, text: "Next-step execution recommendations" },
+    { icon: Mail, text: "Optional verdict email delivery when configured" },
     { icon: Shield, text: "Zero-leakage data isolation" },
     { icon: BarChart3, text: "Up to 50 decisions per month" },
     { icon: Clock, text: "Full decision history & audit trail" },
@@ -967,8 +968,8 @@ export default function CheckoutPage() {
 
               <h1 className="left-title">Complete your order.</h1>
               <p className="left-copy">
-                Secure checkout for the MVP plan. Access the full decision engine,
-                audit trail, and structured reasoning workflow.
+                Secure checkout for the MVP plan. Access the full finance decision
+                workflow, audit trail, document-backed reasoning, and delivery tools.
               </p>
 
               <div className="price-block">

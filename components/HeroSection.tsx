@@ -689,7 +689,7 @@ function HeroSection() {
             letterSpacing: "-0.01em",
           }}
         >
-          Precision AI for billion-dollar financial decisions. We think through so you can move with clarity, speed, and control.
+          Structured AI for consequential financial decisions. Upload documents, weigh trade-offs, and get a verdict you can defend.
         </motion.p>
 
         <motion.div
@@ -737,7 +737,11 @@ function HeroSection() {
 ───────────────────────────────────────── */
 function LogoBar() {
   const logos = [
-    "Global FinTech", "Vertex Capital", "AeroSpace Def.", "Sovereign Partners", "Meridian Law"
+    "Fundraising",
+    "Diligence",
+    "Pricing",
+    "Treasury",
+    "Vendor Risk",
   ];
 
   return (
@@ -750,7 +754,7 @@ function LogoBar() {
           fontSize: 9, letterSpacing: "0.25em", textTransform: "uppercase",
           color: MUTED, textAlign: "center", marginBottom: 40,
         }}>
-          Trusted by top-tier financial teams worldwide
+          Built for finance, operations, and strategy work
         </p>
       </InView>
       <div style={{
@@ -786,18 +790,18 @@ function LogoBar() {
 function EditorialStats() {
   const stats = [
     {
-      metric: "$30T",
-      label: "AUM of firms using three AI",
+      metric: "3-pass",
+      label: "Draft, attack, finalize reasoning loop",
       img: "https://images.unsplash.com/photo-1554224154-26032ffc0d07?w=600&q=80",
     },
     {
-      metric: "40 hrs",
-      label: "Average time saved per decision cycle",
+      metric: "5 types",
+      label: "PDF, CSV, TXT, MD, and JSON uploads",
       img: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&q=80",
     },
     {
-      metric: "3×",
-      label: "More edge-case risks identified",
+      metric: "1 ledger",
+      label: "Searchable decision history with restore controls",
       img: "https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=600&q=80",
     },
   ];
@@ -915,16 +919,15 @@ function EditorialStats() {
               fontWeight: 400,
               letterSpacing: "-0.02em",
             }}>
-              three AI has not only increased the speed at which analysts can perform,
-              but also created visual insights into our various positions that have
-              fundamentally improved our strategic execution process.
+              three AI helps turn dense financial context into a recommendation we can
+              review, challenge, and act on without losing the reasoning behind the call.
             </blockquote>
             <div>
               <p className="font-mono" style={{ fontSize: 11, letterSpacing: "0.14em", textTransform: "uppercase", color: INK, fontWeight: 500 }}>
-                Sarah Chen
+                Decision workflow
               </p>
               <p className="font-mono" style={{ fontSize: 10, letterSpacing: "0.12em", textTransform: "uppercase", color: MUTED }}>
-                CIO — Vertex Capital Partners
+                Finance planning and review
               </p>
             </div>
           </InView>
@@ -948,23 +951,23 @@ function ProductShowcase() {
 
   const tabContent = {
     collab: {
-      title: "Enterprise decision",
-      desc: "Shared workspaces, permissioned access, and audit trails — built for the way institutional teams actually operate.",
+      title: "Decision workspace",
+      desc: "Keep documents, verdicts, and decision history in one place so every financial call is easier to revisit and defend.",
       img: "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=900&q=80",
     },
     scale: {
-      title: "Unmatched analytical scale",
-      desc: "Uncover insights others miss with the power to reason over limitless context — documents, data, and decisions at once.",
+      title: "Document-aware analysis",
+      desc: "Upload financial PDFs, CSVs, notes, and memos so the engine reasons over the context you actually have.",
       img: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=900&q=80",
     },
     workflows: {
-      title: "Workflows that run like your best people",
-      desc: "Encode your firm's financial processes once and three AI runs them continuously, in just one prompt.",
+      title: "Structured verdicts",
+      desc: "Get upside, risk, confidence, next steps, and go / stop / review conditions in a format your team can act on.",
       img: "https://images.unsplash.com/photo-1507925921958-8a62f3d1a50d?w=900&q=80",
     },
     finance: {
-      title: "Deep Enterprice context",
-      desc: "three AI ingests your proprietary data alongside market signals to deliver verdicts grounded in your actual position.",
+      title: "Connected finance context",
+      desc: "Add Stripe, QuickBooks, or CSV data and combine it with uploaded documents for sharper financial recommendations.",
       img: "https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=900&q=80",
     },
   };
@@ -1073,12 +1076,12 @@ function ProductShowcase() {
 ───────────────────────────────────────── */
 function FeaturesTable() {
   const features = [
-    { icon: <Brain size={18} />, title: "Recursive Refinement Engine", desc: "Challenges its own logic — generates branching scenarios before presenting the final verdict." },
-    { icon: <BarChart3 size={18} />, title: "Multi-Document Synthesis", desc: "Ingest thousands of pages simultaneously. Earnings calls, legal briefs, market data — at once." },
-    { icon: <Zap size={18} />, title: "Automated Decision Workflows", desc: "Encode your analysts' best thinking. three AI runs it continuously, on one prompt." },
-    { icon: <Globe size={18} />, title: "Cross-Portfolio Analysis", desc: "Reason across your entire portfolio in one query. Surface correlations others miss entirely." },
-    { icon: <FileText size={18} />, title: "Audit-Ready Outputs", desc: "Every verdict is explainable, traceable, and structured for regulatory review." },
-    { icon: <Users size={18} />, title: "Enterprise Collaboration", desc: "Permissioned workspaces, shared memory, and team-level reasoning chains." },
+    { icon: <Brain size={18} />, title: "Recursive Refinement Engine", desc: "Runs a draft, attack, and finalize loop before it shows the final verdict." },
+    { icon: <BarChart3 size={18} />, title: "Financial Document Ingestion", desc: "Read PDFs, CSVs, TXT, MD, and JSON files inside the same decision flow." },
+    { icon: <Zap size={18} />, title: "Structured Verdict Boards", desc: "Return risks, upsides, conditions, next steps, confidence, and audit notes in one response." },
+    { icon: <Globe size={18} />, title: "Connector-Backed Context", desc: "Blend uploaded documents with Stripe, QuickBooks, and CSV finance data where connected." },
+    { icon: <FileText size={18} />, title: "Audit-Ready Outputs", desc: "Every verdict is explainable, traceable, and easy to revisit from the decision ledger." },
+    { icon: <Users size={18} />, title: "Decision History Control", desc: "Search, rename, restore, or delete recent decisions from the workspace history." },
   ];
 
   return (
@@ -1256,14 +1259,14 @@ function BentoSection() {
               <h3 className="font-display" style={{
                 fontSize: 22, fontWeight: 700, color: CREAM, marginBottom: 14, letterSpacing: "-0.03em",
               }}>
-                The Aside AI Interface
+                The Decision Workspace
               </h3>
               <p className="font-editorial" style={{
                 fontSize: 16,
                 color: "rgba(242,240,234,0.45)", lineHeight: 1.65,
                 fontWeight: 400,
               }}>
-                Designed to live alongside your work — a spatial interface ensuring AI acts
+                Designed to sit alongside your work — a spatial interface ensuring AI acts
                 as a collaborative partner, not a distraction.
               </p>
             </motion.div>
@@ -1315,9 +1318,9 @@ function BentoSection() {
 function SecuritySection() {
   const pillars = [
     { icon: <Lock size={16} />, label: "Zero-Leakage Architecture" },
-    { icon: <ShieldCheck size={16} />, label: "SOC2 Type II Ready" },
-    { icon: <Shield size={16} />, label: "End-to-End Encryption" },
-    { icon: <Globe size={16} />, label: "Local Execution Mode" },
+    { icon: <ShieldCheck size={16} />, label: "Isolated workspace context" },
+    { icon: <Shield size={16} />, label: "Traceable verdict history" },
+    { icon: <Globe size={16} />, label: "Optional email delivery" },
   ];
 
   return (
@@ -1399,21 +1402,21 @@ function SecuritySection() {
 function TestimonialSection() {
   const testimonials = [
     {
-      quote: "The recursive refinement alone has replaced three layers of analyst review. We ship strategy 60% faster.",
-      name: "Marcus Webb",
-      role: "Head of Strategy — Global FinTech",
+      quote: "We use three AI to turn messy financial context into a recommendation we can actually discuss, challenge, and act on.",
+      name: "Fundraising workflow",
+      role: "Capital planning and runway decisions",
       img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80",
     },
     {
-      quote: "three AI surfaces risks in our M&A pipeline we simply weren't seeing. The branching logic is like having a war room available 24/7.",
-      name: "Priya Nair",
-      role: "Managing Director — Vertex Capital",
+      quote: "The branching logic helps us compare upside, downside, and timing without losing the trail behind the call.",
+      name: "Diligence workflow",
+      role: "M&A and investment review",
       img: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=200&q=80",
     },
     {
-      quote: "Data sovereignty wasn't optional for us. three AI was the only system our compliance team approved on first review.",
-      name: "Thomas Brandt",
-      role: "GC — Meridian Law LLP",
+      quote: "What matters is not just the answer. It is having the conditions, risks, and next steps in one decision record.",
+      name: "Risk workflow",
+      role: "Audit and governance review",
       img: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&q=80",
     },
   ];
@@ -1519,7 +1522,7 @@ function CTASection() {
             fontSize: 9, letterSpacing: "0.25em", textTransform: "uppercase",
             color: GOLD, marginBottom: 24,
           }}>
-            Precision AI for Billion-Dollar financial Decisions
+            Structured AI for consequential financial decisions
           </p>
           <h2 className="font-display" style={{
             fontSize: "clamp(40px, 7vw, 80px)",
@@ -1604,7 +1607,7 @@ function Footer() {
               heading: "Product", 
               links: [
                 { name: "Decision Engine", path: "#product" }, 
-                { name: "Aside AI UI", path: "#solutions" }, 
+                { name: "Decision Workspace", path: "#solutions" }, 
                 { name: "Security", path: "#security" }, 
                 { name: "Pricing", path: "/pricing" }
               ] 

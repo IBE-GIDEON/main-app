@@ -5,11 +5,11 @@ import { Check, Sparkles, Zap, ShieldCheck, Box } from "lucide-react";
 export default function UpgradePage() {
   const mvpFeatures = [
     "Unlimited recursive refinement layers",
-    "Unlock premium Image & Video generation models",
-    "Advanced decision frameworks & custom lenses",
-    "Priority API access with higher rate limits",
-    "Extended data retention & export capabilities",
-    "Zero queue times during peak hours",
+    "Full upside and risk scoring with verdict cards",
+    "Financial document uploads across supported file types",
+    "Connector-backed context for Stripe, QuickBooks, and CSV data",
+    "Optional verdict email delivery when configured",
+    "Extended audit history and export-friendly records",
   ];
 
   return (
@@ -21,7 +21,7 @@ export default function UpgradePage() {
           Three AI <span className="text-[11px] font-bold uppercase tracking-widest text-purple-400 bg-purple-400/10 border border-purple-400/20 px-2 py-0.5 rounded-md">MVP</span>
         </h1>
         <p className="text-[14px] text-zinc-400 leading-relaxed">
-          Unlock the full power of the Decision Engine. Think through faster, visualize outcomes deeper, and remove all limits.
+          Unlock the full finance decision workflow. Read more context, keep a searchable audit trail, and move from analysis to verdict faster.
         </p>
       </div>
 
@@ -39,11 +39,11 @@ export default function UpgradePage() {
             </li>
             <li className="flex items-start gap-3 text-[13px] text-zinc-500">
               <Check size={16} className="text-zinc-600 shrink-0 mt-0.5" />
-              Basic framework access
+              Basic verdict cards and history
             </li>
             <li className="flex items-start gap-3 text-[13px] text-zinc-500">
               <Check size={16} className="text-zinc-600 shrink-0 mt-0.5" />
-              Limited daily queries
+              Limited daily decisions and uploads
             </li>
           </ul>
 
@@ -69,7 +69,7 @@ export default function UpgradePage() {
             
             <div className="flex items-baseline gap-1 mb-8">
               <span className="text-[32px] font-bold text-white">$560</span>
-              <span className="text-[13px] text-zinc-500 font-medium">/year</span>
+              <span className="text-[13px] text-zinc-500 font-medium">/month</span>
             </div>
 
             <ul className="flex flex-col gap-4 mb-10">
