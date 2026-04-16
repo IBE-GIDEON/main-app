@@ -155,10 +155,10 @@ export default function ZenSearchBar({
         </div>
 
         {/* Bottom Section: Tools & Actions */}
-        <div className="flex flex-wrap items-center justify-between gap-x-2 gap-y-2 px-2 pb-1">
+        <div className="flex items-center justify-between gap-1 px-2 pb-1 sm:gap-2">
           
           {/* Left Side: Attachments & Connect Apps */}
-          <div className="flex min-w-0 items-center gap-1">
+          <div className="flex min-w-0 shrink items-center gap-0.5 sm:gap-1">
             
             {/* THE PLUS DROPDOWN */}
             <DropdownMenu.Root>
@@ -166,7 +166,7 @@ export default function ZenSearchBar({
                 <button
                   type="button"
                   disabled={isLoading || uploading}
-                  className="shrink-0 rounded-full p-2.5 text-zinc-400 transition-colors hover:bg-zinc-100 hover:text-zinc-800 disabled:opacity-50 outline-none dark:hover:bg-white/10 dark:hover:text-zinc-100"
+                  className="shrink-0 rounded-full p-2 text-zinc-400 transition-colors hover:bg-zinc-100 hover:text-zinc-800 disabled:opacity-50 outline-none sm:p-2.5 dark:hover:bg-white/10 dark:hover:text-zinc-100"
                 >
                   <Plus size={22} />
                 </button>
@@ -208,7 +208,7 @@ export default function ZenSearchBar({
               type="button"
               onClick={() => router.push("/dashin/connectors")}
               disabled={isLoading || uploading}
-              className="flex min-w-0 items-center gap-2 rounded-full px-2.5 py-2 text-[12px] font-medium text-zinc-400 transition-colors hover:bg-zinc-100 hover:text-zinc-800 disabled:opacity-50 sm:px-3 sm:text-[13px] dark:hover:bg-white/10 dark:hover:text-zinc-100"
+              className="flex min-w-0 shrink items-center gap-1.5 whitespace-nowrap rounded-full px-2 py-1.5 text-[11px] font-medium text-zinc-400 transition-colors hover:bg-zinc-100 hover:text-zinc-800 disabled:opacity-50 sm:gap-2 sm:px-3 sm:py-2 sm:text-[13px] dark:hover:bg-white/10 dark:hover:text-zinc-100"
             >
               <Plug size={16} className="text-zinc-400 dark:text-zinc-400" />
               <span className="sm:hidden">Apps</span>
@@ -217,7 +217,7 @@ export default function ZenSearchBar({
           </div>
 
           {/* Right Side: Mode, Mic, and Send */}
-          <div className="ml-auto flex w-full items-center justify-end gap-1 sm:w-auto">
+          <div className="ml-auto flex shrink-0 items-center justify-end gap-0.5 sm:gap-1">
             
             {/* UPGRADE PLANS DROPDOWN */}
             <DropdownMenu.Root>
@@ -226,8 +226,8 @@ export default function ZenSearchBar({
                   type="button"
                   disabled={isLoading || uploading}
                   className={clsx(
-                    "flex shrink-0 items-center gap-1 whitespace-nowrap rounded-xl p-2 cursor-pointer outline-none",
-                    "font-semibold text-[13px] text-white",
+                    "flex shrink-0 items-center gap-1 whitespace-nowrap rounded-xl px-2 py-1.5 cursor-pointer outline-none sm:p-2",
+                    "font-semibold text-[12px] text-white sm:text-[13px]",
                     "bg-gradient-to-r from-[#b372ce] to-[#5b8def] shadow-[0_0_15px_rgba(179,114,206,0.25)] hover:shadow-[0_0_10px_rgba(179,114,206,0.4)]",
                     "transition-all duration-300 ease-out active:scale-[0.98]"
                   )}
@@ -292,7 +292,7 @@ export default function ZenSearchBar({
               onClick={handleSubmit}
               disabled={!hasText || isLoading || uploading}
               className={`
-                flex items-center justify-center w-20 h-10 rounded-full ml-1
+                ml-0.5 flex h-10 w-11 items-center justify-center rounded-full sm:ml-1 sm:w-20
                 transition-all duration-500
                 ${hasText && !isLoading
                   ? "bg-zinc-900 text-white shadow-[0_8px_20px_rgba(0,0,0,0.15)] dark:bg-white dark:text-black scale-100 hover:scale-105 active:scale-95 dark:shadow-[0_0_20px_rgba(255,255,255,0.2)]"
