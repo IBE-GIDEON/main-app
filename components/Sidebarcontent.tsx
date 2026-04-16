@@ -27,7 +27,7 @@ const SidebarContent = ({ item, isCollapsed }: { item: Isidebaritem; isCollapsed
   }
 
   const isActive = useMemo(() => {
-    return path === pathname
+    return pathname === path || pathname.startsWith(`${path}/`)
   }, [path, pathname])
 
   return (

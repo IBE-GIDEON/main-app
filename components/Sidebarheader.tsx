@@ -21,7 +21,7 @@ const items =[
   },
   {
     name: "Discover",
-    path: "/history",
+    path: "/discover",
     icon: Binoculars,
   },
   {
