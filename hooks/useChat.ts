@@ -174,21 +174,7 @@ export function useChat() {
   useEffect(() => {
     if (typeof window === "undefined") return;
 
-    const pendingQuestion = localStorage.getItem("pending_spawn_question");
-    if (pendingQuestion) {
-      localStorage.removeItem("pending_spawn_question");
-      window.setTimeout(() => {
-        void sendRef.current(pendingQuestion);
-      }, 150);
-    }
-
-    const handleNew = () => {
-      clearChat();
-      setMessages([]);
-    };
-
-    const handleLoadRecord = async (e: Event) => {
-      const recordId = (e as CustomEvent<string>).detail;
+    const loadArchivedRecord = async (recordId: string) => {
       clearChat();
       setMessages([]);
       setLoading(true);
@@ -228,6 +214,33 @@ export function useChat() {
       } finally {
         setLoading(false);
       }
+    };
+
+    const pendingQuestion = localStorage.getItem("pending_spawn_question");
+    if (pendingQuestion) {
+      localStorage.removeItem("pending_spawn_question");
+      window.setTimeout(() => {
+        void sendRef.current(pendingQuestion);
+      }, 150);
+    }
+
+    const pendingRecordId = localStorage.getItem("pending_record_id");
+    if (pendingRecordId) {
+      localStorage.removeItem("pending_record_id");
+      window.setTimeout(() => {
+        void loadArchivedRecord(pendingRecordId);
+      }, 150);
+    }
+
+    const handleNew = () => {
+      clearChat();
+      setMessages([]);
+    };
+
+    const handleLoadRecord = async (e: Event) => {
+      const recordId = (e as CustomEvent<string>).detail;
+      if (!recordId) return;
+      void loadArchivedRecord(recordId);
     };
 
     window.addEventListener("think-ai-new", handleNew);

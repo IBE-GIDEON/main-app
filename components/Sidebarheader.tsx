@@ -10,7 +10,7 @@ import Newflows from "./Newdecision";
 
 const items =[
   {
-    name: "conditions",
+    name: "Conditions",
     path: "/integratedapps",
     icon: LayoutDashboard,
   },
