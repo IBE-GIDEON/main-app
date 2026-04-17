@@ -138,29 +138,29 @@ function PasscodeGateModal({
 
   return createPortal(
     <div className="fixed inset-0 z-[150]">
-      <div className="absolute inset-0 bg-zinc-950/60 backdrop-blur-md" />
+      <div className="absolute inset-0 bg-zinc-950/80 backdrop-blur-sm" />
 
       <div className="relative flex min-h-full items-center justify-center px-4 py-8 sm:px-6">
         <div
           role="dialog"
           aria-modal="true"
-          className="relative w-full max-w-xl overflow-hidden rounded-[28px] border border-zinc-200 bg-white shadow-[0_30px_100px_rgba(0,0,0,0.28)] dark:border-white/10 dark:bg-[#111111] dark:shadow-[0_32px_120px_rgba(0,0,0,0.52)]"
+          className="relative w-full max-w-lg overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-2xl dark:border-zinc-800 dark:bg-[#121212]"
         >
-          <div className="border-b border-zinc-100 px-6 py-5 dark:border-white/5">
+          <div className="border-b border-zinc-200 px-6 py-6 dark:border-zinc-800">
             <div className="flex items-center gap-3">
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-zinc-200 bg-zinc-50 text-zinc-700 dark:border-white/10 dark:bg-white/5 dark:text-zinc-100">
-                <LockKeyhole className="h-5 w-5" />
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg border border-zinc-200 bg-zinc-50 text-zinc-700 dark:border-zinc-800 dark:bg-[#181818] dark:text-zinc-300">
+                <LockKeyhole className="h-4 w-4" />
               </div>
               <div>
-                <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-zinc-400 dark:text-zinc-500">
+                <p className="text-xs font-medium uppercase tracking-wider text-zinc-500 dark:text-zinc-500">
                   Secure Entry
                 </p>
-                <h2 className="mt-1 text-xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">
+                <h2 className="mt-1 font-serif text-xl tracking-tight text-zinc-900 dark:text-zinc-100">
                   {title}
                 </h2>
               </div>
             </div>
-            <p className="mt-4 max-w-lg text-sm leading-relaxed text-zinc-500 dark:text-zinc-400">
+            <p className="mt-3 text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
               {subtitle}
             </p>
           </div>
@@ -191,20 +191,20 @@ function PasscodeGateModal({
                     <div
                       key={index}
                       className={clsx(
-                        "flex h-16 w-16 items-center justify-center rounded-full border transition-all sm:h-20 sm:w-20",
+                        "flex h-16 w-14 items-center justify-center rounded-xl border transition-all sm:h-20 sm:w-16",
                         filled
                           ? "border-zinc-900 bg-zinc-900 text-white dark:border-zinc-100 dark:bg-zinc-100 dark:text-zinc-900"
-                          : "border-zinc-200 bg-zinc-50 text-zinc-300 dark:border-zinc-800 dark:bg-[#191919] dark:text-zinc-700",
+                          : "border-zinc-200 bg-zinc-50 text-zinc-300 dark:border-zinc-800 dark:bg-[#161616] dark:text-zinc-700",
                       )}
                     >
-                      <span className={clsx("h-3 w-3 rounded-full", filled ? "bg-current" : "bg-current/25")} />
+                      <span className={clsx("h-2.5 w-2.5 rounded-full", filled ? "bg-current" : "bg-current/25")} />
                     </div>
                   );
                 })}
               </div>
             </div>
 
-            <div className="mt-6 flex items-center justify-center gap-2 text-xs font-medium uppercase tracking-[0.2em] text-zinc-400 dark:text-zinc-500">
+            <div className="mt-6 flex items-center justify-center gap-2 text-xs font-medium uppercase tracking-wider text-zinc-500 dark:text-zinc-500">
               {busy ? (
                 <>
                   <Loader2 className="h-4 w-4 animate-spin" />
@@ -219,18 +219,18 @@ function PasscodeGateModal({
             </div>
 
             {error ? (
-              <div className="mt-6 rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700 dark:border-rose-900/30 dark:bg-rose-900/10 dark:text-rose-300">
+              <div className="mt-6 rounded-lg border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700 dark:border-rose-900/30 dark:bg-rose-900/10 dark:text-rose-400">
                 {error}
               </div>
             ) : null}
 
-            <div className="mt-6 flex flex-col items-center gap-3 text-center text-sm text-zinc-500 dark:text-zinc-400">
+            <div className="mt-6 flex flex-col items-center gap-3 text-center text-sm text-zinc-500 dark:text-zinc-500">
               <p>The vault locks again whenever you leave this page.</p>
               {mode === "confirm" ? (
                 <button
                   type="button"
                   onClick={onStartOver}
-                  className="text-sm font-medium text-zinc-700 transition-colors hover:text-zinc-900 dark:text-zinc-300 dark:hover:text-zinc-100"
+                  className="text-sm font-medium text-zinc-700 transition-colors hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-200"
                 >
                   Start over
                 </button>
@@ -567,12 +567,12 @@ export default function DataDeckWorkspace() {
 
   return (
     <>
-      <main className="flex-1 overflow-y-auto bg-[#F3EFE6] text-zinc-900 dark:bg-[#0A0A0A] dark:text-zinc-100">
+      <main className="flex-1 overflow-y-auto bg-zinc-50 font-sans text-zinc-900 dark:bg-[#0a0a0a] dark:text-zinc-100">
         <div className="mx-auto flex w-full max-w-[1600px] flex-col gap-6 px-4 py-8 sm:px-6 lg:px-8">
-          <header className="rounded-[28px] border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-[#141414] dark:shadow-none">
+          <header className="rounded-xl border border-zinc-200 bg-transparent p-6 dark:border-zinc-800">
             <div className="flex flex-wrap items-start justify-between gap-6">
               <div className="max-w-3xl">
-                <div className="inline-flex items-center gap-2 rounded-full border border-zinc-200 bg-zinc-50 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-zinc-500 dark:border-zinc-800 dark:bg-[#101010] dark:text-zinc-400">
+                <div className="inline-flex items-center gap-2 text-xs font-medium uppercase tracking-wider text-zinc-500 dark:text-zinc-500">
                   <Database className="h-4 w-4" />
                   Data deck
                 </div>
@@ -585,27 +585,27 @@ export default function DataDeckWorkspace() {
               </div>
 
               <div className="grid min-w-[240px] gap-3 sm:grid-cols-2">
-                <div className="rounded-2xl border border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-800 dark:bg-[#101010]">
-                  <div className="flex items-center gap-2 text-zinc-500 dark:text-zinc-400">
+                <div className="rounded-lg border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-[#121212]">
+                  <div className="flex items-center gap-2 text-zinc-500 dark:text-zinc-500">
                     <Shield className="h-4 w-4" />
-                    <span className="text-[10px] font-semibold uppercase tracking-[0.2em]">
+                    <span className="text-xs font-medium uppercase tracking-wider">
                       Passcode lock
                     </span>
                   </div>
-                  <p className="mt-2 text-sm leading-relaxed text-zinc-700 dark:text-zinc-300">
-                    4-digit unlock required every time you come back to this page.
+                  <p className="mt-2 text-sm text-zinc-700 dark:text-zinc-400">
+                    4-digit unlock required every time you return.
                   </p>
                 </div>
 
-                <div className="rounded-2xl border border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-800 dark:bg-[#101010]">
-                  <div className="flex items-center gap-2 text-zinc-500 dark:text-zinc-400">
+                <div className="rounded-lg border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-[#121212]">
+                  <div className="flex items-center gap-2 text-zinc-500 dark:text-zinc-500">
                     <FolderOpen className="h-4 w-4" />
-                    <span className="text-[10px] font-semibold uppercase tracking-[0.2em]">
+                    <span className="text-xs font-medium uppercase tracking-wider">
                       AI-ready source
                     </span>
                   </div>
-                  <p className="mt-2 text-sm leading-relaxed text-zinc-700 dark:text-zinc-300">
-                    Everything here is part of the manual context the backend can use during decisions.
+                  <p className="mt-2 text-sm text-zinc-700 dark:text-zinc-400">
+                    Everything here is part of the manual decision context.
                   </p>
                 </div>
               </div>
@@ -613,30 +613,30 @@ export default function DataDeckWorkspace() {
           </header>
 
           {workspaceError ? (
-            <div className="rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700 dark:border-rose-900/30 dark:bg-rose-900/10 dark:text-rose-300">
+            <div className="rounded-lg border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700 dark:border-rose-900/30 dark:bg-rose-900/10 dark:text-rose-400">
               {workspaceError}
             </div>
           ) : null}
 
           {workspaceNotice ? (
-            <div className="rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700 dark:border-emerald-900/30 dark:bg-emerald-900/10 dark:text-emerald-300">
+            <div className="rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700 dark:border-emerald-900/30 dark:bg-emerald-900/10 dark:text-emerald-400">
               {workspaceNotice}
             </div>
           ) : null}
 
           <div className="grid gap-6 xl:grid-cols-[360px_minmax(0,1fr)]">
             <section className="space-y-6">
-              <div className="rounded-[24px] border border-zinc-200 bg-white p-5 dark:border-zinc-800 dark:bg-[#141414]">
+              <div className="rounded-xl border border-zinc-200 bg-white p-5 dark:border-zinc-800 dark:bg-[#121212]">
                 <div className="flex items-start justify-between gap-3">
                   <div>
-                    <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-zinc-500 dark:text-zinc-400">
-                      Upload Manual Data
+                    <p className="text-xs font-medium uppercase tracking-wider text-zinc-500 dark:text-zinc-500">
+                      Upload Data
                     </p>
-                    <h2 className="mt-2 text-xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">
+                    <h2 className="mt-2 font-serif text-xl font-medium tracking-tight text-zinc-900 dark:text-zinc-100">
                       Add more source files
                     </h2>
                   </div>
-                  {uploading ? <Loader2 className="h-5 w-5 animate-spin text-zinc-500" /> : null}
+                  {uploading ? <Loader2 className="h-4 w-4 animate-spin text-zinc-500" /> : null}
                 </div>
 
                 <div
@@ -647,25 +647,25 @@ export default function DataDeckWorkspace() {
                   onDragLeave={() => setDragging(false)}
                   onDrop={handleDrop}
                   className={clsx(
-                    "mt-5 rounded-[22px] border border-dashed p-5 transition-colors",
+                    "mt-5 rounded-lg border border-dashed p-5 transition-colors",
                     dragging
-                      ? "border-zinc-900 bg-zinc-100 dark:border-zinc-100 dark:bg-zinc-900"
-                      : "border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-[#101010]",
+                      ? "border-zinc-900 bg-zinc-50 dark:border-zinc-100 dark:bg-[#161616]"
+                      : "border-zinc-200 bg-transparent dark:border-zinc-800",
                   )}
                 >
                   <div className="flex flex-col items-start gap-4">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-zinc-200 bg-white text-zinc-700 dark:border-zinc-800 dark:bg-[#171717] dark:text-zinc-200">
-                      <Upload className="h-5 w-5" />
+                    <div className="flex h-10 w-10 items-center justify-center rounded-lg border border-zinc-200 bg-zinc-50 text-zinc-600 dark:border-zinc-800 dark:bg-[#181818] dark:text-zinc-400">
+                      <Upload className="h-4 w-4" />
                     </div>
                     <div>
                       <p className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
-                        Drop files here or add them manually
+                        Drop files here or add manually
                       </p>
-                      <p className="mt-2 text-sm leading-relaxed text-zinc-500 dark:text-zinc-400">
-                        PDFs, CSVs, JSON exports, notes, and onboarding uploads all feed the same manual data source.
+                      <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-500">
+                        PDFs, CSVs, JSON, or text notes.
                       </p>
                     </div>
-                    <div className="flex flex-wrap gap-3">
+                    <div className="flex flex-wrap gap-2">
                       <button
                         type="button"
                         onClick={() => uploadInputRef.current?.click()}
@@ -696,18 +696,18 @@ export default function DataDeckWorkspace() {
                 </div>
               </div>
 
-              <div className="rounded-[24px] border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-[#141414]">
+              <div className="rounded-xl border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-[#121212]">
                 <div className="border-b border-zinc-200 px-5 py-4 dark:border-zinc-800">
                   <div className="flex items-center justify-between gap-3">
                     <div>
-                      <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-zinc-500 dark:text-zinc-400">
+                      <p className="text-xs font-medium uppercase tracking-wider text-zinc-500 dark:text-zinc-500">
                         Stored Files
                       </p>
-                      <h2 className="mt-2 text-lg font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">
+                      <h2 className="mt-1 font-serif text-lg font-medium tracking-tight text-zinc-900 dark:text-zinc-100">
                         Uploaded manual data
                       </h2>
                     </div>
-                    <span className="text-sm text-zinc-500 dark:text-zinc-400">
+                    <span className="text-sm font-medium text-zinc-500 dark:text-zinc-400">
                       {documents.length} file{documents.length === 1 ? "" : "s"}
                     </span>
                   </div>
@@ -715,16 +715,16 @@ export default function DataDeckWorkspace() {
 
                 <div className="max-h-[560px] overflow-y-auto p-3">
                   {loadingDeck ? (
-                    <div className="space-y-3">
+                    <div className="space-y-2">
                       {Array.from({ length: 4 }).map((_, index) => (
                         <div
                           key={index}
-                          className="h-28 animate-pulse rounded-2xl bg-zinc-100 dark:bg-[#101010]"
+                          className="h-24 animate-pulse rounded-lg bg-zinc-100 dark:bg-[#181818]"
                         />
                       ))}
                     </div>
                   ) : documents.length > 0 ? (
-                    <div className="space-y-3">
+                    <div className="space-y-2">
                       {documents.map((document) => {
                         const isSelected = document.document_id === selectedDocumentId;
                         return (
@@ -733,26 +733,26 @@ export default function DataDeckWorkspace() {
                             type="button"
                             onClick={() => setSelectedDocumentId(document.document_id)}
                             className={clsx(
-                              "w-full rounded-[20px] border p-4 text-left transition-colors",
+                              "w-full rounded-lg border p-4 text-left transition-colors",
                               isSelected
-                                ? "border-zinc-900 bg-zinc-100 dark:border-zinc-100 dark:bg-zinc-900"
-                                : "border-zinc-200 bg-zinc-50 hover:bg-zinc-100 dark:border-zinc-800 dark:bg-[#101010] dark:hover:bg-[#171717]",
+                                ? "border-zinc-900 bg-zinc-50 dark:border-zinc-100 dark:bg-[#181818]"
+                                : "border-transparent bg-transparent hover:bg-zinc-50 dark:hover:bg-[#161616]",
                             )}
                           >
                             <div className="flex items-start justify-between gap-3">
                               <div className="min-w-0">
                                 <div className="flex flex-wrap items-center gap-2">
-                                  <span className="rounded-full border border-zinc-200 bg-white px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-zinc-500 dark:border-zinc-700 dark:bg-[#151515] dark:text-zinc-300">
+                                  <span className="rounded bg-zinc-100 px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-wider text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400">
                                     {getFileBadge(document.filename)}
                                   </span>
-                                  <span className="text-xs text-zinc-400 dark:text-zinc-500">
+                                  <span className="text-xs text-zinc-500 dark:text-zinc-500">
                                     {formatTimestamp(document.uploaded_utc)}
                                   </span>
                                 </div>
-                                <p className="mt-3 line-clamp-2 text-sm font-medium text-zinc-900 dark:text-zinc-100">
+                                <p className="mt-2 line-clamp-2 text-sm font-medium text-zinc-900 dark:text-zinc-100">
                                   {document.filename}
                                 </p>
-                                <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-zinc-500 dark:text-zinc-400">
+                                <p className="mt-1 line-clamp-2 text-[13px] leading-relaxed text-zinc-500 dark:text-zinc-500">
                                   {document.preview_text || "No extractable text preview yet."}
                                 </p>
                               </div>
@@ -761,8 +761,8 @@ export default function DataDeckWorkspace() {
                                 <p className="text-xs font-medium text-zinc-500 dark:text-zinc-400">
                                   {formatBytes(document.size_bytes)}
                                 </p>
-                                <p className="mt-2 text-xs text-zinc-400 dark:text-zinc-500">
-                                  {document.pages > 0 ? `${document.pages} page${document.pages === 1 ? "" : "s"}` : "Text"}
+                                <p className="mt-1 text-xs text-zinc-400 dark:text-zinc-600">
+                                  {document.pages > 0 ? `${document.pages} pg${document.pages === 1 ? "" : "s"}` : "Text"}
                                 </p>
                               </div>
                             </div>
@@ -772,65 +772,66 @@ export default function DataDeckWorkspace() {
                     </div>
                   ) : (
                     <div className="px-4 py-10 text-center">
-                      <FileText className="mx-auto h-8 w-8 text-zinc-400 dark:text-zinc-500" />
-                      <h3 className="mt-4 text-lg font-medium text-zinc-900 dark:text-zinc-100">
+                      <FileText className="mx-auto h-6 w-6 text-zinc-400 dark:text-zinc-600" />
+                      <h3 className="mt-4 text-sm font-medium text-zinc-900 dark:text-zinc-100">
                         No manual uploads yet
                       </h3>
-                      <p className="mt-2 text-sm leading-relaxed text-zinc-500 dark:text-zinc-400">
-                        Upload files here and they will show up in this deck. Anything added during onboarding will also appear automatically.
+                      <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-500">
+                        Upload files here to feed the context.
                       </p>
                     </div>
                   )}
                 </div>
               </div>
             </section>
+
             <section className="space-y-6">
               <div className="grid gap-4 md:grid-cols-3">
-                <div className="rounded-[22px] border border-zinc-200 bg-white p-5 dark:border-zinc-800 dark:bg-[#141414]">
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-zinc-500 dark:text-zinc-400">
+                <div className="rounded-xl border border-zinc-200 bg-transparent p-5 dark:border-zinc-800">
+                  <p className="text-xs font-medium uppercase tracking-wider text-zinc-500 dark:text-zinc-500">
                     Files stored
                   </p>
-                  <p className="mt-3 text-3xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">
+                  <p className="mt-2 text-2xl font-light tracking-tight text-zinc-900 dark:text-zinc-100">
                     {documents.length}
                   </p>
-                  <p className="mt-2 text-sm text-zinc-500 dark:text-zinc-400">
-                    Manual uploads available to the AI.
+                  <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-500">
+                    Manual uploads available.
                   </p>
                 </div>
 
-                <div className="rounded-[22px] border border-zinc-200 bg-white p-5 dark:border-zinc-800 dark:bg-[#141414]">
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-zinc-500 dark:text-zinc-400">
+                <div className="rounded-xl border border-zinc-200 bg-transparent p-5 dark:border-zinc-800">
+                  <p className="text-xs font-medium uppercase tracking-wider text-zinc-500 dark:text-zinc-500">
                     Context size
                   </p>
-                  <p className="mt-3 text-3xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">
+                  <p className="mt-2 text-2xl font-light tracking-tight text-zinc-900 dark:text-zinc-100">
                     {totalContextChars.toLocaleString()}
                   </p>
-                  <p className="mt-2 text-sm text-zinc-500 dark:text-zinc-400">
-                    Extracted characters currently available in the shared deck context.
+                  <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-500">
+                    Extracted characters available.
                   </p>
                 </div>
 
-                <div className="rounded-[22px] border border-zinc-200 bg-white p-5 dark:border-zinc-800 dark:bg-[#141414]">
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-zinc-500 dark:text-zinc-400">
+                <div className="rounded-xl border border-zinc-200 bg-transparent p-5 dark:border-zinc-800">
+                  <p className="text-xs font-medium uppercase tracking-wider text-zinc-500 dark:text-zinc-500">
                     Volume
                   </p>
-                  <p className="mt-3 text-3xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">
+                  <p className="mt-2 text-2xl font-light tracking-tight text-zinc-900 dark:text-zinc-100">
                     {formatBytes(totalBytes)}
                   </p>
-                  <p className="mt-2 text-sm text-zinc-500 dark:text-zinc-400">
-                    {totalPages} page{totalPages === 1 ? "" : "s"} of uploaded material, last updated {formatTimestamp(lastUpdated)}.
+                  <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-500">
+                    {totalPages} page{totalPages === 1 ? "" : "s"} total.
                   </p>
                 </div>
               </div>
 
-              <div className="rounded-[24px] border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-[#141414]">
+              <div className="rounded-xl border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-[#121212]">
                 <div className="border-b border-zinc-200 px-5 py-4 dark:border-zinc-800">
                   <div className="flex flex-wrap items-start justify-between gap-4">
                     <div>
-                      <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-zinc-500 dark:text-zinc-400">
+                      <p className="text-xs font-medium uppercase tracking-wider text-zinc-500 dark:text-zinc-500">
                         Document Reader
                       </p>
-                      <h2 className="mt-2 text-xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">
+                      <h2 className="mt-2 font-serif text-2xl font-medium tracking-tight text-zinc-900 dark:text-zinc-100">
                         {selectedDocument?.document.filename || "Choose a document"}
                       </h2>
                     </div>
@@ -840,30 +841,30 @@ export default function DataDeckWorkspace() {
                         type="button"
                         onClick={() => void handleCopySelected()}
                         disabled={!selectedDocument || copying}
-                        className="inline-flex items-center gap-2 rounded-full border border-zinc-200 px-4 py-2 text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-50 disabled:cursor-not-allowed disabled:opacity-50 dark:border-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-900"
+                        className="inline-flex items-center gap-2 rounded-full border border-zinc-200 px-3 py-1.5 text-xs font-medium text-zinc-700 transition-colors hover:bg-zinc-50 disabled:cursor-not-allowed disabled:opacity-50 dark:border-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-900"
                       >
-                        {copying ? <Loader2 className="h-4 w-4 animate-spin" /> : <Copy className="h-4 w-4" />}
-                        Copy text
+                        {copying ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Copy className="h-3.5 w-3.5" />}
+                        Copy
                       </button>
                       <button
                         type="button"
                         onClick={() => void handleDownloadSelected()}
                         disabled={!selectedDocument}
-                        className="inline-flex items-center gap-2 rounded-full border border-zinc-200 px-4 py-2 text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-50 disabled:cursor-not-allowed disabled:opacity-50 dark:border-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-900"
+                        className="inline-flex items-center gap-2 rounded-full border border-zinc-200 px-3 py-1.5 text-xs font-medium text-zinc-700 transition-colors hover:bg-zinc-50 disabled:cursor-not-allowed disabled:opacity-50 dark:border-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-900"
                       >
-                        <Download className="h-4 w-4" />
+                        <Download className="h-3.5 w-3.5" />
                         Download
                       </button>
                       <button
                         type="button"
                         onClick={() => void handleDeleteSelected()}
                         disabled={!selectedDocument || deletingDocumentId === selectedDocumentId}
-                        className="inline-flex items-center gap-2 rounded-full border border-rose-200 px-4 py-2 text-sm font-medium text-rose-700 transition-colors hover:bg-rose-50 disabled:cursor-not-allowed disabled:opacity-50 dark:border-rose-900/40 dark:text-rose-300 dark:hover:bg-rose-900/10"
+                        className="inline-flex items-center gap-2 rounded-full border border-rose-200 px-3 py-1.5 text-xs font-medium text-rose-700 transition-colors hover:bg-rose-50 disabled:cursor-not-allowed disabled:opacity-50 dark:border-rose-900/40 dark:text-rose-400 dark:hover:bg-rose-900/10"
                       >
                         {deletingDocumentId === selectedDocumentId ? (
-                          <Loader2 className="h-4 w-4 animate-spin" />
+                          <Loader2 className="h-3.5 w-3.5 animate-spin" />
                         ) : (
-                          <Trash2 className="h-4 w-4" />
+                          <Trash2 className="h-3.5 w-3.5" />
                         )}
                         Delete
                       </button>
@@ -872,17 +873,17 @@ export default function DataDeckWorkspace() {
 
                   {selectedDocument ? (
                     <div className="mt-4 flex flex-wrap gap-2">
-                      <span className="rounded-full border border-zinc-200 bg-zinc-50 px-3 py-1 text-xs font-medium text-zinc-600 dark:border-zinc-800 dark:bg-[#101010] dark:text-zinc-300">
+                      <span className="rounded bg-zinc-100 px-2 py-1 text-[11px] font-medium text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400">
                         {getFileBadge(selectedDocument.document.filename)}
                       </span>
-                      <span className="rounded-full border border-zinc-200 bg-zinc-50 px-3 py-1 text-xs font-medium text-zinc-600 dark:border-zinc-800 dark:bg-[#101010] dark:text-zinc-300">
+                      <span className="rounded bg-zinc-100 px-2 py-1 text-[11px] font-medium text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400">
                         {formatBytes(selectedDocument.document.size_bytes)}
                       </span>
-                      <span className="rounded-full border border-zinc-200 bg-zinc-50 px-3 py-1 text-xs font-medium text-zinc-600 dark:border-zinc-800 dark:bg-[#101010] dark:text-zinc-300">
-                        {selectedDocument.document.chars_extracted.toLocaleString()} characters
+                      <span className="rounded bg-zinc-100 px-2 py-1 text-[11px] font-medium text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400">
+                        {selectedDocument.document.chars_extracted.toLocaleString()} chars
                       </span>
-                      <span className="rounded-full border border-zinc-200 bg-zinc-50 px-3 py-1 text-xs font-medium text-zinc-600 dark:border-zinc-800 dark:bg-[#101010] dark:text-zinc-300">
-                        Uploaded {formatTimestamp(selectedDocument.document.uploaded_utc)}
+                      <span className="rounded bg-zinc-100 px-2 py-1 text-[11px] font-medium text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400">
+                        {formatTimestamp(selectedDocument.document.uploaded_utc)}
                       </span>
                     </div>
                   ) : null}
@@ -890,29 +891,29 @@ export default function DataDeckWorkspace() {
 
                 <div className="min-h-[540px] p-5">
                   {loadingDetail ? (
-                    <div className="space-y-3">
+                    <div className="space-y-2">
                       {Array.from({ length: 8 }).map((_, index) => (
                         <div
                           key={index}
-                          className="h-6 animate-pulse rounded bg-zinc-100 dark:bg-[#101010]"
+                          className="h-4 animate-pulse rounded bg-zinc-100 dark:bg-[#181818]"
                         />
                       ))}
                     </div>
                   ) : selectedDocument ? (
-                    <div className="rounded-[22px] border border-zinc-200 bg-zinc-50 p-5 dark:border-zinc-800 dark:bg-[#101010]">
-                      <pre className="overflow-x-auto whitespace-pre-wrap break-words font-mono text-[13px] leading-6 text-zinc-700 dark:text-zinc-300">
+                    <div className="rounded-lg border border-zinc-200 bg-zinc-50 p-5 dark:border-zinc-800 dark:bg-[#161616]">
+                      <pre className="overflow-x-auto whitespace-pre-wrap break-words font-mono text-[13px] leading-relaxed text-zinc-700 dark:text-zinc-300">
                         {selectedDocument.extracted_text || "No readable text was extracted from this file yet."}
                       </pre>
                     </div>
                   ) : (
-                    <div className="flex min-h-[500px] items-center justify-center rounded-[22px] border border-dashed border-zinc-200 bg-zinc-50 px-6 text-center dark:border-zinc-800 dark:bg-[#101010]">
-                      <div className="max-w-lg">
-                        <Database className="mx-auto h-8 w-8 text-zinc-400 dark:text-zinc-500" />
-                        <h3 className="mt-4 text-lg font-medium text-zinc-900 dark:text-zinc-100">
+                    <div className="flex min-h-[500px] items-center justify-center rounded-lg border border-dashed border-zinc-200 bg-transparent px-6 text-center dark:border-zinc-800">
+                      <div className="max-w-sm">
+                        <Database className="mx-auto h-6 w-6 text-zinc-300 dark:text-zinc-700" />
+                        <h3 className="mt-4 text-sm font-medium text-zinc-900 dark:text-zinc-100">
                           Open a file to inspect it
                         </h3>
-                        <p className="mt-2 text-sm leading-relaxed text-zinc-500 dark:text-zinc-400">
-                          Select any uploaded manual file from the left to read the extracted content, download the original, or remove it from the shared AI context.
+                        <p className="mt-2 text-sm text-zinc-500 dark:text-zinc-500">
+                          Select any uploaded manual file from the left to read the extracted content.
                         </p>
                       </div>
                     </div>
