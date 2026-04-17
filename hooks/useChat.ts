@@ -40,6 +40,10 @@ function normalizeAuditBox(box: AuditBoxRecord) {
 export function useChat() {
   const [messages, setMessages] = useState<Message[]>(() => {
     if (typeof window !== "undefined") {
+      if (localStorage.getItem("pending_new_decision") === "1") {
+        return [];
+      }
+
       return loadChat() || [];
     }
     return [];
@@ -173,6 +177,13 @@ export function useChat() {
 
   useEffect(() => {
     if (typeof window === "undefined") return;
+
+    const pendingNewDecision = localStorage.getItem("pending_new_decision");
+    if (pendingNewDecision === "1") {
+      localStorage.removeItem("pending_new_decision");
+      clearChat();
+      setMessages([]);
+    }
 
     const loadArchivedRecord = async (recordId: string) => {
       clearChat();
