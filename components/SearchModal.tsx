@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useId, useRef, useState, type KeyboardEvent as ReactKeyboardEvent } from "react";
+import { usePathname, useRouter } from "next/navigation";
 import { createPortal } from "react-dom";
 import { Search, X, MessageSquare, ArrowRight, Clock, Loader2 } from "lucide-react";
 
@@ -42,6 +43,8 @@ function formatSearchDate(rawDate?: string) {
 }
 
 export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
+  const router = useRouter();
+  const pathname = usePathname();
   const [query, setQuery] = useState("");
   const [realDatabase, setRealDatabase] = useState<ChatSession[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -134,7 +137,13 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
 
   const handleSelectChat = (chatId: string) => {
     onClose();
-    window.dispatchEvent(new CustomEvent("think-ai-load-record", { detail: chatId }));
+    if (pathname === "/dashboard") {
+      window.dispatchEvent(new CustomEvent("think-ai-load-record", { detail: chatId }));
+      return;
+    }
+
+    localStorage.setItem("pending_record_id", chatId);
+    router.push("/dashboard");
   };
 
   const handleInputKeyDown = (event: ReactKeyboardEvent<HTMLInputElement>) => {

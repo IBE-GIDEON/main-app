@@ -1,63 +1,66 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import {
+  deleteAuditRecord,
+  getOrCreateCompanyId,
+  listAuditRecords,
+} from "@/services/chatApi";
+import type { RecentAuditRecord } from "@/types/chat";
 
-export type RecentDecision = {
-  record_id: string;
-  decision_id: string;
-  query_preview: string;
-  decision_type: string;
-  stake_level: "Low" | "Medium" | "High";
-  verdict_color: "Green" | "Yellow" | "Orange" | "Red";
-  timestamp_utc: string;
-};
+export type RecentDecision = RecentAuditRecord;
 
-export function useRecents(companyId: string) {
+export function useRecents(companyId?: string) {
   const [recents, setRecents] = useState<RecentDecision[]>([]);
   const [loading, setLoading] = useState(true);
+  const resolvedCompanyId = companyId || getOrCreateCompanyId();
 
   const fetchRecents = useCallback(async () => {
+    setLoading(true);
+
     try {
-      // THE FIX: Changed limit from 15 to 50 so older records don't drop off
-      const res = await fetch(`http://localhost:8000/audit/${companyId}?limit=50`, {
-        headers: { "X-API-Key": "testkey123" }
+      const data = await listAuditRecords({
+        companyId: resolvedCompanyId,
+        limit: 50,
       });
-      if (!res.ok) throw new Error("Failed to fetch");
-      const data = await res.json();
       setRecents(data);
     } catch (err) {
       console.error("Could not load recents", err);
+      setRecents([]);
     } finally {
       setLoading(false);
     }
-  }, [companyId]);
+  }, [resolvedCompanyId]);
 
-  // 1. Listen for new decisions across the app
   useEffect(() => {
-    fetchRecents();
-    
-    const handleRefresh = () => fetchRecents();
+    void fetchRecents();
+
+    const handleRefresh = () => {
+      void fetchRecents();
+
+      // Audit writes are queued in the backend, so a short follow-up fetch
+      // helps the newest decision appear reliably in the sidebar.
+      window.setTimeout(() => {
+        void fetchRecents();
+      }, 900);
+    };
+
     window.addEventListener("refresh-recents", handleRefresh);
-    
+
     return () => window.removeEventListener("refresh-recents", handleRefresh);
   }, [fetchRecents]);
 
-  // 2. Optimistic Delete Function
   const deleteRecord = async (recordId: string) => {
-    // Instantly remove from UI for a snappy feel
+    const previous = recents;
     setRecents((prev) => prev.filter((r) => r.record_id !== recordId));
-    
+
     try {
-      // Send delete request to backend
-      await fetch(`http://localhost:8000/audit/${companyId}/${recordId}`, {
-        method: "DELETE",
-        headers: { "X-API-Key": "testkey123" }
-      });
+      await deleteAuditRecord(recordId, resolvedCompanyId);
     } catch (err) {
       console.error("Failed to delete", err);
-      fetchRecents(); // If backend fails, revert the UI
+      setRecents(previous);
     }
   };
 
-  return { recents, loading, deleteRecord };
+  return { recents, loading, deleteRecord, refreshRecents: fetchRecents };
 }

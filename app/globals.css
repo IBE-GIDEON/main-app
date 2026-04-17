@@ -82,6 +82,8 @@ html, body {
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --app-body-light: #fdfcf8;
+  --app-body-dark: #0a0a0a;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -97,12 +99,81 @@ body {
   overflow-x: hidden;
 }
 
+html {
+  min-height: 100%;
+  background: var(--app-body-light);
+  overscroll-behavior-x: none;
+  overscroll-behavior-y: none;
+}
+
+html.dark {
+  background: var(--app-body-dark);
+}
+
 body {
   color: var(--foreground);
-  background: var(--background);
+  min-height: 100vh;
+  min-height: 100svh;
+  min-height: 100dvh;
+  background: transparent;
   font-family: Arial, Helvetica, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: var(--app-body-light);
+}
+
+.dark body::before {
+  background: var(--app-body-dark);
+}
+
+.h-screen {
+  height: 100vh;
+  height: 100svh;
+  height: 100dvh;
+}
+
+.min-h-screen {
+  min-height: 100vh;
+  min-height: 100svh;
+  min-height: 100dvh;
+}
+
+.app-shell {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  height: 100svh;
+  height: 100dvh;
+  min-height: 100vh;
+  min-height: 100svh;
+  min-height: 100dvh;
+  overflow: hidden;
+  isolation: isolate;
+  background: var(--app-shell-bg, var(--app-body-light));
+}
+
+.dark .app-shell {
+  background: var(--app-shell-bg-dark, var(--app-body-dark));
+}
+
+.app-shell-main {
+  min-width: 0;
+  min-height: 0;
+}
+
+.app-scroll-region {
+  min-height: 0;
+  overscroll-behavior-y: contain;
+  -webkit-overflow-scrolling: touch;
 }
 
 * {

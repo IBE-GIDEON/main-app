@@ -1,9 +1,10 @@
 "use client";
 
 import React from "react";
+import { usePathname, useRouter } from "next/navigation";
 import clsx from "clsx";
 import { Clock, Trash2 } from "lucide-react";
-import { useRecents } from "@/hooks/useRecents"; // Adjust path if needed
+import { useRecents } from "@/hooks/useRecents";
 
 const VERDICT_STYLES: Record<string, string> = {
   Green:  "bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.3)] dark:shadow-[0_0_8px_rgba(16,185,129,0.4)]",
@@ -17,8 +18,23 @@ interface SidebarRecentsProps {
 }
 
 export default function SidebarRecents({ isCollapsed }: SidebarRecentsProps) {
-  // Grab deleteRecord from the hook
-  const { recents, loading, deleteRecord } = useRecents("demo-co");
+  const router = useRouter();
+  const pathname = usePathname();
+  const { recents, loading, deleteRecord } = useRecents();
+
+  const handleOpenRecord = (recordId: string) => {
+    if (pathname === "/dashboard") {
+      window.dispatchEvent(
+        new CustomEvent("think-ai-load-record", {
+          detail: recordId,
+        }),
+      );
+      return;
+    }
+
+    localStorage.setItem("pending_record_id", recordId);
+    router.push("/dashboard");
+  };
 
   return (
     // THIN SCROLLBAR INJECTED HERE (With Light/Dark mode thumb colors)
@@ -50,12 +66,7 @@ export default function SidebarRecents({ isCollapsed }: SidebarRecentsProps) {
             // CHANGED from <button> to <div className="cursor-pointer"> to allow nested buttons
             <div
               key={record.record_id}
-              onClick={() => {
-                // Instantly fires the event that useChat.ts is listening for
-                window.dispatchEvent(new CustomEvent("think-ai-load-record", { 
-                  detail: record.record_id 
-                }));
-              }}
+              onClick={() => handleOpenRecord(record.record_id)}
               className={clsx(
                 "w-full text-left rounded-lg hover:bg-zinc-100 dark:hover:bg-white/5 transition-colors group relative flex items-center cursor-pointer",
                 isCollapsed ? "p-3 justify-center" : "p-3 gap-3"

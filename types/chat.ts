@@ -210,19 +210,31 @@ export interface AssistantEnvelope {
   decision?: DecisionPayload | null;
 }
 
+export interface UploadedDocumentSummary {
+  document_id: string;
+  filename: string;
+  pages: number;
+  chars_extracted: number;
+  uploaded_utc: string;
+  sha256: string;
+  size_bytes: number;
+  content_type?: string | null;
+  preview_text: string;
+}
+
 export interface UploadDocumentsResponse {
   ok: boolean;
   message: string;
   document_count: number;
   total_chars: number;
   uploaded_utc: string;
-  documents: Array<{
-    filename: string;
-    pages: number;
-    chars_extracted: number;
-    uploaded_utc: string;
-    sha256: string;
-  }>;
+  documents: UploadedDocumentSummary[];
+}
+
+export interface UploadedDocumentDetailResponse {
+  ok: boolean;
+  document: UploadedDocumentSummary;
+  extracted_text: string;
 }
 
 export interface DeliveryStatusResponse {

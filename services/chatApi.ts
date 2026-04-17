@@ -6,9 +6,14 @@ import type {
   DecisionPayload,
   DeliveryStatusResponse,
   RecentAuditRecord,
+  UploadedDocumentDetailResponse,
   UploadDocumentsResponse,
   VerdictEmailResponse,
 } from "@/types/chat";
+import type {
+  InsightAskIfResponse,
+  InsightSnapshotResponse,
+} from "@/types/insights";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
 const API_KEY = process.env.NEXT_PUBLIC_API_KEY || "testkey123";
@@ -47,6 +52,22 @@ async function parseJsonResponse<T>(response: Response): Promise<T> {
   }
 
   return response.json() as Promise<T>;
+}
+
+function getDownloadFilename(
+  response: Response,
+  fallback = "manual-data-file",
+) {
+  const disposition = response.headers.get("Content-Disposition");
+  if (!disposition) return fallback;
+
+  const utf8Match = disposition.match(/filename\*=UTF-8''([^;]+)/i);
+  if (utf8Match?.[1]) {
+    return decodeURIComponent(utf8Match[1]);
+  }
+
+  const asciiMatch = disposition.match(/filename="?([^"]+)"?/i);
+  return asciiMatch?.[1] || fallback;
 }
 
 function processSseEvent(
@@ -182,6 +203,68 @@ export async function uploadFinancialDocuments(files: File[]) {
   return parseJsonResponse<UploadDocumentsResponse>(response);
 }
 
+export async function listUploadedFinancialDocuments(options?: {
+  companyId?: string;
+}) {
+  const companyId = options?.companyId || getOrCreateCompanyId();
+  const response = await fetch(`${API_URL}/finance/uploads/${companyId}`, {
+    headers: getApiHeaders(),
+  });
+
+  return parseJsonResponse<UploadDocumentsResponse>(response);
+}
+
+export async function getUploadedFinancialDocument(
+  documentId: string,
+  companyId?: string,
+) {
+  const response = await fetch(
+    `${API_URL}/finance/uploads/${companyId || getOrCreateCompanyId()}/${documentId}`,
+    {
+      headers: getApiHeaders(),
+    },
+  );
+
+  return parseJsonResponse<UploadedDocumentDetailResponse>(response);
+}
+
+export async function deleteUploadedFinancialDocument(
+  documentId: string,
+  companyId?: string,
+) {
+  const response = await fetch(
+    `${API_URL}/finance/uploads/${companyId || getOrCreateCompanyId()}/${documentId}`,
+    {
+      method: "DELETE",
+      headers: getApiHeaders(),
+    },
+  );
+
+  return parseJsonResponse<UploadDocumentsResponse>(response);
+}
+
+export async function downloadUploadedFinancialDocument(
+  documentId: string,
+  companyId?: string,
+) {
+  const response = await fetch(
+    `${API_URL}/finance/uploads/${companyId || getOrCreateCompanyId()}/${documentId}/download`,
+    {
+      headers: getApiHeaders(),
+    },
+  );
+
+  if (!response.ok) {
+    const err = await response.json().catch(() => ({}));
+    throw new Error(err.detail ?? "Unable to download document.");
+  }
+
+  return {
+    blob: await response.blob(),
+    filename: getDownloadFilename(response),
+  };
+}
+
 export async function getDeliveryStatus() {
   const response = await fetch(`${API_URL}/finance/delivery/status`, {
     headers: getApiHeaders(),
@@ -258,6 +341,48 @@ export async function deliverVerdictEmail(input: {
   });
 
   return parseJsonResponse<VerdictEmailResponse>(response);
+}
+
+export async function getInsightsSnapshot(options?: {
+  companyId?: string;
+  forceRefresh?: boolean;
+}) {
+  const companyId = options?.companyId || getOrCreateCompanyId();
+  const params = new URLSearchParams();
+
+  if (options?.forceRefresh) {
+    params.set("force_refresh", "true");
+  }
+
+  const queryString = params.toString();
+  const response = await fetch(
+    `${API_URL}/insights/${companyId}${queryString ? `?${queryString}` : ""}`,
+    {
+      headers: getApiHeaders(),
+    },
+  );
+
+  return parseJsonResponse<InsightSnapshotResponse>(response);
+}
+
+export async function askInsightIf(input: {
+  question: string;
+  companyId?: string;
+  forceRefresh?: boolean;
+  signal?: AbortSignal;
+}) {
+  const response = await fetch(`${API_URL}/insights/ask-if`, {
+    method: "POST",
+    headers: getApiHeaders({ "Content-Type": "application/json" }),
+    body: JSON.stringify({
+      company_id: input.companyId || getOrCreateCompanyId(),
+      question: input.question,
+      force_refresh: Boolean(input.forceRefresh),
+    }),
+    signal: input.signal,
+  });
+
+  return parseJsonResponse<InsightAskIfResponse>(response);
 }
 
 export async function setupCompanyProfile(data: {

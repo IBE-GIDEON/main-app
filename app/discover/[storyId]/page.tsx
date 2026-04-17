@@ -70,20 +70,18 @@ export default function DiscoverStoryPage() {
     useDiscoverStory(storyId);
 
   return (
-    // FIX: Restored flex-1 for layout support, using overflow-y-scroll to block the shake
-    <main className="flex-1 overflow-y-scroll bg-[#F9F9F9] font-sans dark:bg-[#121212]">
-      {/* FIX: Restored your original pt-16 padding */}
-      <div className="mx-auto flex min-h-full w-full max-w-[1280px] flex-col gap-6 px-4 pb-16 pt-16 sm:px-6 lg:px-8 lg:pt-8">
-        <div className="flex flex-wrap items-center justify-between gap-4">
+    <main className="flex-1 overflow-x-hidden overflow-y-auto bg-[#F9F9F9] font-sans dark:bg-[#121212]">
+      <div className="mx-auto flex min-h-full w-full max-w-[1280px] flex-col gap-5 px-4 pb-12 pt-16 sm:gap-6 sm:px-6 sm:pb-16 lg:px-8 lg:pt-8">
+        <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
           <Link
             href="/discover"
-            className="inline-flex items-center gap-2 rounded-md border border-zinc-200 bg-white px-4 py-2 text-sm font-medium text-zinc-900 transition-colors hover:bg-zinc-50 dark:border-zinc-800 dark:bg-[#1C1C1E] dark:text-zinc-100 dark:hover:bg-zinc-800"
+            className="inline-flex w-full items-center justify-center gap-2 rounded-md border border-zinc-200 bg-white px-4 py-2 text-sm font-medium text-zinc-900 transition-colors hover:bg-zinc-50 sm:w-auto dark:border-zinc-800 dark:bg-[#1C1C1E] dark:text-zinc-100 dark:hover:bg-zinc-800"
           >
             <ArrowLeft className="h-4 w-4" />
             Back to discover
           </Link>
 
-          <div className="inline-flex items-center gap-1.5 rounded-sm border border-zinc-200 bg-white px-3 py-1.5 text-[10px] font-medium uppercase tracking-widest text-zinc-500 dark:border-zinc-800 dark:bg-[#1C1C1E] dark:text-zinc-400">
+          <div className="inline-flex w-full items-center justify-center gap-1.5 rounded-sm border border-zinc-200 bg-white px-3 py-1.5 text-[10px] font-medium uppercase tracking-widest text-zinc-500 sm:w-auto dark:border-zinc-800 dark:bg-[#1C1C1E] dark:text-zinc-400">
             <RefreshCcw className="h-3.5 w-3.5" />
             {mode === "live" ? "Live finance feed" : "Cached finance briefings"}
           </div>
@@ -117,7 +115,7 @@ export default function DiscoverStoryPage() {
                 </div>
 
                 <div className="space-y-4">
-                  <h1 className="font-serif max-w-4xl text-3xl font-medium tracking-tight text-zinc-900 dark:text-zinc-100 sm:text-[2.65rem] sm:leading-snug">
+                  <h1 className="font-serif max-w-4xl text-2xl font-medium tracking-tight text-zinc-900 dark:text-zinc-100 sm:text-3xl lg:text-[2.65rem] lg:leading-snug">
                     {story.title}
                   </h1>
                   <p className="max-w-4xl text-[15px] leading-relaxed text-zinc-600 dark:text-zinc-400">
@@ -169,12 +167,12 @@ export default function DiscoverStoryPage() {
                   </div>
                 </div>
 
-                <div className="flex flex-wrap items-center gap-3 pt-2">
+                <div className="flex flex-col gap-3 pt-2 sm:flex-row sm:flex-wrap sm:items-center">
                   <a
                     href={story.sourceUrl}
                     target="_blank"
                     rel="noreferrer"
-                    className="inline-flex items-center gap-2 rounded-md bg-zinc-900 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-white"
+                    className="inline-flex w-full items-center justify-center gap-2 rounded-md bg-zinc-900 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-zinc-800 sm:w-auto dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-white"
                   >
                     Open original source
                     <ExternalLink className="h-4 w-4" />
@@ -182,7 +180,7 @@ export default function DiscoverStoryPage() {
 
                   <Link
                     href="/discover"
-                    className="inline-flex items-center gap-2 rounded-md border border-zinc-200 bg-white px-4 py-2 text-sm font-medium text-zinc-900 transition-colors hover:bg-zinc-50 dark:border-zinc-800 dark:bg-[#1C1C1E] dark:text-zinc-100 dark:hover:bg-zinc-800"
+                    className="inline-flex w-full items-center justify-center gap-2 rounded-md border border-zinc-200 bg-white px-4 py-2 text-sm font-medium text-zinc-900 transition-colors hover:bg-zinc-50 sm:w-auto dark:border-zinc-800 dark:bg-[#1C1C1E] dark:text-zinc-100 dark:hover:bg-zinc-800"
                   >
                     Keep browsing
                   </Link>

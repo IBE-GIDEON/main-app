@@ -270,6 +270,7 @@ export default function DiscoverPage() {
   const [query, setQuery] = useState("");
   const deferredQuery = useDeferredValue(query.trim().toLowerCase());
   const [isTopicPending, startTopicTransition] = useTransition();
+  const scrollContainerRef = useRef<HTMLElement | null>(null);
   const sentinelRef = useRef<HTMLDivElement | null>(null);
 
   const {
@@ -334,11 +335,13 @@ export default function DiscoverPage() {
 
   useEffect(() => {
     const node = sentinelRef.current;
-    if (!node) return;
+    const root = scrollContainerRef.current;
+    if (!node || !root) return;
 
     const observer = new IntersectionObserver(
       (entries) => handleIntersection(entries),
       {
+        root,
         rootMargin: "700px 0px",
       },
     );
@@ -348,13 +351,14 @@ export default function DiscoverPage() {
   }, []);
 
   return (
-    // FIX: Restored flex-1 to keep your layout intact, changed to overflow-y-scroll to kill the jitter
-    <main className="flex-1 overflow-y-scroll bg-[#F9F9F9] font-sans dark:bg-[#121212]">
-      {/* FIX: Restored your original pt-16 padding */}
-      <div className="mx-auto flex min-h-full w-full max-w-[1560px] flex-col gap-6 px-4 pb-16 pt-16 sm:px-6 lg:px-8 lg:pt-8">
+    <main
+      ref={scrollContainerRef}
+      className="flex-1 overflow-x-hidden overflow-y-auto bg-[#F9F9F9] font-sans dark:bg-[#121212]"
+    >
+      <div className="mx-auto flex min-h-full w-full max-w-[1560px] flex-col gap-5 px-4 pb-12 pt-16 sm:gap-6 sm:px-6 sm:pb-16 lg:px-8 lg:pt-8">
         <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_320px]">
-          <section className="min-w-0 space-y-6">
-            <header className="sticky top-0 z-10 -mx-4 border-b border-zinc-200 bg-[#F9F9F9]/90 px-4 py-4 backdrop-blur xl:static xl:mx-0 xl:border-b-0 xl:bg-transparent xl:p-0 dark:border-zinc-800 dark:bg-[#121212]/90">
+          <section className="min-w-0 space-y-5 sm:space-y-6">
+            <header className="border-b border-zinc-200 pb-4 dark:border-zinc-800">
               <div className="flex flex-col gap-5">
                 <div className="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
                   <div className="space-y-2">
@@ -373,8 +377,8 @@ export default function DiscoverPage() {
                     </div>
                   </div>
 
-                  <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-                    <label className="relative block min-w-[240px]">
+                  <div className="flex flex-col gap-3 sm:flex-row sm:items-stretch xl:items-center">
+                    <label className="relative block w-full min-w-0 sm:flex-1 xl:min-w-[280px] xl:max-w-[320px]">
                       <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
                       <input
                         value={query}
@@ -388,7 +392,7 @@ export default function DiscoverPage() {
                       type="button"
                       onClick={() => void refresh()}
                       disabled={loading || refreshing}
-                      className="inline-flex items-center justify-center gap-2 rounded-md border border-zinc-200 bg-white px-4 py-2 text-sm font-medium text-zinc-900 transition-colors hover:bg-zinc-50 disabled:cursor-not-allowed disabled:opacity-60 dark:border-zinc-800 dark:bg-[#1C1C1E] dark:text-zinc-100 dark:hover:bg-zinc-800"
+                      className="inline-flex w-full items-center justify-center gap-2 rounded-md border border-zinc-200 bg-white px-4 py-2 text-sm font-medium text-zinc-900 transition-colors hover:bg-zinc-50 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto dark:border-zinc-800 dark:bg-[#1C1C1E] dark:text-zinc-100 dark:hover:bg-zinc-800"
                     >
                       <RefreshCcw
                         className={clsx(
@@ -401,34 +405,34 @@ export default function DiscoverPage() {
                   </div>
                 </div>
 
-                <div className="flex min-h-[36px] flex-wrap items-center gap-2 border-b border-zinc-200 pb-2 dark:border-zinc-800">
-                  {FEED_TOPICS.map((topic) => (
-                    <button
-                      key={topic.value}
-                      type="button"
-                      onClick={() =>
-                        startTopicTransition(() => {
-                          setActiveTopic(topic.value);
-                          setQuery("");
-                        })
-                      }
-                      className={clsx(
-                        "rounded-md px-3 py-1.5 text-sm font-medium transition-colors",
-                        activeTopic === topic.value
-                          ? "bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900"
-                          : "text-zinc-600 hover:bg-zinc-100 dark:text-zinc-400 dark:hover:bg-zinc-800",
-                      )}
-                    >
-                      {topic.label}
-                    </button>
-                  ))}
-                  <div className="ml-2 w-20">
-                    {isTopicPending && (
-                      <span className="text-xs font-medium uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
-                        switching...
-                      </span>
-                    )}
+                <div className="border-b border-zinc-200 pb-2 dark:border-zinc-800">
+                  <div className="flex min-h-[36px] items-center gap-2 overflow-x-auto pb-1">
+                    {FEED_TOPICS.map((topic) => (
+                      <button
+                        key={topic.value}
+                        type="button"
+                        onClick={() =>
+                          startTopicTransition(() => {
+                            setActiveTopic(topic.value);
+                            setQuery("");
+                          })
+                        }
+                        className={clsx(
+                          "shrink-0 rounded-md px-3 py-1.5 text-sm font-medium transition-colors",
+                          activeTopic === topic.value
+                            ? "bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900"
+                            : "text-zinc-600 hover:bg-zinc-100 dark:text-zinc-400 dark:hover:bg-zinc-800",
+                        )}
+                      >
+                        {topic.label}
+                      </button>
+                    ))}
                   </div>
+                  {isTopicPending && (
+                    <span className="mt-2 block text-xs font-medium uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
+                      switching...
+                    </span>
+                  )}
                 </div>
               </div>
             </header>
@@ -483,9 +487,9 @@ export default function DiscoverPage() {
               </>
             )}
 
-            <div ref={sentinelRef} className="h-6 w-full" />
+            <div ref={sentinelRef} className="h-3 w-full" />
 
-            <div className="flex items-center justify-between gap-4 rounded-md border border-zinc-200 bg-white px-5 py-4 dark:border-zinc-800 dark:bg-[#1C1C1E]">
+            <div className="flex flex-col gap-3 rounded-md border border-zinc-200 bg-white px-5 py-4 sm:flex-row sm:items-start sm:justify-between dark:border-zinc-800 dark:bg-[#1C1C1E]">
               <div>
                 <p className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
                   {loadingMore ? "Loading more money threads..." : "Feed window stays fresh"}
@@ -494,17 +498,13 @@ export default function DiscoverPage() {
                   Older stories roll off as the newest items arrive, so the page stays current instead of growing stale.
                 </p>
               </div>
-              {hasMore && !deferredQuery && (
-                <button
-                  type="button"
-                  onClick={() => void loadMore()}
-                  disabled={loadingMore}
-                  className="inline-flex shrink-0 items-center gap-1.5 rounded-md border border-zinc-200 bg-white px-4 py-2 text-sm font-medium text-zinc-900 transition-colors hover:bg-zinc-50 disabled:cursor-not-allowed disabled:opacity-60 dark:border-zinc-800 dark:bg-[#2C2C2E] dark:text-zinc-100 dark:hover:bg-zinc-700"
-                >
-                  Load more
-                  <ChevronRight className="h-4 w-4" />
-                </button>
-              )}
+              <p className="text-[12px] font-medium text-zinc-500 dark:text-zinc-400 sm:max-w-[220px] sm:text-right">
+                {deferredQuery
+                  ? "Clear search to restore the full rotating feed."
+                  : hasMore
+                    ? "More threads load automatically as you scroll."
+                    : "You are seeing the newest feed window."}
+              </p>
             </div>
           </section>
 
@@ -523,7 +523,7 @@ export default function DiscoverPage() {
               </div>
 
               <div className="grid gap-3 p-5">
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid gap-3 sm:grid-cols-2">
                   <div className="rounded-sm border border-zinc-100 bg-zinc-50 p-4 dark:border-zinc-800/50 dark:bg-[#242426]">
                     <div className="flex items-center gap-1.5 text-zinc-500 dark:text-zinc-400">
                       <TrendingUp className="h-3.5 w-3.5" />
