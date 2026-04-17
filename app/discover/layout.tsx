@@ -1,4 +1,11 @@
+import type { CSSProperties } from "react";
+
 import SidebarContainer from "@/components/SidebarContainer";
+
+const discoverShellStyle = {
+  "--app-shell-bg": "#FCFBF8",
+  "--app-shell-bg-dark": "#09090B",
+} as CSSProperties;
 
 export default function DiscoverLayout({
   children,
@@ -6,9 +13,12 @@ export default function DiscoverLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="flex h-screen w-full overflow-hidden bg-[#FCFBF8] text-zinc-900 transition-colors duration-300 dark:bg-[#09090B] dark:text-white">
+    <div
+      className="app-shell flex w-full text-zinc-900 transition-colors duration-300 dark:text-white"
+      style={discoverShellStyle}
+    >
       <SidebarContainer />
-      <div className="flex min-w-0 flex-1 overflow-hidden">
+      <div className="app-shell-main flex flex-1 overflow-hidden">
         {children}
       </div>
     </div>

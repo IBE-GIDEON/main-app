@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
+import Link from "next/link";
 import { motion, AnimatePresence, useScroll, useTransform, useInView } from "framer-motion";
 import {
   Network, Lock, LayoutPanelLeft, Menu, X, ArrowRight,
@@ -27,16 +28,6 @@ const reveal = {
     opacity: 1, y: 0,
     transition: { duration: 0.9, ease, delay: i * 0.12 }
   })
-};
-
-const fadeIn = {
-  hidden: { opacity: 0 },
-  visible: { opacity: 1, transition: { duration: 1.1, ease } }
-};
-
-const slideLeft = {
-  hidden: { opacity: 0, x: -60 },
-  visible: { opacity: 1, x: 0, transition: { duration: 0.9, ease } }
 };
 
 /* ─────────────────────────────────────────
@@ -462,7 +453,7 @@ function NavBar({ scrolled, isLight }) {
           transition: "all 0.4s ease"
         }}
       >
-        <a href="/">
+        <Link href="/">
         <div className="flex items-center gap-3 mb-6">
           <motion.div
             initial={{ scale: 0 }}
@@ -473,7 +464,7 @@ function NavBar({ scrolled, isLight }) {
             {/* Added 'nav-logo' class here for CSS targeting */}
             <img src="/logofive.png" alt="three AI logo" className="h-[30px] w-auto mt-5 nav-logo" />
           </motion.div>
-        </div></a>
+        </div></Link>
 
         <nav
           className="desktop-nav"
@@ -571,8 +562,8 @@ function HeroSection() {
       className="hero-section"
       style={{
         position: "relative",
-        height: "100vh",
-        minHeight: 700,
+        height: "100svh",
+        minHeight: "max(700px, 100svh)",
         overflow: "hidden",
         display: "flex",
         flexDirection: "column",
@@ -909,7 +900,7 @@ function EditorialStats() {
         }}>
           <InView>
             <span className="font-display" style={{ fontSize: 64, color: GOLD, lineHeight: 1, display: "block", marginBottom: 8 }}>
-              "
+              &ldquo;
             </span>
             <blockquote className="font-editorial" style={{
               fontSize: "clamp(20px, 2.5vw, 30px)",
@@ -1466,7 +1457,7 @@ function TestimonialSection() {
                   marginBottom: 36,
                   fontWeight: 400,
                 }}>
-                  "{t.quote}"
+                  &ldquo;{t.quote}&rdquo;
                 </blockquote>
                 <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
                   <div className="img-wrap" style={{
@@ -1574,7 +1565,7 @@ function Footer() {
         >  
 <div>
 
-         <a href="/">
+         <Link href="/">
         <div className="flex items-center gap-3 mb-6">
           <motion.div
             initial={{ scale: 0 }}
@@ -1585,7 +1576,7 @@ function Footer() {
             {/* Added 'nav-logo' class here for CSS targeting */}
             <img src="/logosix.png" alt="three AI logo" className="h-[20px] w-15 mt-5 nav-logo" />
           </motion.div>
-        </div></a>
+        </div></Link>
 
 
             <p className="font-editorial" style={{

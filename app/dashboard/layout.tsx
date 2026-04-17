@@ -6,6 +6,12 @@ import SidebarContainer from "@/components/SidebarContainer";
 import { useChat } from "@/hooks/useChat";
 import { useOnboarding } from "@/hooks/useOnboarding";
 import clsx from "clsx";
+import type { CSSProperties } from "react";
+
+const dashboardShellStyle = {
+  "--app-shell-bg": "#FDFCF8",
+  "--app-shell-bg-dark": "#0A0A0A",
+} as CSSProperties;
 
 export default function ChatLayout() {
   useOnboarding();
@@ -14,11 +20,14 @@ export default function ChatLayout() {
   const hasMessages = messages.length > 0;
 
   return (
-    <div className="flex h-screen w-full overflow-hidden text-zinc-900 dark:text-white relative bg-[#FDFCF8] dark:bg-[#0A0A0A] transition-colors duration-300">
+    <div
+      className="app-shell relative flex w-full text-zinc-900 transition-colors duration-300 dark:text-white"
+      style={dashboardShellStyle}
+    >
       
       <SidebarContainer />
 
-      <div className="flex flex-col flex-1 min-w-0 h-full relative z-10">
+      <div className="app-shell-main relative z-10 flex h-full flex-1 flex-col">
 
         {/* Top bar */}
         <div className="flex-none flex items-center justify-between px-4 py-4 sm:px-6">
@@ -33,7 +42,7 @@ export default function ChatLayout() {
 
         {/* THE ENTERPRISE LAYOUT SHIFT */}
         {hasMessages && (
-          <div className="flex-1 min-h-0 w-full animate-in fade-in duration-500 ease-out">
+          <div className="app-scroll-region flex-1 w-full animate-in fade-in duration-500 ease-out">
             <Aicontentspace
               messages={messages}
               isTyping={loading}
