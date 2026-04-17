@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import { useSession } from "next-auth/react";
 import {
   CheckCircle,
   Lock,
@@ -24,6 +25,9 @@ import {
   MapPin,
   Mail,
 } from "lucide-react";
+import { getBillingStatus } from "@/services/billingApi";
+import { getOrCreateCompanyId } from "@/services/chatApi";
+import type { BillingStatusResponse } from "@/types/billing";
 
 /* ─────────────────────────────────────────
    TOKENS
@@ -92,11 +96,13 @@ function usePaystack() {
   const pay = ({
     email,
     name,
+    companyId,
     onSuccess,
     onClose,
   }: {
     email: string;
     name: string;
+    companyId: string;
     onSuccess: (reference: string) => void;
     onClose: () => void;
   }) => {
@@ -112,6 +118,7 @@ function usePaystack() {
         custom_fields: [
           { display_name: "Full Name", variable_name: "full_name", value: name },
           { display_name: "Plan", variable_name: "plan", value: "MVP" },
+          { display_name: "Company", variable_name: "company_id", value: companyId },
         ],
       },
       callback: (response: { reference: string }) => {
@@ -154,18 +161,92 @@ function InfoBox({
 /* ─────────────────────────────────────────
    CHECKOUT FORM
 ───────────────────────────────────────── */
+function formatDate(value?: string | null) {
+  if (!value) return "N/A";
+
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "N/A";
+
+  return date.toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+}
+
 function CheckoutForm() {
+  const { data: session } = useSession();
   const { ready, pay } = usePaystack();
 
+  const [companyId, setCompanyId] = useState("");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isCheckingStatus, setIsCheckingStatus] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
 
+  const [billingStatus, setBillingStatus] = useState<BillingStatusResponse | null>(
+    null,
+  );
+
+  useEffect(() => {
+    setCompanyId(getOrCreateCompanyId());
+  }, []);
+
+  useEffect(() => {
+    if (session?.user?.name && !name) {
+      setName(session.user.name);
+    }
+    if (session?.user?.email && !email) {
+      setEmail(session.user.email);
+    }
+  }, [session?.user?.email, session?.user?.name, name, email]);
+
+  useEffect(() => {
+    if (!companyId) return;
+
+    let cancelled = false;
+
+    async function loadStatus() {
+      setIsCheckingStatus(true);
+
+      try {
+        const status = await getBillingStatus(companyId);
+        if (cancelled) return;
+
+        setBillingStatus(status);
+        setError(null);
+
+        if (status.customer_name && !name) {
+          setName(status.customer_name);
+        }
+        if (status.customer_email && !email) {
+          setEmail(status.customer_email);
+        }
+      } catch (err: any) {
+        if (!cancelled) {
+          setError(err?.message ?? "Could not load your current billing status.");
+        }
+      } finally {
+        if (!cancelled) {
+          setIsCheckingStatus(false);
+        }
+      }
+    }
+
+    loadStatus();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [companyId]);
+
+  const hasPaidAccess = Boolean(billingStatus?.has_paid_access);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!ready) return;
+    if (!ready || !companyId || hasPaidAccess) return;
 
     setIsLoading(true);
     setError(null);
@@ -173,18 +254,29 @@ function CheckoutForm() {
     pay({
       email,
       name,
+      companyId,
       onSuccess: async (reference) => {
         try {
           const res = await fetch("/api/paystack/verify", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ reference }),
+            body: JSON.stringify({
+              company_id: companyId,
+              reference,
+              email,
+              name,
+              plan_id: "mvp_monthly",
+            }),
           });
-          if (!res.ok) throw new Error("Verification failed.");
+          const data = await res.json().catch(() => null);
+          if (!res.ok) {
+            throw new Error(data?.detail ?? "Verification failed.");
+          }
+          setBillingStatus(data);
           setSuccess(true);
         } catch (err: any) {
           setError(
-            err.message ??
+            err?.message ??
               "Payment verified on Paystack but confirmation failed. Contact support."
           );
         } finally {
@@ -197,7 +289,7 @@ function CheckoutForm() {
     });
   };
 
-  if (success) {
+  if (success || hasPaidAccess) {
     return (
       <motion.div
         initial={{ opacity: 0, scale: 0.96 }}
@@ -210,9 +302,15 @@ function CheckoutForm() {
         </div>
 
         <div>
-          <h3 className="success-title">You&apos;re in.</h3>
+          <h3 className="success-title">
+            {success ? "You&apos;re in." : "Your MVP plan is active."}
+          </h3>
           <p className="success-copy">
-            Your three AI workspace is ready. Start making your first decision now.
+            {billingStatus?.current_period_end_utc
+              ? `Your workspace is paid through ${formatDate(
+                  billingStatus.current_period_end_utc,
+                )}.`
+              : "Your three AI workspace is ready. Start making your first decision now."}
           </p>
         </div>
 
@@ -235,6 +333,17 @@ function CheckoutForm() {
         >
           <AlertCircle size={15} className="shrink-0" />
           {error}
+        </motion.div>
+      )}
+
+      {isCheckingStatus && (
+        <motion.div
+          initial={{ opacity: 0, y: -8 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="notice-box"
+        >
+          <Loader2 size={15} className="animate-spin shrink-0" />
+          Checking your current plan before payment.
         </motion.div>
       )}
 
@@ -265,7 +374,11 @@ function CheckoutForm() {
       <div className="summary-row">
         <div>
           <p className="summary-title">{PLAN.name}</p>
-          <p className="summary-sub">Billed monthly · Cancel anytime</p>
+          <p className="summary-sub">
+            {billingStatus?.has_paid_access && billingStatus.current_period_end_utc
+              ? `Active through ${formatDate(billingStatus.current_period_end_utc)}`
+              : "Billed monthly · Cancel anytime"}
+          </p>
         </div>
         <div className="summary-price-wrap">
           <p className="summary-price">{PLAN.price}</p>
@@ -273,17 +386,34 @@ function CheckoutForm() {
         </div>
       </div>
 
+      {billingStatus?.has_paid_access && billingStatus.current_period_end_utc ? (
+        <div className="billing-state">
+          <CheckCircle size={14} className="shrink-0" />
+          Active through {formatDate(billingStatus.current_period_end_utc)}
+        </div>
+      ) : null}
+
       <button
         type="submit"
-        disabled={!ready || isLoading}
+        disabled={!ready || isLoading || isCheckingStatus || hasPaidAccess}
         className="pay-btn"
       >
         {isLoading ? (
           <Loader2 className="animate-spin" size={18} />
+        ) : hasPaidAccess ? (
+          <>
+            <CheckCircle size={15} />
+            Already Active
+          </>
         ) : !ready ? (
           <>
             <Loader2 className="animate-spin" size={16} />
             Loading payment
+          </>
+        ) : isCheckingStatus ? (
+          <>
+            <Loader2 className="animate-spin" size={16} />
+            Checking plan
           </>
         ) : (
           <>
@@ -822,6 +952,31 @@ export default function CheckoutPage() {
           background: rgba(220,38,38,0.05);
           color: #b42318;
           font-size: 13px;
+        }
+
+        .notice-box {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          padding: 14px;
+          border: 1px solid rgba(15,14,11,0.08);
+          background: rgba(15,14,11,0.03);
+          color: rgba(15,14,11,0.72);
+          font-size: 13px;
+        }
+
+        .billing-state {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          padding: 12px 14px;
+          border: 1px solid rgba(22,163,74,0.14);
+          background: rgba(22,163,74,0.06);
+          color: #166534;
+          font-size: 12px;
+          font-family: 'IBM Plex Mono', monospace;
+          text-transform: uppercase;
+          letter-spacing: 0.08em;
         }
 
         .trust-block {

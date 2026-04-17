@@ -3,8 +3,10 @@
 import { useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState, useRef, useEffect } from "react";
-import { X, Loader2, Upload } from "lucide-react";
+import { X, Loader2, CreditCard, RefreshCw, CheckCircle2 } from "lucide-react";
 import clsx from "clsx";
+import { formatBillingAmount, getBillingStatus } from "@/services/billingApi";
+import type { BillingStatusResponse } from "@/types/billing";
 
 export default function AccountPage() {
   const { data: session } = useSession();
@@ -20,6 +22,9 @@ export default function AccountPage() {
   const [editModal, setEditModal] = useState<{ type: "name" | "username"; value: string } | null>(null);
   const [isUpdating, setIsUpdating] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [billingStatus, setBillingStatus] = useState<BillingStatusResponse | null>(null);
+  const [billingLoading, setBillingLoading] = useState(true);
+  const [billingError, setBillingError] = useState<string | null>(null);
 
   // Sync with session if it exists
   useEffect(() => {
@@ -32,6 +37,43 @@ export default function AccountPage() {
       if (session.user.image) setLocalImage(session.user.image);
     }
   }, [session]);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function loadBilling() {
+      setBillingLoading(true);
+
+      try {
+        const status = await getBillingStatus();
+        if (cancelled) return;
+
+        setBillingStatus(status);
+        setBillingError(null);
+
+        if (status.customer_name && !session?.user?.name) {
+          setLocalName(status.customer_name);
+        }
+        if (status.customer_email && !session?.user?.email) {
+          setLocalEmail(status.customer_email);
+        }
+      } catch (err: any) {
+        if (!cancelled) {
+          setBillingError(err?.message ?? "Could not load subscription details.");
+        }
+      } finally {
+        if (!cancelled) {
+          setBillingLoading(false);
+        }
+      }
+    }
+
+    loadBilling();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [session?.user?.email, session?.user?.name]);
 
   // --- HANDLERS ---
   const handleAvatarSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -60,6 +102,16 @@ export default function AccountPage() {
     setIsUpdating(false);
     setEditModal(null);
   };
+
+  const subscriptionLabel = billingStatus?.plan_name || "Basic";
+  const subscriptionState = billingStatus?.has_paid_access ? "Active" : "Free";
+  const renewalLabel = billingStatus?.current_period_end_utc
+    ? new Date(billingStatus.current_period_end_utc).toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+      })
+    : null;
 
   // Shared ghost button style
   const ghostButtonClass =
@@ -156,30 +208,148 @@ export default function AccountPage() {
       <h2 className="mb-6 text-[18px] font-semibold text-zinc-900 dark:text-zinc-100 tracking-tight transition-colors">
         Your Subscription
       </h2>
-      <div className="flex items-start md:items-center justify-between mb-12 flex-col md:flex-row gap-4 md:gap-0">
-        <div className="flex flex-col gap-1">
-          <div className="text-[14px] font-medium text-zinc-900 dark:text-zinc-100 flex items-center gap-2 transition-colors">
-            Unlock the most powerful decision engine with Three AI
-            <span className="text-[10px] font-bold uppercase tracking-wider text-purple-600 bg-purple-50 border-purple-200 dark:text-purple-400 dark:bg-purple-400/10 border dark:border-purple-400/20 px-1.5 py-0.5 rounded-md transition-colors">
-              MVP
-            </span>
+      <div className="mb-12 rounded-3xl border border-zinc-200 bg-white/70 p-5 shadow-sm dark:border-white/10 dark:bg-white/[0.03]">
+        <div className="flex flex-col gap-5 md:flex-row md:items-start md:justify-between">
+          <div className="space-y-4">
+            <div className="flex items-center gap-3">
+              <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-zinc-100 text-zinc-900 dark:bg-white/5 dark:text-white">
+                <CreditCard size={18} />
+              </div>
+              <div>
+                <div className="flex items-center gap-2">
+                  <p className="text-[15px] font-semibold text-zinc-900 dark:text-zinc-100 transition-colors">
+                    {subscriptionLabel}
+                  </p>
+                  <span
+                    className={clsx(
+                      "rounded-full px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.24em]",
+                      billingStatus?.has_paid_access
+                        ? "bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-300"
+                        : "bg-zinc-100 text-zinc-600 dark:bg-white/5 dark:text-zinc-300",
+                    )}
+                  >
+                    {subscriptionState}
+                  </span>
+                </div>
+                <p className="text-[13px] text-zinc-500 dark:text-zinc-400 transition-colors">
+                  {billingStatus?.has_paid_access
+                    ? renewalLabel
+                      ? `Your current access is active through ${renewalLabel}.`
+                      : "Your workspace has premium billing access."
+                    : "You are currently on the free workspace plan."}
+                </p>
+              </div>
+            </div>
+
+            <div className="grid gap-3 sm:grid-cols-3">
+              <div className="rounded-2xl border border-zinc-200/80 bg-zinc-50/90 p-3 dark:border-white/10 dark:bg-white/[0.03]">
+                <p className="text-[11px] uppercase tracking-[0.22em] text-zinc-500 dark:text-zinc-400">
+                  Provider
+                </p>
+                <p className="mt-1 text-[14px] font-medium text-zinc-900 dark:text-zinc-100">
+                  {billingStatus?.billing_provider
+                    ? billingStatus.billing_provider[0].toUpperCase() + billingStatus.billing_provider.slice(1)
+                    : "Not connected"}
+                </p>
+              </div>
+              <div className="rounded-2xl border border-zinc-200/80 bg-zinc-50/90 p-3 dark:border-white/10 dark:bg-white/[0.03]">
+                <p className="text-[11px] uppercase tracking-[0.22em] text-zinc-500 dark:text-zinc-400">
+                  Decision limit
+                </p>
+                <p className="mt-1 text-[14px] font-medium text-zinc-900 dark:text-zinc-100">
+                  {billingStatus?.entitlements.max_decisions_per_month ?? "Custom"}
+                  <span className="ml-1 text-zinc-500 dark:text-zinc-400">/ month</span>
+                </p>
+              </div>
+              <div className="rounded-2xl border border-zinc-200/80 bg-zinc-50/90 p-3 dark:border-white/10 dark:bg-white/[0.03]">
+                <p className="text-[11px] uppercase tracking-[0.22em] text-zinc-500 dark:text-zinc-400">
+                  Last payment
+                </p>
+                <p className="mt-1 text-[14px] font-medium text-zinc-900 dark:text-zinc-100">
+                  {formatBillingAmount(
+                    billingStatus?.last_payment_amount_minor,
+                    billingStatus?.last_payment_currency || "USD",
+                  )}
+                </p>
+              </div>
+            </div>
           </div>
-          <div className="text-[13px] text-zinc-500 dark:text-zinc-400 transition-colors">
-            Get the most out of Three AI with the MVP Plan.{" "}
+
+          <div className="flex flex-wrap gap-3">
             <button
-              onClick={() => router.push("/dashin/upgrade")}
-              className="text-purple-600 hover:text-purple-700 dark:text-purple-400 dark:hover:text-purple-300 transition-colors"
+              onClick={() => router.push(billingStatus?.has_paid_access ? "/checkout" : "/dashin/upgrade")}
+              className="rounded-full bg-zinc-900 px-5 py-2 text-[13px] font-semibold text-white shadow-sm transition-all hover:bg-zinc-800 active:scale-95 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-white"
             >
-              Learn more
+              {billingStatus?.has_paid_access ? "Manage billing" : "Upgrade plan"}
+            </button>
+            <button
+              onClick={async () => {
+                setBillingLoading(true);
+                try {
+                  const refreshed = await getBillingStatus();
+                  setBillingStatus(refreshed);
+                  setBillingError(null);
+                } catch (err: any) {
+                  setBillingError(err?.message ?? "Could not refresh billing.");
+                } finally {
+                  setBillingLoading(false);
+                }
+              }}
+              className={ghostButtonClass}
+            >
+              <RefreshCw size={14} className="mr-2 inline-block" />
+              Refresh
             </button>
           </div>
         </div>
-        <button
-          onClick={() => router.push("/dashin/upgrade")}
-          className="shrink-0 rounded-full bg-zinc-900 text-white dark:bg-zinc-100 px-5 py-2 text-[13px] font-semibold dark:text-zinc-900 transition-all hover:bg-zinc-800 dark:hover:bg-white active:scale-95 shadow-sm"
-        >
-          Upgrade plan
-        </button>
+
+        {billingLoading ? (
+          <div className="mt-5 flex items-center gap-2 rounded-2xl border border-zinc-200/80 bg-zinc-50/80 px-4 py-3 text-[13px] text-zinc-600 dark:border-white/10 dark:bg-white/[0.03] dark:text-zinc-300">
+            <Loader2 size={15} className="animate-spin" />
+            Loading your current billing state.
+          </div>
+        ) : null}
+
+        {billingError ? (
+          <div className="mt-5 rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-[13px] text-rose-700 dark:border-rose-500/20 dark:bg-rose-500/10 dark:text-rose-300">
+            {billingError}
+          </div>
+        ) : null}
+
+        {billingStatus?.recent_payments?.length ? (
+          <div className="mt-5 space-y-3">
+            <div className="flex items-center gap-2 text-[13px] font-medium text-zinc-900 dark:text-zinc-100">
+              <CheckCircle2 size={15} className="text-emerald-500" />
+              Recent Payments
+            </div>
+            <div className="space-y-2">
+              {billingStatus.recent_payments.slice(0, 3).map((payment) => (
+                <div
+                  key={payment.reference}
+                  className="flex flex-col gap-2 rounded-2xl border border-zinc-200/80 bg-zinc-50/90 px-4 py-3 text-[13px] dark:border-white/10 dark:bg-white/[0.03] md:flex-row md:items-center md:justify-between"
+                >
+                  <div>
+                    <p className="font-medium text-zinc-900 dark:text-zinc-100">
+                      {formatBillingAmount(payment.amount_minor, payment.currency)}
+                    </p>
+                    <p className="text-zinc-500 dark:text-zinc-400">
+                      Ref {payment.reference}
+                    </p>
+                  </div>
+                  <div className="text-zinc-500 dark:text-zinc-400">
+                    {new Date(payment.paid_at_utc).toLocaleString("en-US", {
+                      month: "short",
+                      day: "numeric",
+                      year: "numeric",
+                      hour: "numeric",
+                      minute: "2-digit",
+                    })}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        ) : null}
       </div>
 
       {/* --- SYSTEM SECTION --- */}
