@@ -7,18 +7,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   ],
   pages: {
     signIn: "/signin",
-     error: "/auth-error",
-  },
-  callbacks: {
-    authorized({ auth, request: { nextUrl } }) {
-      const isLoggedIn = !!auth?.user;
-      const isOnDashboard = nextUrl.pathname.startsWith("/dashboard");
-
-      if (isOnDashboard) {
-        if (isLoggedIn) return true;
-        return false;
-      }
-      return true;
-    },
+    error: "/auth-error",
   },
 });
